@@ -1,0 +1,45 @@
+{
+  "name": "lms-platform",
+  "version": "1.0.0",
+  "description": "Modern, ölçeklenebilir Eğitim Sistemi (LMS) - Monorepo",
+  "private": true,
+  "packageManager": "pnpm@10.14.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "pnpm --parallel --recursive dev",
+    "build": "pnpm --recursive build",
+    "test": "pnpm --recursive test",
+    "lint": "pnpm --recursive lint",
+    "clean": "pnpm --recursive clean",
+    "db:generate": "pnpm --filter database generate",
+    "db:migrate": "pnpm --filter database migrate",
+    "db:seed": "pnpm --filter database seed",
+    "web:dev": "pnpm --filter web dev",
+    "api:dev": "pnpm --filter api dev",
+    "mobile:dev": "pnpm --filter mobile dev"
+  },
+  "keywords": [
+    "lms",
+    "education",
+    "nextjs",
+    "nestjs",
+    "postgresql",
+    "video-streaming",
+    "e-learning"
+  ],
+  "author": "LMS Platform Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "prettier": "^3.0.0",
+    "eslint": "^8.0.0"
+  }
+}

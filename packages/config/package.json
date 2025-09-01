@@ -1,0 +1,21 @@
+{
+  "name": "@lms/config",
+  "version": "1.0.0",
+  "description": "Shared configuration for LMS Platform",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist"
+  },
+  "keywords": ["config", "lms", "environment"],
+  "author": "LMS Platform Team",
+  "license": "MIT",
+  "dependencies": {
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
