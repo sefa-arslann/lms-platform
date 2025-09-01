@@ -1,0 +1,21 @@
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Main dark blue rectangle -->
+  <rect x="2" y="2" width="44" height="44" rx="8" fill="#1e40af" stroke="#1e3a8a" stroke-width="2"/>
+  
+  <!-- Small white protrusions on left and right sides -->
+  <!-- Left side protrusions -->
+  <path d="M0 8 L2 8 L2 12 L0 12 Z" fill="white"/>
+  <path d="M0 18 L2 18 L2 22 L0 22 Z" fill="white"/>
+  <path d="M0 28 L2 28 L2 32 L0 32 Z" fill="white"/>
+  <path d="M0 38 L2 38 L2 42 L0 42 Z" fill="white"/>
+  
+  <!-- Right side protrusions -->
+  <path d="M46 8 L48 8 L48 12 L46 12 Z" fill="white"/>
+  <path d="M46 18 L48 18 L48 22 L46 22 Z" fill="white"/>
+  <path d="M46 28 L48 28 L48 32 L46 32 Z" fill="white"/>
+  <path d="M46 38 L48 38 L48 42 L46 42 Z" fill="white"/>
+  
+  <!-- Center accent -->
+  <circle cx="24" cy="24" r="8" fill="#3b82f6" opacity="0.8"/>
+  <circle cx="24" cy="24" r="4" fill="white"/>
+</svg>
