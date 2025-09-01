@@ -9,6 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var SecureVideoService_1;
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SecureVideoService = void 0;
 const common_1 = require("@nestjs/common");
@@ -166,8 +167,6 @@ let SecureVideoService = SecureVideoService_1 = class SecureVideoService {
 exports.SecureVideoService = SecureVideoService;
 exports.SecureVideoService = SecureVideoService = SecureVideoService_1 = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
-        jwt_1.JwtService,
-        access_grants_service_1.AccessGrantsService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService, typeof (_a = typeof jwt_1.JwtService !== "undefined" && jwt_1.JwtService) === "function" ? _a : Object, access_grants_service_1.AccessGrantsService])
 ], SecureVideoService);
 //# sourceMappingURL=secure-video.service.js.map

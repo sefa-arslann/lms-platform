@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SecureVideoController = void 0;
 const common_1 = require("@nestjs/common");
@@ -250,8 +251,6 @@ __decorate([
 exports.SecureVideoController = SecureVideoController = __decorate([
     (0, swagger_1.ApiTags)('secure-video'),
     (0, common_1.Controller)('secure-video'),
-    __metadata("design:paramtypes", [secure_video_service_1.SecureVideoService,
-        jwt_1.JwtService,
-        access_grants_service_1.AccessGrantsService])
+    __metadata("design:paramtypes", [secure_video_service_1.SecureVideoService, typeof (_a = typeof jwt_1.JwtService !== "undefined" && jwt_1.JwtService) === "function" ? _a : Object, access_grants_service_1.AccessGrantsService])
 ], SecureVideoController);
 //# sourceMappingURL=secure-video.controller.js.map

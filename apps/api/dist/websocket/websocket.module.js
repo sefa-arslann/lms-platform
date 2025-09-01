@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var _a, _b;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.WebSocketModule = exports.AdminWebSocketGateway = void 0;
 const common_1 = require("@nestjs/common");
@@ -90,12 +91,12 @@ let AdminWebSocketGateway = class AdminWebSocketGateway {
 exports.AdminWebSocketGateway = AdminWebSocketGateway;
 __decorate([
     (0, websockets_1.WebSocketServer)(),
-    __metadata("design:type", socket_io_1.Server)
+    __metadata("design:type", typeof (_a = typeof socket_io_1.Server !== "undefined" && socket_io_1.Server) === "function" ? _a : Object)
 ], AdminWebSocketGateway.prototype, "server", void 0);
 __decorate([
     (0, websockets_1.SubscribeMessage)('join-admin'),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [socket_io_1.Socket, Object]),
+    __metadata("design:paramtypes", [typeof (_b = typeof socket_io_1.Socket !== "undefined" && socket_io_1.Socket) === "function" ? _b : Object, Object]),
     __metadata("design:returntype", void 0)
 ], AdminWebSocketGateway.prototype, "handleJoinAdmin", null);
 exports.AdminWebSocketGateway = AdminWebSocketGateway = __decorate([

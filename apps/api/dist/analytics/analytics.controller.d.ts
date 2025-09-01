@@ -6,160 +6,27 @@ export declare class AnalyticsController {
         userId?: string;
         page: string;
         metadata?: any;
-    }): Promise<{
-        id: string;
-        createdAt: Date;
-        userId: string | null;
-        userAgent: string | null;
-        metadata: import("@prisma/client/runtime/library").JsonValue | null;
-        ipAddress: string | null;
-        eventType: import("@prisma/client").$Enums.AnalyticsEventType;
-        eventData: import("@prisma/client/runtime/library").JsonValue;
-    }>;
+    }): unknown;
     trackCourseView(data: {
         userId?: string;
         courseId: string;
         viewType: string;
-    }): Promise<{
-        event: {
-            id: string;
-            createdAt: Date;
-            userId: string | null;
-            userAgent: string | null;
-            metadata: import("@prisma/client/runtime/library").JsonValue | null;
-            ipAddress: string | null;
-            eventType: import("@prisma/client").$Enums.AnalyticsEventType;
-            eventData: import("@prisma/client/runtime/library").JsonValue;
-        };
-        courseView: {
-            id: string;
-            duration: number | null;
-            createdAt: Date;
-            progress: number | null;
-            userId: string | null;
-            courseId: string;
-            viewType: import("@prisma/client").$Enums.CourseViewType;
-        };
-    }>;
+    }): unknown;
     trackVideoAction(data: {
         userId?: string;
         videoId: string;
         action: string;
         timestamp?: number;
-    }): Promise<{
-        event: {
-            id: string;
-            createdAt: Date;
-            userId: string | null;
-            userAgent: string | null;
-            metadata: import("@prisma/client/runtime/library").JsonValue | null;
-            ipAddress: string | null;
-            eventType: import("@prisma/client").$Enums.AnalyticsEventType;
-            eventData: import("@prisma/client/runtime/library").JsonValue;
-        };
-        videoAnalytics: {
-            lessonId: string | null;
-            id: string;
-            duration: number | null;
-            createdAt: Date;
-            userId: string | null;
-            timestamp: number | null;
-            videoId: string;
-            action: import("@prisma/client").$Enums.VideoAction;
-        };
-    }>;
+    }): unknown;
     trackSession(data: {
         userId: string;
         sessionId: string;
         deviceId?: string;
         ipAddress?: string;
-    }): Promise<{
-        id: string;
-        isActive: boolean;
-        userId: string;
-        userAgent: string | null;
-        sessionId: string;
-        startedAt: Date;
-        lastActivity: Date;
-        ipAddress: string | null;
-        deviceId: string | null;
-    }>;
+    }): unknown;
     updateSessionActivity(data: {
         sessionId: string;
-    }): Promise<{
-        id: string;
-        isActive: boolean;
-        userId: string;
-        userAgent: string | null;
-        sessionId: string;
-        startedAt: Date;
-        lastActivity: Date;
-        ipAddress: string | null;
-        deviceId: string | null;
-    }>;
-    getRealTimeData(): Promise<{
-        activeUsers: number;
-        recentActivity: ({
-            user: {
-                email: string;
-                firstName: string;
-                lastName: string;
-            } | null;
-        } & {
-            id: string;
-            createdAt: Date;
-            userId: string | null;
-            userAgent: string | null;
-            metadata: import("@prisma/client/runtime/library").JsonValue | null;
-            ipAddress: string | null;
-            eventType: import("@prisma/client").$Enums.AnalyticsEventType;
-            eventData: import("@prisma/client/runtime/library").JsonValue;
-        })[];
-        courseViews: ({
-            user: {
-                firstName: string;
-                lastName: string;
-            } | null;
-            course: {
-                title: string;
-                slug: string;
-            };
-        } & {
-            id: string;
-            duration: number | null;
-            createdAt: Date;
-            progress: number | null;
-            userId: string | null;
-            courseId: string;
-            viewType: import("@prisma/client").$Enums.CourseViewType;
-        })[];
-        videoActions: ({
-            user: {
-                firstName: string;
-                lastName: string;
-            } | null;
-            video: {
-                title: string;
-            };
-        } & {
-            lessonId: string | null;
-            id: string;
-            duration: number | null;
-            createdAt: Date;
-            userId: string | null;
-            timestamp: number | null;
-            videoId: string;
-            action: import("@prisma/client").$Enums.VideoAction;
-        })[];
-        timestamp: Date;
-    }>;
-    getAnalyticsSummary(period?: 'day' | 'week' | 'month'): Promise<{
-        period: "week" | "month" | "day";
-        totalEvents: number;
-        uniqueUsers: number;
-        courseViews: number;
-        videoActions: number;
-        startDate: Date;
-        endDate: Date;
-    }>;
+    }): unknown;
+    getRealTimeData(): unknown;
+    getAnalyticsSummary(period?: 'day' | 'week' | 'month'): unknown;
 }

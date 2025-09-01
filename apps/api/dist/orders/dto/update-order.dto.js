@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var _a, _b;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpdateOrderDto = void 0;
 const class_validator_1 = require("class-validator");
@@ -38,11 +39,11 @@ __decorate([
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsEnum)(client_1.PaymentMethod),
-    __metadata("design:type", String)
+    __metadata("design:type", typeof (_a = typeof client_1.PaymentMethod !== "undefined" && client_1.PaymentMethod) === "function" ? _a : Object)
 ], UpdateOrderDto.prototype, "paymentMethod", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsObject)(),
-    __metadata("design:type", Object)
+    __metadata("design:type", typeof (_b = typeof Record !== "undefined" && Record) === "function" ? _b : Object)
 ], UpdateOrderDto.prototype, "metadata", void 0);
 //# sourceMappingURL=update-order.dto.js.map

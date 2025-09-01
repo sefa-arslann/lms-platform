@@ -1,1 +1,1 @@
-export declare const DeviceInfo: (...dataOrPipes: unknown[]) => ParameterDecorator;
+export declare const DeviceInfo: any;
