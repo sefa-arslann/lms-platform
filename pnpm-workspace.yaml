@@ -1,3 +1,15 @@
 packages:
-  - 'apps/*'
-  - 'packages/*'
+  - apps/*
+  - packages/*
+
+ignoredBuiltDependencies:
+  - '@nestjs/core'
+  - '@prisma/client'
+  - '@prisma/engines'
+  - '@swc/core'
+  - '@tailwindcss/oxide'
+  - esbuild
+  - ffmpeg-static
+  - prisma
+  - sharp
+  - unrs-resolver

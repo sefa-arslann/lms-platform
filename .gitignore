@@ -1,13 +1,41 @@
-node_modules/
+# Environment files
 .env
 .env.local
 .env.production
-.DS_Store
+.env.development
+
+# Database
+*.db
+*.sqlite
+
+# Logs
+logs/
 *.log
-.next/
-build/
+
+# Node modules
+node_modules/
+*/node_modules/
+
+# Build outputs
 dist/
-coverage/
+build/
+.next/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
 .vscode/
 .idea/
-apps/web/.next/
+
+# PM2
+.pm2/
+
+# Uploads
+uploads/
+public/uploads/
+
+# Temporary files
+*.tmp
+*.temp
