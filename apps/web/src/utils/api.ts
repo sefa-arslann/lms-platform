@@ -12,7 +12,13 @@ class ApiClient {
 
   constructor(baseUrl?: string) {
     // Use provided baseUrl or environment variable or fallback
-    this.baseUrl = baseUrl || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+    if (baseUrl) {
+      this.baseUrl = baseUrl;
+    } else if (process.env.NEXT_PUBLIC_API_URL) {
+      this.baseUrl = process.env.NEXT_PUBLIC_API_URL;
+    } else {
+      this.baseUrl = 'http://localhost:3001';
+    }
   }
 
   private async request<T>(endpoint: string, options: ApiOptions = {}): Promise<T> {
@@ -46,7 +52,8 @@ class ApiClient {
     }
 
     try {
-      const response = await fetch(`${this.baseUrl}${endpoint}`, config);
+      const url = `${this.baseUrl}${endpoint.startsWith('/') ? '' : '/'}${endpoint}`;
+      const response = await fetch(url, config);
 
       // Handle unauthorized access
       if (response.status === 401) {
