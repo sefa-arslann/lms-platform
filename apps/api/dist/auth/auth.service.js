@@ -37,11 +37,11 @@ let AuthService = class AuthService {
     }
     async login(loginDto, deviceInfo) {
         console.log(`🔐 Login attempt for ${loginDto.email} with device info:`, {
-            platform: deviceInfo.platform,
-            model: deviceInfo.model,
-            ip: deviceInfo.ip,
-            userAgent: deviceInfo.userAgent,
-            installId: deviceInfo.installId
+            platform: deviceInfo?.platform || 'unknown',
+            model: deviceInfo?.model || 'unknown',
+            ip: deviceInfo?.ip || 'unknown',
+            userAgent: deviceInfo?.userAgent || 'unknown',
+            installId: deviceInfo?.installId || 'unknown'
         });
         const user = await this.validateUser(loginDto.email, loginDto.password);
         if (!user) {
