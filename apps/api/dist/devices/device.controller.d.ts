@@ -4,8 +4,11 @@ export declare class DeviceController {
     constructor(deviceService: DeviceService);
     getMyDevices(req: any): Promise<{
         id: string;
-        installId: string;
+        createdAt: Date;
+        updatedAt: Date;
+        isActive: boolean;
         userId: string;
+        installId: string;
         publicKey: string;
         platform: string;
         model: string | null;
@@ -14,18 +17,18 @@ export declare class DeviceController {
         lastIp: string;
         lastSeenAt: Date;
         isTrusted: boolean;
-        isActive: boolean;
         approvedAt: Date | null;
         deviceName: string | null;
         osVersion: string | null;
         appVersion: string | null;
-        createdAt: Date;
-        updatedAt: Date;
     }[]>;
     enrollDevice(deviceInfo: any, req: any): Promise<{
         id: string;
-        installId: string;
+        createdAt: Date;
+        updatedAt: Date;
+        isActive: boolean;
         userId: string;
+        installId: string;
         publicKey: string;
         platform: string;
         model: string | null;
@@ -34,20 +37,20 @@ export declare class DeviceController {
         lastIp: string;
         lastSeenAt: Date;
         isTrusted: boolean;
-        isActive: boolean;
         approvedAt: Date | null;
         deviceName: string | null;
         osVersion: string | null;
         appVersion: string | null;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     approveEnrollRequest(body: {
         requestId: string;
     }, req: any): Promise<{
         id: string;
-        installId: string;
+        createdAt: Date;
+        updatedAt: Date;
+        isActive: boolean;
         userId: string;
+        installId: string;
         publicKey: string;
         platform: string;
         model: string | null;
@@ -56,20 +59,20 @@ export declare class DeviceController {
         lastIp: string;
         lastSeenAt: Date;
         isTrusted: boolean;
-        isActive: boolean;
         approvedAt: Date | null;
         deviceName: string | null;
         osVersion: string | null;
         appVersion: string | null;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     renameDevice(id: string, body: {
         deviceName: string;
     }, req: any): Promise<{
         id: string;
-        installId: string;
+        createdAt: Date;
+        updatedAt: Date;
+        isActive: boolean;
         userId: string;
+        installId: string;
         publicKey: string;
         platform: string;
         model: string | null;
@@ -78,18 +81,18 @@ export declare class DeviceController {
         lastIp: string;
         lastSeenAt: Date;
         isTrusted: boolean;
-        isActive: boolean;
         approvedAt: Date | null;
         deviceName: string | null;
         osVersion: string | null;
         appVersion: string | null;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     revokeDevice(id: string, req: any): Promise<{
         id: string;
-        installId: string;
+        createdAt: Date;
+        updatedAt: Date;
+        isActive: boolean;
         userId: string;
+        installId: string;
         publicKey: string;
         platform: string;
         model: string | null;
@@ -98,20 +101,20 @@ export declare class DeviceController {
         lastIp: string;
         lastSeenAt: Date;
         isTrusted: boolean;
-        isActive: boolean;
         approvedAt: Date | null;
         deviceName: string | null;
         osVersion: string | null;
         appVersion: string | null;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     setDeviceTrusted(id: string, body: {
         isTrusted: boolean;
     }, req: any): Promise<{
         id: string;
-        installId: string;
+        createdAt: Date;
+        updatedAt: Date;
+        isActive: boolean;
         userId: string;
+        installId: string;
         publicKey: string;
         platform: string;
         model: string | null;
@@ -120,13 +123,10 @@ export declare class DeviceController {
         lastIp: string;
         lastSeenAt: Date;
         isTrusted: boolean;
-        isActive: boolean;
         approvedAt: Date | null;
         deviceName: string | null;
         osVersion: string | null;
         appVersion: string | null;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     getEnrollRequests(): never[];
 }

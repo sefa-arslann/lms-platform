@@ -10,15 +10,8 @@ interface ApiOptions {
 class ApiClient {
   private baseUrl: string;
 
-  constructor(baseUrl?: string) {
-    // Use provided baseUrl or environment variable or fallback
-    if (baseUrl) {
-      this.baseUrl = baseUrl;
-    } else if (process.env.NEXT_PUBLIC_API_URL) {
-      this.baseUrl = process.env.NEXT_PUBLIC_API_URL;
-    } else {
-      this.baseUrl = 'http://localhost:3001';
-    }
+  constructor(baseUrl: string = 'http://179.61.246.103:3001') {
+    this.baseUrl = baseUrl;
   }
 
   private async request<T>(endpoint: string, options: ApiOptions = {}): Promise<T> {
@@ -52,8 +45,7 @@ class ApiClient {
     }
 
     try {
-      const url = `${this.baseUrl}${endpoint.startsWith('/') ? '' : '/'}${endpoint}`;
-      const response = await fetch(url, config);
+      const response = await fetch(`${this.baseUrl}${endpoint}`, config);
 
       // Handle unauthorized access
       if (response.status === 401) {

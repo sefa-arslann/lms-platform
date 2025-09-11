@@ -3,7 +3,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import SecureStorage from '@/utils/secureStorage';
 import { getDeviceInfo, DeviceInfo } from '@/utils/deviceDetection';
-import { ApiClient } from '@/utils/api';
 
 interface User {
   id: string;
@@ -38,7 +37,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const apiClient = new ApiClient();
 
   // Check if user is already logged in on mount
   useEffect(() => {
@@ -83,16 +81,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           
           // Fallback: Verify token with backend
           console.log('🔄 Verifying token with backend...');
-          const response = await apiClient.request('auth/verify', {
-            method: 'GET',
+          const response = await fetch('http://179.61.246.103:3001/auth/verify', {
             headers: {
               'Authorization': `Bearer ${storedToken}`,
+              'Content-Type': 'application/json',
             },
           });
           
-          if (response) {
-            console.log('✅ Backend verification successful:', response);
-            setUser(response);
+          if (response.ok) {
+            const userData = await response.json();
+            console.log('✅ Backend verification successful:', userData);
+            setUser(userData);
             setToken(storedToken);
           } else {
             // Token invalid, remove it
@@ -178,18 +177,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const deviceInfo = getDeviceInfo();
       console.log('🔍 Frontend device info:', deviceInfo);
       
-      const response = await apiClient.request('auth/login', {
+      const response = await fetch('http://179.61.246.103:3001/auth/login', {
         method: 'POST',
-        body: { 
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
           email, 
           password,
           deviceInfo // Include device info
-        },
+        }),
       });
 
-      if (response) {
+      const data = await response.json();
+      
+      if (response.ok) {
         // Check if it's a device approval required response
-        if (response.status === 'pending_approval') {
+        if (data.status === 'pending_approval') {
           return { 
             success: false, 
             requiresApproval: true,
@@ -198,7 +202,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
         
         // Normal login response with token
-        const { accessToken: newToken, user: userData } = response;
+        const { accessToken: newToken, user: userData } = data;
         
         // Validate token and user data
         if (!newToken || typeof newToken !== 'string') {

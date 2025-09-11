@@ -89,7 +89,7 @@ export default function MessagesPage() {
   const fetchMessages = async () => {
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:3001/messages/my-messages", {
+      const response = await fetch("http://179.61.246.103:3001/messages/my-messages", {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -125,7 +125,7 @@ export default function MessagesPage() {
         fileSize: file.size,
       }));
 
-      const response = await fetch("http://localhost:3001/messages", {
+      const response = await fetch("http://179.61.246.103:3001/messages", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -165,7 +165,7 @@ export default function MessagesPage() {
     if (!replyContent.trim()) return;
 
     try {
-      const response = await fetch(`http://localhost:3001/messages/my-messages/${messageId}/reply`, {
+      const response = await fetch(`http://179.61.246.103:3001/messages/my-messages/${messageId}/reply`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -291,7 +291,7 @@ export default function MessagesPage() {
                         // Mesaj okundu olarak işaretle
                         if (!message.isRead) {
                           try {
-                            await fetch(`http://localhost:3001/messages/my-messages/${message.id}/status`, {
+                            await fetch(`http://179.61.246.103:3001/messages/my-messages/${message.id}/status`, {
                               method: 'PUT',
                               headers: {
                                 Authorization: `Bearer ${token}`,
@@ -316,7 +316,7 @@ export default function MessagesPage() {
                         // Admin yanıtlarını okundu olarak işaretle
                         if (message.replies && message.replies.some((reply: any) => reply.isAdmin && !reply.isRead)) {
                           try {
-                            await fetch(`http://localhost:3001/messages/my-messages/${message.id}/admin-replies/read`, {
+                            await fetch(`http://179.61.246.103:3001/messages/my-messages/${message.id}/admin-replies/read`, {
                               method: 'PUT',
                               headers: {
                                 Authorization: `Bearer ${token}`,

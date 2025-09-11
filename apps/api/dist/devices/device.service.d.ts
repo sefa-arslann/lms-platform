@@ -4,8 +4,11 @@ export declare class DeviceService {
     constructor(prisma: PrismaService);
     findByInstallId(installId: string): Promise<{
         id: string;
-        installId: string;
+        createdAt: Date;
+        updatedAt: Date;
+        isActive: boolean;
         userId: string;
+        installId: string;
         publicKey: string;
         platform: string;
         model: string | null;
@@ -14,18 +17,18 @@ export declare class DeviceService {
         lastIp: string;
         lastSeenAt: Date;
         isTrusted: boolean;
-        isActive: boolean;
         approvedAt: Date | null;
         deviceName: string | null;
         osVersion: string | null;
         appVersion: string | null;
-        createdAt: Date;
-        updatedAt: Date;
     } | null>;
     findExistingDevice(userId: string, deviceInfo: any): Promise<{
         id: string;
-        installId: string;
+        createdAt: Date;
+        updatedAt: Date;
+        isActive: boolean;
         userId: string;
+        installId: string;
         publicKey: string;
         platform: string;
         model: string | null;
@@ -34,25 +37,22 @@ export declare class DeviceService {
         lastIp: string;
         lastSeenAt: Date;
         isTrusted: boolean;
-        isActive: boolean;
         approvedAt: Date | null;
         deviceName: string | null;
         osVersion: string | null;
         appVersion: string | null;
-        createdAt: Date;
-        updatedAt: Date;
     } | null>;
     createEnrollRequest(userId: string, deviceInfo: any): Promise<{
         id: string;
-        installId: string | null;
+        createdAt: Date;
+        status: import("@prisma/client").$Enums.EnrollStatus;
         userId: string;
+        installId: string | null;
         platform: string;
         model: string | null;
-        createdAt: Date;
         ip: string;
         geoCountry: string | null;
         requestId: string;
-        status: import("@prisma/client").$Enums.EnrollStatus;
         expiresAt: Date;
     }>;
     approveEnrollRequest(requestId: string, options?: {
@@ -60,8 +60,11 @@ export declare class DeviceService {
         isTrusted?: boolean;
     }): Promise<{
         id: string;
-        installId: string;
+        createdAt: Date;
+        updatedAt: Date;
+        isActive: boolean;
         userId: string;
+        installId: string;
         publicKey: string;
         platform: string;
         model: string | null;
@@ -70,18 +73,18 @@ export declare class DeviceService {
         lastIp: string;
         lastSeenAt: Date;
         isTrusted: boolean;
-        isActive: boolean;
         approvedAt: Date | null;
         deviceName: string | null;
         osVersion: string | null;
         appVersion: string | null;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     updateLastSeen(deviceId: string, ip: string): Promise<{
         id: string;
-        installId: string;
+        createdAt: Date;
+        updatedAt: Date;
+        isActive: boolean;
         userId: string;
+        installId: string;
         publicKey: string;
         platform: string;
         model: string | null;
@@ -90,18 +93,18 @@ export declare class DeviceService {
         lastIp: string;
         lastSeenAt: Date;
         isTrusted: boolean;
-        isActive: boolean;
         approvedAt: Date | null;
         deviceName: string | null;
         osVersion: string | null;
         appVersion: string | null;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     getMyDevices(userId: string): Promise<{
         id: string;
-        installId: string;
+        createdAt: Date;
+        updatedAt: Date;
+        isActive: boolean;
         userId: string;
+        installId: string;
         publicKey: string;
         platform: string;
         model: string | null;
@@ -110,18 +113,18 @@ export declare class DeviceService {
         lastIp: string;
         lastSeenAt: Date;
         isTrusted: boolean;
-        isActive: boolean;
         approvedAt: Date | null;
         deviceName: string | null;
         osVersion: string | null;
         appVersion: string | null;
-        createdAt: Date;
-        updatedAt: Date;
     }[]>;
     enrollDevice(userId: string, deviceInfo: any): Promise<{
         id: string;
-        installId: string;
+        createdAt: Date;
+        updatedAt: Date;
+        isActive: boolean;
         userId: string;
+        installId: string;
         publicKey: string;
         platform: string;
         model: string | null;
@@ -130,18 +133,18 @@ export declare class DeviceService {
         lastIp: string;
         lastSeenAt: Date;
         isTrusted: boolean;
-        isActive: boolean;
         approvedAt: Date | null;
         deviceName: string | null;
         osVersion: string | null;
         appVersion: string | null;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     revokeDevice(deviceId: string): Promise<{
         id: string;
-        installId: string;
+        createdAt: Date;
+        updatedAt: Date;
+        isActive: boolean;
         userId: string;
+        installId: string;
         publicKey: string;
         platform: string;
         model: string | null;
@@ -150,18 +153,18 @@ export declare class DeviceService {
         lastIp: string;
         lastSeenAt: Date;
         isTrusted: boolean;
-        isActive: boolean;
         approvedAt: Date | null;
         deviceName: string | null;
         osVersion: string | null;
         appVersion: string | null;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     getUserDevices(userId: string): Promise<{
         id: string;
-        installId: string;
+        createdAt: Date;
+        updatedAt: Date;
+        isActive: boolean;
         userId: string;
+        installId: string;
         publicKey: string;
         platform: string;
         model: string | null;
@@ -170,19 +173,19 @@ export declare class DeviceService {
         lastIp: string;
         lastSeenAt: Date;
         isTrusted: boolean;
-        isActive: boolean;
         approvedAt: Date | null;
         deviceName: string | null;
         osVersion: string | null;
         appVersion: string | null;
-        createdAt: Date;
-        updatedAt: Date;
     }[]>;
     countActiveDevices(userId: string): Promise<number>;
     renameDevice(deviceId: string, deviceName: string): Promise<{
         id: string;
-        installId: string;
+        createdAt: Date;
+        updatedAt: Date;
+        isActive: boolean;
         userId: string;
+        installId: string;
         publicKey: string;
         platform: string;
         model: string | null;
@@ -191,18 +194,18 @@ export declare class DeviceService {
         lastIp: string;
         lastSeenAt: Date;
         isTrusted: boolean;
-        isActive: boolean;
         approvedAt: Date | null;
         deviceName: string | null;
         osVersion: string | null;
         appVersion: string | null;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     setDeviceTrusted(deviceId: string, isTrusted: boolean): Promise<{
         id: string;
-        installId: string;
+        createdAt: Date;
+        updatedAt: Date;
+        isActive: boolean;
         userId: string;
+        installId: string;
         publicKey: string;
         platform: string;
         model: string | null;
@@ -211,12 +214,9 @@ export declare class DeviceService {
         lastIp: string;
         lastSeenAt: Date;
         isTrusted: boolean;
-        isActive: boolean;
         approvedAt: Date | null;
         deviceName: string | null;
         osVersion: string | null;
         appVersion: string | null;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
 }

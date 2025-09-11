@@ -71,7 +71,7 @@ export default function AdminMessagesPage() {
       const token = SecureStorage.getToken();
       console.log('🔑 Token being used:', token ? `${token.substring(0, 20)}...` : 'NO TOKEN');
       
-      const response = await fetch('http://localhost:3001/messages/admin', {
+      const response = await fetch('http://179.61.246.103:3001/messages/admin', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -99,7 +99,7 @@ export default function AdminMessagesPage() {
       const token = SecureStorage.getToken();
       console.log('🔑 Stats Token being used:', token ? `${token.substring(0, 20)}...` : 'NO TOKEN');
       
-      const response = await fetch('http://localhost:3001/messages/admin/stats', {
+      const response = await fetch('http://179.61.246.103:3001/messages/admin/stats', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -122,7 +122,7 @@ export default function AdminMessagesPage() {
   const fetchReplies = async (messageId: string) => {
     try {
       const token = SecureStorage.getToken();
-      const response = await fetch(`http://localhost:3001/messages/admin/${messageId}`, {
+      const response = await fetch(`http://179.61.246.103:3001/messages/admin/${messageId}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -153,7 +153,7 @@ export default function AdminMessagesPage() {
   const markAsRead = async (messageId: string) => {
     try {
       const token = SecureStorage.getToken();
-      await fetch(`http://localhost:3001/messages/admin/${messageId}/status`, {
+      await fetch(`http://179.61.246.103:3001/messages/admin/${messageId}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -172,7 +172,7 @@ export default function AdminMessagesPage() {
     setSendingReply(true);
     try {
       const token = SecureStorage.getToken();
-      const response = await fetch(`http://localhost:3001/messages/admin/${selectedMessage.id}/reply`, {
+      const response = await fetch(`http://179.61.246.103:3001/messages/admin/${selectedMessage.id}/reply`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -199,7 +199,7 @@ export default function AdminMessagesPage() {
   const updateStatus = async (messageId: string, status: 'READ' | 'REPLIED' | 'CLOSED') => {
     try {
       const token = SecureStorage.getToken();
-      const response = await fetch(`http://localhost:3001/messages/admin/${messageId}/status`, {
+      const response = await fetch(`http://179.61.246.103:3001/messages/admin/${messageId}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

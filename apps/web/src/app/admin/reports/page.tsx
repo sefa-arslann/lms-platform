@@ -63,7 +63,7 @@ export default function AdminReports() {
       }
 
       // Fetch user activities
-      const activitiesResponse = await fetch(`http://localhost:3001/admin/reports/user-activities?period=${selectedPeriod}`, {
+      const activitiesResponse = await fetch(`http://179.61.246.103:3001/admin/reports/user-activities?period=${selectedPeriod}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -79,7 +79,7 @@ export default function AdminReports() {
       }
 
       // Fetch daily stats
-      const dailyResponse = await fetch(`http://localhost:3001/admin/reports/daily-stats?period=${selectedPeriod}`, {
+      const dailyResponse = await fetch(`http://179.61.246.103:3001/admin/reports/daily-stats?period=${selectedPeriod}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -95,7 +95,7 @@ export default function AdminReports() {
       }
 
       // Fetch weekly stats
-      const weeklyResponse = await fetch(`http://localhost:3001/admin/reports/weekly-stats?period=${selectedPeriod}`, {
+      const weeklyResponse = await fetch(`http://179.61.246.103:3001/admin/reports/weekly-stats?period=${selectedPeriod}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -128,7 +128,7 @@ export default function AdminReports() {
       if (!token) return;
 
       // Fetch detailed questions
-      const questionsResponse = await fetch(`http://localhost:3001/admin/reports/detailed-questions?period=${selectedPeriod}`, {
+      const questionsResponse = await fetch(`http://179.61.246.103:3001/admin/reports/detailed-questions?period=${selectedPeriod}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -140,7 +140,7 @@ export default function AdminReports() {
       }
 
       // Fetch detailed notes
-      const notesResponse = await fetch(`http://localhost:3001/admin/reports/detailed-notes?period=${selectedPeriod}`, {
+      const notesResponse = await fetch(`http://179.61.246.103:3001/admin/reports/detailed-notes?period=${selectedPeriod}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -164,7 +164,7 @@ export default function AdminReports() {
       const token = SecureStorage.getToken();
       if (!token) return;
 
-      const response = await fetch(`http://localhost:3001/admin/notes/${noteId}`, {
+      const response = await fetch(`http://179.61.246.103:3001/admin/notes/${noteId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -665,7 +665,7 @@ function AdminQAPanel() {
       const token = SecureStorage.getToken();
       if (!token) return;
 
-      const response = await fetch(`http://localhost:3001/admin/questions?status=${filter}`, {
+      const response = await fetch(`http://179.61.246.103:3001/admin/questions?status=${filter}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -687,7 +687,7 @@ function AdminQAPanel() {
       const token = SecureStorage.getToken();
       if (!token || !answerContent.trim()) return;
 
-      const response = await fetch(`http://localhost:3001/admin/questions/${questionId}/answer`, {
+      const response = await fetch(`http://179.61.246.103:3001/admin/questions/${questionId}/answer`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -715,7 +715,7 @@ function AdminQAPanel() {
       const token = SecureStorage.getToken();
       if (!token) return;
 
-      const response = await fetch(`http://localhost:3001/admin/questions/${questionId}`, {
+      const response = await fetch(`http://179.61.246.103:3001/admin/questions/${questionId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -739,7 +739,7 @@ function AdminQAPanel() {
       const token = SecureStorage.getToken();
       if (!token) return;
 
-      const response = await fetch(`http://localhost:3001/admin/answers/${answerId}`, {
+      const response = await fetch(`http://179.61.246.103:3001/admin/answers/${answerId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
