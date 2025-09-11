@@ -10,8 +10,9 @@ interface ApiOptions {
 class ApiClient {
   private baseUrl: string;
 
-  constructor(baseUrl: string = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001') {
-    this.baseUrl = baseUrl;
+  constructor(baseUrl?: string) {
+    // Use provided baseUrl or environment variable or fallback
+    this.baseUrl = baseUrl || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
   }
 
   private async request<T>(endpoint: string, options: ApiOptions = {}): Promise<T> {
