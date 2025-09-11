@@ -15,7 +15,7 @@ import {
   Res,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiConsumes } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiConsumes, ApiParam } from '@nestjs/swagger';
 import { VideosService } from './videos.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -69,6 +69,48 @@ export class VideosController {
     @Request() req: any,
   ) {
     return this.videosService.uploadVideo(file, lessonId, req.user.id, req.user.role);
+  }
+
+  // PDF Upload endpoint
+  @Post('upload-pdf/:lessonId')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.INSTRUCTOR, UserRole.ADMIN)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Upload PDF for a lesson (Instructor/Admin only)' })
+  @ApiResponse({
+    status: 201,
+    description: 'PDF uploaded successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request - Invalid file type or size',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Insufficient permissions',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Lesson not found',
+  })
+  @UseInterceptors(FileInterceptor('pdf'))
+  async uploadPdf(
+    @Param('lessonId') lessonId: string,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 50 * 1024 * 1024 }), // 50MB
+        ],
+      }),
+    )
+    file: Express.Multer.File,
+    @Request() req: any,
+  ) {
+    return this.videosService.uploadPdf(file, lessonId, req.user.id, req.user.role);
   }
 
   // Simple video stream endpoint for testing
@@ -134,6 +176,34 @@ export class VideosController {
     return this.videosService.getHLSStream(lessonId, req.user.id, req.user.role);
   }
 
+  // PDF Stream endpoint
+  @Get('pdf/:lessonId')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get PDF for a lesson' })
+  @ApiResponse({
+    status: 200,
+    description: 'PDF URL retrieved successfully',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Access denied',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Lesson or PDF not found',
+  })
+  async getPdf(
+    @Param('lessonId') lessonId: string,
+    @Request() req: any,
+  ) {
+    return this.videosService.getPdf(lessonId, req.user.id, req.user.role);
+  }
+
   @Delete(':lessonId')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.INSTRUCTOR, UserRole.ADMIN)
@@ -195,5 +265,23 @@ export class VideosController {
       req.user.id,
       req.user.role,
     );
+  }
+
+  @Get('pdf/:lessonId')
+  @ApiOperation({ summary: 'Get PDF URL for a lesson' })
+  @ApiParam({ name: 'lessonId', description: 'Lesson ID' })
+  @ApiResponse({
+    status: 200,
+    description: 'PDF URL retrieved successfully',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Lesson or PDF not found',
+  })
+  async getPdfUrl(
+    @Param('lessonId') lessonId: string,
+    @Request() req: any,
+  ) {
+    return this.videosService.getPdf(lessonId, req.user.id, req.user.role);
   }
 }

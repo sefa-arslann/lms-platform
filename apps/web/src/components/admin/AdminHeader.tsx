@@ -21,7 +21,7 @@ export default function AdminHeader() {
         <div className="flex items-center space-x-3">
           <img 
             src="/Logo-Dark.png" 
-            alt="LMS Platform Logo" 
+            alt="Hakan Onbaşı Matematik Logo" 
             className="w-48 h-auto"
             style={{ width: '200px' }}
           />

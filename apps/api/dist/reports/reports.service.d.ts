@@ -204,5 +204,11 @@ export declare class ReportsService {
         isFree: boolean;
         resources: import("@prisma/client/runtime/library").JsonValue | null;
         videoType: string | null;
+        pdfUrl: string | null;
+        pdfKey: string | null;
+        pdfFileName: string | null;
+        pdfSize: number | null;
+        pdfPages: number | null;
+        contentType: string | null;
     }) | null>;
 }

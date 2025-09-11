@@ -232,6 +232,12 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
   const getSecureVideoUrl = useCallback(async () => {
     if (!currentLesson || !user || !token) return;
     
+    // Skip video URL generation for PDF lessons
+    if (currentLesson.contentType === 'PDF') {
+      console.log('📄 PDF lesson detected, skipping video URL generation');
+      return;
+    }
+    
     try {
       console.log('🎬 Getting secure video URL for lesson:', currentLesson.id);
       
@@ -284,8 +290,15 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
   useEffect(() => {
     if (currentLesson && user && token) {
       console.log('🎬 Lesson changed, loading new video:', currentLesson.title);
-      setIsVideoLoading(true);
-      setVideoError(null);
+      
+      // Only set video loading for non-PDF lessons
+      if (currentLesson.contentType !== 'PDF') {
+        setIsVideoLoading(true);
+        setVideoError(null);
+      } else {
+        setIsVideoLoading(false);
+        setVideoError(null);
+      }
       
       // Don't reset progress immediately - wait for video to load
       // setCurrentTime(0);      // ❌ Don't reset immediately
@@ -301,7 +314,7 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
       
       getSecureVideoUrl();
     }
-  }, [currentLesson?.id, user?.id, token, getSecureVideoUrl]);
+  }, [currentLesson?.id, currentLesson?.contentType, user?.id, token, getSecureVideoUrl]);
 
   // Load progress data when lesson changes - FIXED: Added proper dependencies and prevent infinite loops
   useEffect(() => {
@@ -1274,8 +1287,8 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
           <div className="h-full flex flex-col">
             {/* Video Player */}
             <div className="flex-1 bg-black rounded-lg overflow-hidden relative group">
-              {/* Loading State */}
-              {isVideoLoading && (
+              {/* Loading State - Only show for non-PDF lessons */}
+              {isVideoLoading && currentLesson?.contentType !== 'PDF' && (
                 <div className="absolute inset-0 bg-black/80 flex items-center justify-center z-10">
                   <div className="text-center text-white">
                     <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-500 mx-auto mb-4"></div>
@@ -1315,123 +1328,191 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
                 </div>
               )}
 
-              <video
-                key={currentLesson?.id || 'no-lesson'}
-                ref={videoRef}
-                src={currentLesson?.secureVideoUrl || currentLesson?.videoUrl || ''}
-                className="w-full h-full object-cover"
-                onTimeUpdate={handleTimeUpdate}
-                onLoadedMetadata={handleLoadedMetadata}
-                onPlay={() => setIsPlaying(true)}
-                onPause={() => setIsPlaying(false)}
-                onVolumeChange={(e) => setVolume(e.currentTarget.volume)}
-                onSeeked={() => {
-                  if (videoRef.current) {
-                    const progressPercent = Math.round((videoRef.current.currentTime / videoRef.current.duration) * 100);
-                    setProgress(progressPercent);
-                    saveProgress(progressPercent);
-                  }
-                }}
-                onContextMenu={(e) => e.preventDefault()}
-                onDragStart={(e) => e.preventDefault()}
-                onDrop={(e) => e.preventDefault()}
-                onLoadStart={handleVideoLoadStart}
-                onCanPlay={() => {
-                  setIsVideoLoading(false);
-                  console.log('🎬 Video can play');
-                }}
-                onSeeking={(e) => e.preventDefault()}
-                onRateChange={(e) => e.preventDefault()}
-                onError={handleVideoError}
-                onLoadedData={() => {
-                  console.log('🎬 Video data loaded');
-                  setIsVideoLoading(false);
-                }}
-                onCanPlayThrough={() => {
-                  console.log('🎬 Video can play through');
-                  setIsVideoLoading(false);
+              {/* Content Display - Video or PDF */}
+              {currentLesson?.contentType === 'PDF' ? (
+                // PDF Viewer
+                <div className="w-full h-full bg-gray-100 flex flex-col">
+                  {/* PDF Header */}
+                  <div className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <svg className="w-6 h-6 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
+                      </svg>
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-800">
+                          {currentLesson.pdfFileName || 'PDF Dosyası'}
+                        </h3>
+                        <p className="text-sm text-gray-500">PDF Dersi</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={async () => {
+                        try {
+                          // Mark lesson as completed when PDF is viewed
+                          if (currentLesson && user && token) {
+                            saveProgress(100);
+                            setLessonProgress(100);
+                            console.log('📄 PDF görüntülendi, ders otomatik tamamlandı');
+                            
+                            // Kurs genel ilerlemesini güncelle
+                            if (courseData) {
+                              loadCourseProgress();
+                            }
+                          }
+                        } catch (error) {
+                          console.error('PDF progress hatası:', error);
+                        }
+                      }}
+                      className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors"
+                    >
+                      ✅ Dersi Tamamla
+                    </button>
+                  </div>
                   
-                  // Get progress for current lesson from lessonProgressMap
-                  const currentLessonData = currentLesson ? lessonProgressMap.get(currentLesson.id) : null;
-                  const validLastPosition = currentLessonData?.lastPosition || 0;
-                  const validProgress = currentLessonData?.progress || 0;
-                  
-                  console.log('🎬 onCanPlayThrough - Current lesson data:', {
-                    lessonId: currentLesson?.id,
-                    progress: validProgress,
-                    lastPosition: validLastPosition
-                  });
-                  
-                  // Video oynatılmaya hazır olduğunda kaldığı yerden başlat - but only for THIS lesson
-                  if (validLastPosition > 0 && videoRef.current && videoRef.current.currentTime !== validLastPosition && validProgress > 0) {
-                    // Check if lastPosition is valid
-                    if (validLastPosition < videoRef.current.duration) {
-                      videoRef.current.currentTime = validLastPosition;
-                      setCurrentTime(validLastPosition);
-                      setCurrentVideoTime(validLastPosition);
-                      
-                      // Restore progress
-                      const progressPercent = (validLastPosition / videoRef.current.duration) * 100;
+                  {/* PDF Content */}
+                  <div className="flex-1 bg-gray-50 overflow-hidden">
+                    <iframe
+                      src="http://localhost:3001/uploads/pdfs/1757443755835-m6fl052r69l.pdf#zoom=75"
+                      className="w-full h-full border-0 transform scale-75 origin-top-left"
+                      style={{ width: '133.33%', height: '133.33%' }}
+                      title="PDF Viewer"
+                      onLoad={() => {
+                        // Mark lesson as completed when PDF loads
+                        if (currentLesson && user && token) {
+                          saveProgress(100);
+                          setLessonProgress(100);
+                          console.log('📄 PDF yüklendi, ders otomatik tamamlandı');
+                          
+                          // Kurs genel ilerlemesini güncelle
+                          if (courseData) {
+                            loadCourseProgress();
+                          }
+                        }
+                      }}
+                    />
+                  </div>
+                </div>
+              ) : (
+                // Video Player
+                <video
+                  key={currentLesson?.id || 'no-lesson'}
+                  ref={videoRef}
+                  src={currentLesson?.secureVideoUrl || currentLesson?.videoUrl || ''}
+                  className="w-full h-full object-cover"
+                  onTimeUpdate={handleTimeUpdate}
+                  onLoadedMetadata={handleLoadedMetadata}
+                  onPlay={() => setIsPlaying(true)}
+                  onPause={() => setIsPlaying(false)}
+                  onVolumeChange={(e) => setVolume(e.currentTarget.volume)}
+                  onSeeked={() => {
+                    if (videoRef.current) {
+                      const progressPercent = Math.round((videoRef.current.currentTime / videoRef.current.duration) * 100);
                       setProgress(progressPercent);
-                      
-                      console.log('🎬 Video oynatılmaya hazır, kaldığı yerden başlatılıyor:', {
-                        lastPosition: validLastPosition,
-                        duration: videoRef.current.duration,
-                        progress: progressPercent
-                      });
-                    } else {
-                      console.log('🎬 lastPosition invalid, starting from beginning:', {
-                        lastPosition: validLastPosition,
-                        duration: videoRef.current.duration
-                      });
-                      
-                      // Start from beginning
-                      videoRef.current.currentTime = 0;
-                      setCurrentTime(0);
-                      setCurrentVideoTime(0);
-                      setProgress(0);
+                      saveProgress(progressPercent);
                     }
-                  } else {
-                    console.log('🎬 Starting from beginning - no valid position for this lesson:', {
-                      validLastPosition,
-                      validProgress,
-                      lessonId: currentLesson?.id
+                  }}
+                  onContextMenu={(e) => e.preventDefault()}
+                  onDragStart={(e) => e.preventDefault()}
+                  onDrop={(e) => e.preventDefault()}
+                  onLoadStart={handleVideoLoadStart}
+                  onCanPlay={() => {
+                    setIsVideoLoading(false);
+                    console.log('🎬 Video can play');
+                  }}
+                  onSeeking={(e) => e.preventDefault()}
+                  onRateChange={(e) => e.preventDefault()}
+                  onError={handleVideoError}
+                  onLoadedData={() => {
+                    console.log('🎬 Video data loaded');
+                    setIsVideoLoading(false);
+                  }}
+                  onCanPlayThrough={() => {
+                    console.log('🎬 Video can play through');
+                    setIsVideoLoading(false);
+                    
+                    // Get progress for current lesson from lessonProgressMap
+                    const currentLessonData = currentLesson ? lessonProgressMap.get(currentLesson.id) : null;
+                    const validLastPosition = currentLessonData?.lastPosition || 0;
+                    const validProgress = currentLessonData?.progress || 0;
+                    
+                    console.log('🎬 onCanPlayThrough - Current lesson data:', {
+                      lessonId: currentLesson?.id,
+                      progress: validProgress,
+                      lastPosition: validLastPosition
                     });
                     
-                    // Start from beginning for new lesson
-                    if (videoRef.current) {
-                      videoRef.current.currentTime = 0;
-                      setCurrentTime(0);
-                      setCurrentVideoTime(0);
-                      setProgress(0);
+                    // Video oynatılmaya hazır olduğunda kaldığı yerden başlat - but only for THIS lesson
+                    if (validLastPosition > 0 && videoRef.current && videoRef.current.currentTime !== validLastPosition && validProgress > 0) {
+                      // Check if lastPosition is valid
+                      if (validLastPosition < videoRef.current.duration) {
+                        videoRef.current.currentTime = validLastPosition;
+                        setCurrentTime(validLastPosition);
+                        setCurrentVideoTime(validLastPosition);
+                        
+                        // Restore progress
+                        const progressPercent = (validLastPosition / videoRef.current.duration) * 100;
+                        setProgress(progressPercent);
+                        
+                        console.log('🎬 Video oynatılmaya hazır, kaldığı yerden başlatılıyor:', {
+                          lastPosition: validLastPosition,
+                          duration: videoRef.current.duration,
+                          progress: progressPercent
+                        });
+                      } else {
+                        console.log('🎬 lastPosition invalid, starting from beginning:', {
+                          lastPosition: validLastPosition,
+                          duration: videoRef.current.duration
+                        });
+                        
+                        // Start from beginning
+                        videoRef.current.currentTime = 0;
+                        setCurrentTime(0);
+                        setCurrentVideoTime(0);
+                        setProgress(0);
+                      }
+                    } else {
+                      console.log('🎬 Starting from beginning - no valid position for this lesson:', {
+                        validLastPosition,
+                        validProgress,
+                        lessonId: currentLesson?.id
+                      });
+                      
+                      // Start from beginning for new lesson
+                      if (videoRef.current) {
+                        videoRef.current.currentTime = 0;
+                        setCurrentTime(0);
+                        setCurrentVideoTime(0);
+                        setProgress(0);
+                      }
                     }
-                  }
-                }}
-                onEnded={() => {
-                  // Video bittiğinde otomatik tamamla
-                  if (currentLesson && user && token) {
-                    saveProgress(100);
-                    setLessonProgress(100);
-                    console.log('🎯 Video tamamlandı, ilerleme %100');
-                    
-                    // Kurs genel ilerlemesini güncelle
-                    if (courseData) {
-                      loadCourseProgress();
+                  }}
+                  onEnded={() => {
+                    // Video bittiğinde otomatik tamamla
+                    if (currentLesson && user && token) {
+                      saveProgress(100);
+                      setLessonProgress(100);
+                      console.log('🎯 Video tamamlandı, ilerleme %100');
+                      
+                      // Kurs genel ilerlemesini güncelle
+                      if (courseData) {
+                        loadCourseProgress();
+                      }
                     }
-                  }
-                }}
-                controlsList="nodownload nofullscreen noremoteplayback"
-                disablePictureInPicture
-                disableRemotePlayback
-                preload="metadata"
-                crossOrigin="anonymous"
-                playsInline
-              >
-                Tarayıcınız video oynatmayı desteklemiyor.
-              </video>
+                  }}
+                  controlsList="nodownload nofullscreen noremoteplayback"
+                  disablePictureInPicture
+                  disableRemotePlayback
+                  preload="metadata"
+                  crossOrigin="anonymous"
+                  playsInline
+                >
+                  Tarayıcınız video oynatmayı desteklemiyor.
+                </video>
+              )}
 
-              {/* Unified Video Control Panel */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300">
+              {/* Unified Video Control Panel - Only show for video lessons */}
+              {currentLesson?.contentType !== 'PDF' && (
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300">
                 {/* Top Bar - Video Info */}
                 <div className="absolute top-4 left-4 right-4">
                   <div className="flex items-center justify-between">
@@ -1594,10 +1675,12 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
                   </div>
                 </div>
               </div>
+              )}
             </div>
 
-            {/* Video Controls Summary - Lesson Specific */}
-            <div className="mt-4 bg-gray-800 rounded-lg p-4">
+            {/* Video Controls Summary - Lesson Specific - Only show for video lessons */}
+            {currentLesson?.contentType !== 'PDF' && (
+              <div className="mt-4 bg-gray-800 rounded-lg p-4">
               <div className="flex items-center justify-center space-x-6 text-sm text-gray-400">
                 <div className="flex items-center space-x-2">
                   <span>🎯</span>
@@ -1659,6 +1742,7 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
                 </div>
               </div>
             </div>
+            )}
           </div>
         </div>
 
@@ -1785,9 +1869,16 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
                             })()}
                           </div>
                           <div className="flex-1 text-left">
-                            <p className="font-medium">{lesson.title}</p>
+                            <div className="flex items-center space-x-2">
+                              <p className="font-medium">{lesson.title}</p>
+                              {lesson.contentType === 'PDF' && (
+                                <span className="text-red-500 text-sm" title="PDF Dersi">📄</span>
+                              )}
+                            </div>
                             <div className="flex items-center space-x-2 mt-1">
-                                <span className="text-sm opacity-75">{formatDurationMMSS(lesson.duration || 0)}</span>
+                                <span className="text-sm opacity-75">
+                                  {lesson.contentType === 'PDF' ? 'PDF' : formatDurationMMSS(lesson.duration || 0)}
+                                </span>
                                 
                                 {/* Progress from lessonProgressMap */}
                                 {(() => {

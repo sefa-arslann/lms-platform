@@ -197,6 +197,127 @@ let VideosService = VideosService_1 = class VideosService {
             throw error;
         }
     }
+    async uploadPdf(file, lessonId, userId, userRole) {
+        try {
+            this.logger.log(`📄 Uploading PDF for lesson ${lessonId} by user ${userId}`);
+            if (file.mimetype !== 'application/pdf') {
+                throw new common_1.BadRequestException(`Invalid file type. Expected application/pdf, got ${file.mimetype}`);
+            }
+            const lesson = await this.prisma.lesson.findUnique({
+                where: { id: lessonId },
+                include: { section: { include: { course: true } } },
+            });
+            if (!lesson) {
+                throw new common_1.NotFoundException('Lesson not found');
+            }
+            if (userRole === client_1.UserRole.STUDENT) {
+                throw new common_1.ForbiddenException('Students cannot upload PDFs');
+            }
+            if (userRole === client_1.UserRole.INSTRUCTOR) {
+                if (lesson.section.course.instructorId !== userId) {
+                    throw new common_1.ForbiddenException('You can only upload PDFs to your own courses');
+                }
+            }
+            const fileExtension = '.pdf';
+            const uniqueFileName = `${Date.now()}-${Math.random().toString(36).substring(2)}${fileExtension}`;
+            const uploadPath = `./uploads/pdfs/${uniqueFileName}`;
+            const fs = require('fs');
+            const path = require('path');
+            const uploadDir = path.dirname(uploadPath);
+            if (!fs.existsSync(uploadDir)) {
+                fs.mkdirSync(uploadDir, { recursive: true });
+            }
+            console.log('🔍 File object:', {
+                buffer: file.buffer ? 'EXISTS' : 'UNDEFINED',
+                size: file.size,
+                mimetype: file.mimetype,
+                originalname: file.originalname,
+                fieldname: file.fieldname
+            });
+            if (file.buffer) {
+                fs.writeFileSync(uploadPath, file.buffer);
+            }
+            else {
+                throw new Error('File buffer is undefined');
+            }
+            const fileSize = file.size;
+            const updatedLesson = await this.prisma.lesson.update({
+                where: { id: lessonId },
+                data: {
+                    pdfUrl: `/uploads/pdfs/${uniqueFileName}`,
+                    pdfKey: uniqueFileName,
+                    pdfFileName: file.originalname,
+                    pdfSize: fileSize,
+                    contentType: 'PDF',
+                    duration: 0,
+                },
+                include: {
+                    section: {
+                        include: {
+                            course: true,
+                        },
+                    },
+                },
+            });
+            this.logger.log(`✅ PDF uploaded successfully for lesson ${lessonId}`);
+            return {
+                success: true,
+                message: 'PDF uploaded successfully',
+                data: {
+                    lessonId,
+                    pdfUrl: updatedLesson.pdfUrl,
+                    pdfFileName: updatedLesson.pdfFileName,
+                    pdfSize: updatedLesson.pdfSize,
+                    contentType: updatedLesson.contentType,
+                },
+            };
+        }
+        catch (error) {
+            this.logger.error(`PDF upload failed: ${error.message}`);
+            throw error;
+        }
+    }
+    async getPdf(lessonId, userId, userRole) {
+        try {
+            this.logger.log(`📄 Getting PDF for lesson ${lessonId} by user ${userId}`);
+            const lesson = await this.prisma.lesson.findUnique({
+                where: { id: lessonId },
+                include: { section: { include: { course: true } } },
+            });
+            if (!lesson) {
+                throw new common_1.NotFoundException('Lesson not found');
+            }
+            if (!lesson.pdfUrl) {
+                throw new common_1.NotFoundException('No PDF available for this lesson');
+            }
+            if (userRole === client_1.UserRole.STUDENT) {
+                const accessGrant = await this.prisma.accessGrant.findFirst({
+                    where: {
+                        userId,
+                        courseId: lesson.section.courseId,
+                        isActive: true,
+                    },
+                });
+                if (!accessGrant) {
+                    throw new common_1.ForbiddenException('Access denied - Course not purchased');
+                }
+            }
+            return {
+                success: true,
+                data: {
+                    lessonId,
+                    pdfUrl: `http://localhost:3001${lesson.pdfUrl}`,
+                    pdfFileName: lesson.pdfFileName,
+                    pdfSize: lesson.pdfSize,
+                    contentType: lesson.contentType,
+                },
+            };
+        }
+        catch (error) {
+            this.logger.error(`PDF retrieval failed: ${error.message}`);
+            throw error;
+        }
+    }
 };
 exports.VideosService = VideosService;
 exports.VideosService = VideosService = VideosService_1 = __decorate([

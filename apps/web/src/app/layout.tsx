@@ -17,10 +17,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "LMS Platform - Online Eğitim Platformu",
+  title: "Hakan Onbaşı Matematik - ÖABT Matematik Eğitim Platformu",
   description: "Profesyonel online eğitim platformu. Binlerce kurs, uzman eğitmenler ve esnek öğrenme deneyimi.",
   keywords: "online eğitim, kurs, öğrenme, eğitim platformu, video kurslar",
-  authors: [{ name: "LMS Platform" }],
+  authors: [{ name: "Hakan Onbaşı Matematik" }],
   icons: {
     icon: '/Logo-Dark.png',
     shortcut: '/Logo-Dark.png',

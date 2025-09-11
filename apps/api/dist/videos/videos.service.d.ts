@@ -26,6 +26,12 @@ export declare class VideosService {
             isFree: boolean;
             resources: import("@prisma/client/runtime/library").JsonValue | null;
             videoType: string | null;
+            pdfUrl: string | null;
+            pdfKey: string | null;
+            pdfFileName: string | null;
+            pdfSize: number | null;
+            pdfPages: number | null;
+            contentType: string | null;
         };
         videoKey: string;
         hlsKeys: string[];
@@ -57,5 +63,26 @@ export declare class VideosService {
     addWatermark(lessonId: string, watermarkText: string, userId: string, userRole: UserRole): Promise<{
         message: string;
         videoKey: string;
+    }>;
+    uploadPdf(file: Express.Multer.File, lessonId: string, userId: string, userRole: UserRole): Promise<{
+        success: boolean;
+        message: string;
+        data: {
+            lessonId: string;
+            pdfUrl: string | null;
+            pdfFileName: string | null;
+            pdfSize: number | null;
+            contentType: string | null;
+        };
+    }>;
+    getPdf(lessonId: string, userId: string, userRole: UserRole): Promise<{
+        success: boolean;
+        data: {
+            lessonId: string;
+            pdfUrl: string;
+            pdfFileName: string | null;
+            pdfSize: number | null;
+            contentType: string | null;
+        };
     }>;
 }

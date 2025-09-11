@@ -545,7 +545,7 @@ export default function CartPage() {
                       <div className="space-y-2 text-sm text-gray-600">
                         <p><span className="font-medium">Banka:</span> Garanti BBVA</p>
                         <p><span className="font-medium">IBAN:</span> TR12 0006 2000 0000 0000 0000 00</p>
-                        <p><span className="font-medium">Alıcı:</span> LMS Platform A.Ş.</p>
+                        <p><span className="font-medium">Alıcı:</span> Hakan Onbaşı Matematik A.Ş.</p>
                         <p><span className="font-medium">Açıklama:</span> Sipariş No: {Math.random().toString(36).substr(2, 9).toUpperCase()}</p>
                       </div>
                     </div>

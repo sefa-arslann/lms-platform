@@ -306,6 +306,12 @@ export declare class AdminController {
         isFree: boolean;
         resources: import("@prisma/client/runtime/library").JsonValue | null;
         videoType: string | null;
+        pdfUrl: string | null;
+        pdfKey: string | null;
+        pdfFileName: string | null;
+        pdfSize: number | null;
+        pdfPages: number | null;
+        contentType: string | null;
     }) | null>;
     getAllQuestions(status?: 'all' | 'unanswered' | 'answered'): Promise<({
         user: {
@@ -835,6 +841,12 @@ export declare class AdminController {
             isFree: boolean;
             resources: import("@prisma/client/runtime/library").JsonValue | null;
             videoType: string | null;
+            pdfUrl: string | null;
+            pdfKey: string | null;
+            pdfFileName: string | null;
+            pdfSize: number | null;
+            pdfPages: number | null;
+            contentType: string | null;
         }[];
     } & {
         order: number;
@@ -866,6 +878,12 @@ export declare class AdminController {
             isFree: boolean;
             resources: import("@prisma/client/runtime/library").JsonValue | null;
             videoType: string | null;
+            pdfUrl: string | null;
+            pdfKey: string | null;
+            pdfFileName: string | null;
+            pdfSize: number | null;
+            pdfPages: number | null;
+            contentType: string | null;
         }[];
     } & {
         order: number;
@@ -908,6 +926,12 @@ export declare class AdminController {
         isFree: boolean;
         resources: import("@prisma/client/runtime/library").JsonValue | null;
         videoType: string | null;
+        pdfUrl: string | null;
+        pdfKey: string | null;
+        pdfFileName: string | null;
+        pdfSize: number | null;
+        pdfPages: number | null;
+        contentType: string | null;
     }>;
     updateLesson(id: string, updateLessonDto: any): Promise<{
         order: number;
@@ -926,6 +950,12 @@ export declare class AdminController {
         isFree: boolean;
         resources: import("@prisma/client/runtime/library").JsonValue | null;
         videoType: string | null;
+        pdfUrl: string | null;
+        pdfKey: string | null;
+        pdfFileName: string | null;
+        pdfSize: number | null;
+        pdfPages: number | null;
+        contentType: string | null;
     }>;
     deleteLesson(id: string): Promise<{
         order: number;
@@ -944,6 +974,12 @@ export declare class AdminController {
         isFree: boolean;
         resources: import("@prisma/client/runtime/library").JsonValue | null;
         videoType: string | null;
+        pdfUrl: string | null;
+        pdfKey: string | null;
+        pdfFileName: string | null;
+        pdfSize: number | null;
+        pdfPages: number | null;
+        contentType: string | null;
     }>;
     createQnA(courseId: string, createQnADto: any): Promise<{
         user: {

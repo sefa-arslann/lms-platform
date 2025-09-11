@@ -238,7 +238,7 @@ export default function Header() {
             <div className="relative">
               <img 
                 src="/Logo-Dark.png" 
-                alt="LMS Platform Logo" 
+                alt="Hakan Onbaşı Matematik Logo" 
                 className="w-48 h-auto"
                 style={{ width: '200px' }}
               />

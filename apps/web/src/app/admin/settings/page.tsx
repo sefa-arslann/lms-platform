@@ -134,7 +134,7 @@ export default function SettingsPage() {
                 </label>
                 <input
                   type="text"
-                  defaultValue={settings.platform_name || 'LMS Platform'}
+                  defaultValue={settings.platform_name || 'Hakan Onbaşı Matematik'}
                   onChange={(e) => setSettings({...settings, platform_name: e.target.value})}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
@@ -467,7 +467,7 @@ export default function SettingsPage() {
                 </label>
                 <input
                   type="text"
-                  defaultValue="LMS Platform"
+                  defaultValue="Hakan Onbaşı Matematik"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>

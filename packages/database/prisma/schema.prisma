@@ -105,6 +105,13 @@ model Lesson {
   isFree         Boolean          @default(false)
   resources      Json?
   videoType      String?          @default("VIDEO")
+  // PDF Support
+  pdfUrl         String?
+  pdfKey         String?
+  pdfFileName    String?
+  pdfSize        Int?             // File size in bytes
+  pdfPages       Int?             // Number of pages
+  contentType    String?          @default("VIDEO") // VIDEO, PDF, or MIXED
   progress       LessonProgress[]
   section        Section          @relation(fields: [sectionId], references: [id], onDelete: Cascade)
   notes          Note[]

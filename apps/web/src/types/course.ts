@@ -21,6 +21,14 @@ export interface CourseLesson {
   videoType: 'VIDEO' | 'LIVE' | 'QUIZ' | 'ASSIGNMENT';
   isFree: boolean;
   resources?: string[];
+  // PDF support fields
+  contentType?: 'VIDEO' | 'PDF' | 'MIXED';
+  pdfUrl?: string;
+  pdfKey?: string;
+  pdfFileName?: string;
+  pdfSize?: number;
+  pdfPages?: number;
+  pdfFile?: File; // For form handling only, not persisted
 }
 
 export interface CourseQnA {

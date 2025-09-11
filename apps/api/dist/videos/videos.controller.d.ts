@@ -22,6 +22,12 @@ export declare class VideosController {
             isFree: boolean;
             resources: import("@prisma/client/runtime/library").JsonValue | null;
             videoType: string | null;
+            pdfUrl: string | null;
+            pdfKey: string | null;
+            pdfFileName: string | null;
+            pdfSize: number | null;
+            pdfPages: number | null;
+            contentType: string | null;
         };
         videoKey: string;
         hlsKeys: string[];
@@ -34,12 +40,33 @@ export declare class VideosController {
             fps: number;
         };
     }>;
+    uploadPdf(lessonId: string, file: Express.Multer.File, req: any): Promise<{
+        success: boolean;
+        message: string;
+        data: {
+            lessonId: string;
+            pdfUrl: string | null;
+            pdfFileName: string | null;
+            pdfSize: number | null;
+            contentType: string | null;
+        };
+    }>;
     streamVideo(lessonId: string, res: any): Promise<any>;
     getHLSStream(lessonId: string, req: any): Promise<{
         lessonId: string;
         hlsUrl: string;
         thumbnail: string | null;
         duration: number;
+    }>;
+    getPdf(lessonId: string, req: any): Promise<{
+        success: boolean;
+        data: {
+            lessonId: string;
+            pdfUrl: string;
+            pdfFileName: string | null;
+            pdfSize: number | null;
+            contentType: string | null;
+        };
     }>;
     deleteVideo(lessonId: string, req: any): Promise<{
         message: string;
@@ -49,5 +76,15 @@ export declare class VideosController {
     }, req: any): Promise<{
         message: string;
         videoKey: string;
+    }>;
+    getPdfUrl(lessonId: string, req: any): Promise<{
+        success: boolean;
+        data: {
+            lessonId: string;
+            pdfUrl: string;
+            pdfFileName: string | null;
+            pdfSize: number | null;
+            contentType: string | null;
+        };
     }>;
 }

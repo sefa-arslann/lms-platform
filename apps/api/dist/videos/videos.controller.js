@@ -32,6 +32,9 @@ let VideosController = class VideosController {
     async uploadVideo(lessonId, file, req) {
         return this.videosService.uploadVideo(file, lessonId, req.user.id, req.user.role);
     }
+    async uploadPdf(lessonId, file, req) {
+        return this.videosService.uploadPdf(file, lessonId, req.user.id, req.user.role);
+    }
     async streamVideo(lessonId, res) {
         try {
             console.log(`🎥 Streaming video for lesson ${lessonId}`);
@@ -64,11 +67,17 @@ let VideosController = class VideosController {
     async getHLSStream(lessonId, req) {
         return this.videosService.getHLSStream(lessonId, req.user.id, req.user.role);
     }
+    async getPdf(lessonId, req) {
+        return this.videosService.getPdf(lessonId, req.user.id, req.user.role);
+    }
     async deleteVideo(lessonId, req) {
         return this.videosService.deleteVideo(lessonId, req.user.id, req.user.role);
     }
     async addWatermark(lessonId, body, req) {
         return this.videosService.addWatermark(lessonId, body.watermarkText, req.user.id, req.user.role);
+    }
+    async getPdfUrl(lessonId, req) {
+        return this.videosService.getPdf(lessonId, req.user.id, req.user.role);
     }
 };
 exports.VideosController = VideosController;
@@ -113,6 +122,44 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], VideosController.prototype, "uploadVideo", null);
 __decorate([
+    (0, common_1.Post)('upload-pdf/:lessonId'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(client_1.UserRole.INSTRUCTOR, client_1.UserRole.ADMIN),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Upload PDF for a lesson (Instructor/Admin only)' }),
+    (0, swagger_1.ApiResponse)({
+        status: 201,
+        description: 'PDF uploaded successfully',
+    }),
+    (0, swagger_1.ApiResponse)({
+        status: 400,
+        description: 'Bad request - Invalid file type or size',
+    }),
+    (0, swagger_1.ApiResponse)({
+        status: 401,
+        description: 'Unauthorized',
+    }),
+    (0, swagger_1.ApiResponse)({
+        status: 403,
+        description: 'Forbidden - Insufficient permissions',
+    }),
+    (0, swagger_1.ApiResponse)({
+        status: 404,
+        description: 'Lesson not found',
+    }),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('pdf')),
+    __param(0, (0, common_1.Param)('lessonId')),
+    __param(1, (0, common_1.UploadedFile)(new common_1.ParseFilePipe({
+        validators: [
+            new common_1.MaxFileSizeValidator({ maxSize: 50 * 1024 * 1024 }),
+        ],
+    }))),
+    __param(2, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object, Object]),
+    __metadata("design:returntype", Promise)
+], VideosController.prototype, "uploadPdf", null);
+__decorate([
     (0, common_1.Get)('stream/:lessonId'),
     __param(0, (0, common_1.Param)('lessonId')),
     __param(1, (0, common_1.Res)()),
@@ -147,6 +194,33 @@ __decorate([
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], VideosController.prototype, "getHLSStream", null);
+__decorate([
+    (0, common_1.Get)('pdf/:lessonId'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Get PDF for a lesson' }),
+    (0, swagger_1.ApiResponse)({
+        status: 200,
+        description: 'PDF URL retrieved successfully',
+    }),
+    (0, swagger_1.ApiResponse)({
+        status: 401,
+        description: 'Unauthorized',
+    }),
+    (0, swagger_1.ApiResponse)({
+        status: 403,
+        description: 'Forbidden - Access denied',
+    }),
+    (0, swagger_1.ApiResponse)({
+        status: 404,
+        description: 'Lesson or PDF not found',
+    }),
+    __param(0, (0, common_1.Param)('lessonId')),
+    __param(1, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], VideosController.prototype, "getPdf", null);
 __decorate([
     (0, common_1.Delete)(':lessonId'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
@@ -208,6 +282,24 @@ __decorate([
     __metadata("design:paramtypes", [String, Object, Object]),
     __metadata("design:returntype", Promise)
 ], VideosController.prototype, "addWatermark", null);
+__decorate([
+    (0, common_1.Get)('pdf/:lessonId'),
+    (0, swagger_1.ApiOperation)({ summary: 'Get PDF URL for a lesson' }),
+    (0, swagger_1.ApiParam)({ name: 'lessonId', description: 'Lesson ID' }),
+    (0, swagger_1.ApiResponse)({
+        status: 200,
+        description: 'PDF URL retrieved successfully',
+    }),
+    (0, swagger_1.ApiResponse)({
+        status: 404,
+        description: 'Lesson or PDF not found',
+    }),
+    __param(0, (0, common_1.Param)('lessonId')),
+    __param(1, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], VideosController.prototype, "getPdfUrl", null);
 exports.VideosController = VideosController = __decorate([
     (0, swagger_1.ApiTags)('Videos'),
     (0, common_1.Controller)('videos'),

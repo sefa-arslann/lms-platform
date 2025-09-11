@@ -366,7 +366,7 @@ export default function PaymentPage() {
                         </div>
                         <div className="flex justify-between">
                           <span className="font-medium">Alıcı:</span>
-                          <span>LMS Platform A.Ş.</span>
+                          <span>Hakan Onbaşı Matematik A.Ş.</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="font-medium">Açıklama:</span>

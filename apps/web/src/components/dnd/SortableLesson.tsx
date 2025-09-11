@@ -54,7 +54,12 @@ export function SortableLesson({
         
         <span className="text-sm font-medium text-gray-500">{lessonIndex + 1}</span>
         <div>
-          <h5 className="font-medium text-gray-900">{lesson.title}</h5>
+          <div className="flex items-center space-x-2">
+            <h5 className="font-medium text-gray-900">{lesson.title}</h5>
+            {lesson.contentType === 'PDF' && (
+              <span className="text-red-500 text-sm" title="PDF Dersi">📄</span>
+            )}
+          </div>
           {lesson.description && (
             <p className="text-sm text-gray-600">{lesson.description}</p>
           )}
@@ -63,7 +68,7 @@ export function SortableLesson({
       
       <div className="flex items-center space-x-2">
         <span className="text-xs text-gray-500">
-          {formatDurationMMSS(lesson.duration || 0)}
+          {lesson.contentType === 'PDF' ? 'PDF' : formatDurationMMSS(lesson.duration || 0)}
         </span>
         <span className={`px-2 py-1 text-xs rounded-full font-medium ${
           lesson.isPublished

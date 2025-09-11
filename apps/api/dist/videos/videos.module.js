@@ -19,8 +19,6 @@ const jwt_1 = require("@nestjs/jwt");
 const access_grants_module_1 = require("../access-grants/access-grants.module");
 const platform_express_1 = require("@nestjs/platform-express");
 const multer_1 = require("multer");
-const path_1 = require("path");
-const uuid_1 = require("uuid");
 let VideosModule = class VideosModule {
 };
 exports.VideosModule = VideosModule;
@@ -34,20 +32,13 @@ exports.VideosModule = VideosModule = __decorate([
                 signOptions: { expiresIn: '1h' },
             }),
             platform_express_1.MulterModule.register({
-                storage: (0, multer_1.diskStorage)({
-                    destination: './uploads/temp',
-                    filename: (req, file, cb) => {
-                        const uniqueName = (0, uuid_1.v4)();
-                        const extension = (0, path_1.extname)(file.originalname);
-                        cb(null, `${uniqueName}${extension}`);
-                    },
-                }),
+                storage: (0, multer_1.memoryStorage)(),
                 fileFilter: (req, file, cb) => {
-                    if (file.mimetype.startsWith('video/')) {
+                    if (file.mimetype.startsWith('video/') || file.mimetype === 'application/pdf') {
                         cb(null, true);
                     }
                     else {
-                        cb(new Error('Only video files are allowed'), false);
+                        cb(new Error('Only video and PDF files are allowed'), false);
                     }
                 },
                 limits: {

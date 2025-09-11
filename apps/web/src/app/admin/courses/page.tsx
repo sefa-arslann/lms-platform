@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import {
   BookOpenIcon,
@@ -35,6 +36,9 @@ import { formatDuration, formatDurationMMSS, formatDurationHHMMSS } from '@/util
 
 
 export default function CoursesPage() {
+  // Auth context for getting token
+  const { token } = useAuth();
+  
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -861,8 +865,10 @@ export default function CoursesPage() {
         videoUrl: '',
         thumbnail: '',
         videoType: 'VIDEO',
+        contentType: 'VIDEO',
         isFree: false,
-        resources: []
+        resources: [],
+        pdfFile: undefined
       });
     }
     
@@ -1521,53 +1527,118 @@ export default function CoursesPage() {
                   </div>
                 </div>
 
+                {/* Content Type Selection */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-800 mb-2">
-                    Video URL *
+                    İçerik Türü *
                   </label>
-                  <div className="space-y-2">
-                    <input
-                      type="url"
-                      value={lessonFormData.videoUrl || ''}
-                      onChange={(e) => setLessonFormData({...lessonFormData, videoUrl: e.target.value})}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900 font-medium shadow-sm hover:border-gray-400 transition-colors"
-                      placeholder="https://example.com/video.mp4"
-                    />
-                    {lessonFormData.videoUrl && (
-                      <div className="flex items-center space-x-2">
-                        <button
-                          type="button"
-                          onClick={async () => {
-                            try {
-                              const response = await fetch('http://localhost:3001/admin/video/duration', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ videoUrl: lessonFormData.videoUrl }),
-                              });
-                              
-                              if (response.ok) {
-                                const data = await response.json();
-                                setLessonFormData(prev => ({ ...prev, duration: data.duration }));
-                                alert(`Video süresi otomatik olarak alındı: ${data.formattedDuration} (${data.duration} saniye)`);
-                              } else {
-                                throw new Error('Failed to get video duration');
-                              }
-                            } catch (error) {
-                              console.error('Error getting video duration:', error);
-                              alert('Video süresi alınamadı. Manuel olarak girebilirsiniz.');
-                            }
-                          }}
-                          className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors"
-                        >
-                          🎬 Süreyi Otomatik Al
-                        </button>
-                        <span className="text-xs text-gray-500">
-                          Video URL'ini girdikten sonra süreyi otomatik olarak alabilirsiniz
-                        </span>
-                      </div>
-                    )}
+                  <div className="flex space-x-4">
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        name="contentType"
+                        value="VIDEO"
+                        checked={lessonFormData.contentType === 'VIDEO' || !lessonFormData.contentType}
+                        onChange={(e) => setLessonFormData({...lessonFormData, contentType: e.target.value as 'VIDEO' | 'PDF' | 'MIXED'})}
+                        className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                      />
+                      <span className="ml-2 text-sm font-medium text-gray-700">🎬 Video</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        name="contentType"
+                        value="PDF"
+                        checked={lessonFormData.contentType === 'PDF'}
+                        onChange={(e) => setLessonFormData({...lessonFormData, contentType: e.target.value as 'VIDEO' | 'PDF' | 'MIXED'})}
+                        className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                      />
+                      <span className="ml-2 text-sm font-medium text-gray-700">📄 PDF</span>
+                    </label>
                   </div>
                 </div>
+
+                {/* Video URL - Only show if content type is VIDEO */}
+                {(!lessonFormData.contentType || lessonFormData.contentType === 'VIDEO') && (
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-800 mb-2">
+                      Video URL *
+                    </label>
+                    <div className="space-y-2">
+                      <input
+                        type="url"
+                        value={lessonFormData.videoUrl || ''}
+                        onChange={(e) => setLessonFormData({...lessonFormData, videoUrl: e.target.value})}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900 font-medium shadow-sm hover:border-gray-400 transition-colors"
+                        placeholder="https://example.com/video.mp4"
+                      />
+                      {lessonFormData.videoUrl && (
+                        <div className="flex items-center space-x-2">
+                          <button
+                            type="button"
+                            onClick={async () => {
+                              try {
+                                const response = await fetch('http://localhost:3001/admin/video/duration', {
+                                  method: 'POST',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({ videoUrl: lessonFormData.videoUrl }),
+                                });
+                                
+                                if (response.ok) {
+                                  const data = await response.json();
+                                  setLessonFormData(prev => ({ ...prev, duration: data.duration }));
+                                  alert(`Video süresi otomatik olarak alındı: ${data.formattedDuration} (${data.duration} saniye)`);
+                                } else {
+                                  throw new Error('Failed to get video duration');
+                                }
+                              } catch (error) {
+                                console.error('Error getting video duration:', error);
+                                alert('Video süresi alınamadı. Manuel olarak girebilirsiniz.');
+                              }
+                            }}
+                            className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors"
+                          >
+                            🎬 Süreyi Otomatik Al
+                          </button>
+                          <span className="text-xs text-gray-500">
+                            Video URL'ini girdikten sonra süreyi otomatik olarak alabilirsiniz
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* PDF Upload - Only show if content type is PDF */}
+                {lessonFormData.contentType === 'PDF' && (
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-800 mb-2">
+                      PDF Dosyası *
+                    </label>
+                    <div className="space-y-2">
+                      <input
+                        type="file"
+                        accept=".pdf"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            setLessonFormData({...lessonFormData, pdfFile: file});
+                          }
+                        }}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900 font-medium shadow-sm hover:border-gray-400 transition-colors"
+                      />
+                      <div className="text-xs text-gray-500">
+                        💡 PDF dosyası yüklendikten sonra ders otomatik olarak tamamlanmış sayılacak
+                      </div>
+                      {lessonFormData.pdfFile && (
+                        <div className="flex items-center space-x-2 text-sm text-green-600">
+                          <span>✅</span>
+                          <span>{lessonFormData.pdfFile.name} ({(lessonFormData.pdfFile.size / 1024 / 1024).toFixed(2)} MB)</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-800 mb-2">
@@ -1628,19 +1699,68 @@ export default function CoursesPage() {
                           alert('Ders başlığı zorunludur!');
                           return;
                         }
-                        if (!lessonFormData.videoUrl?.trim()) {
+                        
+                        // Content type validation
+                        if (lessonFormData.contentType === 'VIDEO' && !lessonFormData.videoUrl?.trim()) {
                           alert('Video URL zorunludur!');
+                          return;
+                        }
+                        if (lessonFormData.contentType === 'PDF' && !lessonFormData.pdfFile) {
+                          alert('PDF dosyası zorunludur!');
                           return;
                         }
 
                         if (selectedLesson) {
                           // Update existing lesson
+                          console.log('🔍 Token check for lesson update:', token ? 'EXISTS' : 'NOT FOUND');
+                          if (!token) {
+                            console.error('❌ No token found in useAuth for lesson update');
+                            throw new Error('No authentication token found');
+                          }
+
                           const response = await fetch(`http://localhost:3001/admin/lessons/${selectedLesson.id}`, {
                             method: 'PATCH',
-                            headers: { 'Content-Type': 'application/json' },
+                            headers: { 
+                              'Content-Type': 'application/json',
+                              'Authorization': `Bearer ${token}`,
+                            },
                             body: JSON.stringify(lessonFormData),
                           });
                           if (!response.ok) throw new Error('Failed to update lesson');
+                          
+                          // If it's a PDF lesson and a new PDF file is uploaded, upload the PDF
+                          if (lessonFormData.contentType === 'PDF' && lessonFormData.pdfFile) {
+                            try {
+                              const formData = new FormData();
+                              formData.append('pdf', lessonFormData.pdfFile);
+                              
+                              console.log('📄 Uploading PDF for lesson update:', selectedLesson.id);
+                              console.log('📄 PDF file:', lessonFormData.pdfFile.name, 'Size:', lessonFormData.pdfFile.size);
+                              
+                              const pdfResponse = await fetch(`http://localhost:3001/videos/upload-pdf/${selectedLesson.id}`, {
+                                method: 'POST',
+                                headers: {
+                                  'Authorization': `Bearer ${token}`,
+                                },
+                                body: formData,
+                              });
+                              
+                              console.log('📄 PDF upload response status:', pdfResponse.status);
+                              
+                              if (!pdfResponse.ok) {
+                                const errorData = await pdfResponse.json();
+                                console.error('PDF upload failed:', errorData);
+                                alert(`Ders güncellendi ancak PDF yüklenemedi: ${errorData.message || 'Bilinmeyen hata'}`);
+                              } else {
+                                const pdfData = await pdfResponse.json();
+                                console.log('✅ PDF uploaded successfully:', pdfData);
+                                alert('PDF ders başarıyla güncellendi!');
+                              }
+                            } catch (error) {
+                              console.error('PDF upload error:', error);
+                              alert(`Ders güncellendi ancak PDF yüklenemedi: ${error instanceof Error ? error.message : 'Bilinmeyen hata'}`);
+                            }
+                          }
                         } else {
                           // Create new lesson - need section ID from context
                           let sectionId = '';
@@ -1659,15 +1779,69 @@ export default function CoursesPage() {
                             }
                           }
                           
+                          // First create the lesson
+                          const lessonData = {
+                            ...lessonFormData,
+                            order: 1, // Default order
+                            duration: lessonFormData.contentType === 'PDF' ? 0 : lessonFormData.duration, // PDFs have 0 duration
+                          };
+                          
+                          // Remove pdfFile from the data sent to API (it's not part of the lesson model)
+                          delete lessonData.pdfFile;
+                          
+                          // Get JWT token for admin requests
+                          console.log('🔍 Token check for lesson creation:', token ? 'EXISTS' : 'NOT FOUND');
+                          if (!token) {
+                            console.error('❌ No token found in useAuth for lesson creation');
+                            throw new Error('No authentication token found');
+                          }
+
                           const response = await fetch(`http://localhost:3001/admin/sections/${sectionId}/lessons`, {
                             method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                              ...lessonFormData,
-                              order: 1, // Default order
-                            }),
+                            headers: { 
+                              'Content-Type': 'application/json',
+                              'Authorization': `Bearer ${token}`,
+                            },
+                            body: JSON.stringify(lessonData),
                           });
+                          
                           if (!response.ok) throw new Error('Failed to create lesson');
+                          
+                          const newLesson = await response.json();
+                          
+                          // If it's a PDF lesson, upload the PDF file
+                          if (lessonFormData.contentType === 'PDF' && lessonFormData.pdfFile) {
+                            try {
+                              const formData = new FormData();
+                              formData.append('pdf', lessonFormData.pdfFile);
+                              
+                              console.log('📄 Uploading PDF for lesson:', newLesson.id);
+                              console.log('📄 PDF file:', lessonFormData.pdfFile.name, 'Size:', lessonFormData.pdfFile.size);
+                              
+                              const pdfResponse = await fetch(`http://localhost:3001/videos/upload-pdf/${newLesson.id}`, {
+                                method: 'POST',
+                                headers: {
+                                  'Authorization': `Bearer ${token}`,
+                                },
+                                body: formData,
+                              });
+                              
+                              console.log('📄 PDF upload response status:', pdfResponse.status);
+                              
+                              if (!pdfResponse.ok) {
+                                const errorData = await pdfResponse.json();
+                                console.error('PDF upload failed:', errorData);
+                                alert(`Ders oluşturuldu ancak PDF yüklenemedi: ${errorData.message || 'Bilinmeyen hata'}`);
+                              } else {
+                                const pdfData = await pdfResponse.json();
+                                console.log('✅ PDF uploaded successfully:', pdfData);
+                                alert('PDF ders başarıyla oluşturuldu!');
+                              }
+                            } catch (error) {
+                              console.error('PDF upload error:', error);
+                              alert(`Ders oluşturuldu ancak PDF yüklenemedi: ${error instanceof Error ? error.message : 'Bilinmeyen hata'}`);
+                            }
+                          }
                         }
                         
                         // Refresh course data
@@ -2008,7 +2182,7 @@ export default function CoursesPage() {
                             name="taxIncluded"
                             value="included"
                             checked={createFormData.taxIncluded === 'included'}
-                            onChange={(e) => setCreateFormData(prev => ({ ...prev, taxIncluded: e.target.value }))}
+                            onChange={(e) => setCreateFormData(prev => ({ ...prev, taxIncluded: e.target.value as 'included' | 'excluded' }))}
                             className="text-blue-600 focus:ring-blue-500"
                           />
                           <span className="text-sm text-gray-700">KDV Dahil</span>
@@ -2019,7 +2193,7 @@ export default function CoursesPage() {
                             name="taxIncluded"
                             value="excluded"
                             checked={createFormData.taxIncluded === 'excluded'}
-                            onChange={(e) => setCreateFormData(prev => ({ ...prev, taxIncluded: e.target.value }))}
+                            onChange={(e) => setCreateFormData(prev => ({ ...prev, taxIncluded: e.target.value as 'included' | 'excluded' }))}
                             className="text-blue-600 focus:ring-blue-500"
                           />
                           <span className="text-sm text-gray-700">KDV Hariç</span>

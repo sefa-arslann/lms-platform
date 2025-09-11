@@ -9,7 +9,7 @@ import { PrismaModule } from '../prisma/prisma.module';
 import { JwtModule } from '@nestjs/jwt';
 import { AccessGrantsModule } from '../access-grants/access-grants.module';
 import { MulterModule } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
+import { diskStorage, memoryStorage } from 'multer';
 import { extname } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -22,19 +22,12 @@ import { v4 as uuidv4 } from 'uuid';
       signOptions: { expiresIn: '1h' },
     }),
     MulterModule.register({
-      storage: diskStorage({
-        destination: './uploads/temp',
-        filename: (req, file, cb) => {
-          const uniqueName = uuidv4();
-          const extension = extname(file.originalname);
-          cb(null, `${uniqueName}${extension}`);
-        },
-      }),
+      storage: memoryStorage(), // Use memory storage for PDF uploads
       fileFilter: (req, file, cb) => {
-        if (file.mimetype.startsWith('video/')) {
+        if (file.mimetype.startsWith('video/') || file.mimetype === 'application/pdf') {
           cb(null, true);
         } else {
-          cb(new Error('Only video files are allowed'), false);
+          cb(new Error('Only video and PDF files are allowed'), false);
         }
       },
       limits: {
