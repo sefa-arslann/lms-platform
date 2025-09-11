@@ -47,7 +47,7 @@ export class AuthService {
       
       if (!existingDevice) {
         // Auto-approve device for admin users (bypass device limit)
-        const enrollRequest = await this.deviceService.createEnrollRequest(user.id, deviceInfo);
+        const enrollRequest = await this.deviceService.createEnrollRequest(user.id, deviceInfo || {});
         existingDevice = await this.deviceService.approveEnrollRequest(enrollRequest.requestId, {
           deviceName: `Admin-${deviceInfo?.platform || 'unknown'}`,
           isTrusted: true
@@ -93,7 +93,7 @@ export class AuthService {
     if (!existingDevice) {
       // Try to find existing device by other criteria (IP, userAgent, etc.)
       console.log(`🔍 Trying findExistingDevice with other criteria...`);
-      existingDevice = await this.deviceService.findExistingDevice(user.id, deviceInfo);
+      existingDevice = await this.deviceService.findExistingDevice(user.id, deviceInfo || {});
       console.log(`🔍 Device lookup result for ${user.email}:`, existingDevice ? `Found: ${existingDevice.id}` : 'Not found');
     }
     
@@ -105,7 +105,7 @@ export class AuthService {
       if (activeDevices >= 3) {
         // User has 3+ devices, require approval
         console.log(`⚠️ User ${user.email} has reached device limit, requiring approval`);
-        const enrollRequest = await this.deviceService.createEnrollRequest(user.id, deviceInfo);
+        const enrollRequest = await this.deviceService.createEnrollRequest(user.id, deviceInfo || {});
         
         return {
           status: 'pending_approval',
@@ -122,7 +122,7 @@ export class AuthService {
       } else {
         // User has less than 3 devices, auto-approve
         console.log(`✅ Auto-approving device for ${user.email} (${activeDevices} devices)`);
-        const enrollRequest = await this.deviceService.createEnrollRequest(user.id, deviceInfo);
+        const enrollRequest = await this.deviceService.createEnrollRequest(user.id, deviceInfo || {});
         const newDevice = await this.deviceService.approveEnrollRequest(enrollRequest.requestId, {
           deviceName: `${deviceInfo?.platform || 'unknown'} Device`,
           isTrusted: false
