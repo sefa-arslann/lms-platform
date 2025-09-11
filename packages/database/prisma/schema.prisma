@@ -105,13 +105,12 @@ model Lesson {
   isFree         Boolean          @default(false)
   resources      Json?
   videoType      String?          @default("VIDEO")
-  // PDF Support
-  pdfUrl         String?
   pdfKey         String?
+  pdfUrl         String?
+  contentType    String?          @default("VIDEO")
   pdfFileName    String?
-  pdfSize        Int?             // File size in bytes
-  pdfPages       Int?             // Number of pages
-  contentType    String?          @default("VIDEO") // VIDEO, PDF, or MIXED
+  pdfPages       Int?
+  pdfSize        Int?
   progress       LessonProgress[]
   section        Section          @relation(fields: [sectionId], references: [id], onDelete: Cascade)
   notes          Note[]
@@ -424,8 +423,8 @@ model MessageReply {
   userId    String
   content   String
   isAdmin   Boolean  @default(false)
-  isRead    Boolean  @default(false)
   createdAt DateTime @default(now())
+  isRead    Boolean  @default(false)
   message   Message  @relation(fields: [messageId], references: [id], onDelete: Cascade)
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
