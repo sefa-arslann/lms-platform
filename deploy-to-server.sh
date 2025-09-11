@@ -17,7 +17,7 @@ git commit -m "ÖABT Matematik odaklı güncellemeler - Hakan Onbaşı Matematik
 
 # Git'e push et
 echo "📤 Git'e push ediliyor..."
-git push origin main
+git push origin master
 
 # Sunucuya bağlan ve güncelle
 echo "🌐 Sunucuya bağlanılıyor..."
@@ -32,7 +32,7 @@ ssh $SERVER_USER@$SERVER_IP << 'EOF'
     
     # Git pull yap
     echo "📥 Kod güncellemeleri çekiliyor..."
-    git pull origin main
+    git pull origin master
     
     # Yedeklenen ayarları geri yükle
     echo "🔄 Ayarlar geri yükleniyor..."
