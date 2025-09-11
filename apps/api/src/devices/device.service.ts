@@ -19,17 +19,17 @@ export class DeviceService {
 
   async findExistingDevice(userId: string, deviceInfo: any) {
     console.log(`🔍 Searching for existing device for user ${userId} with criteria:`, {
-      ip: deviceInfo?.ip || 'unknown',
-      userAgent: deviceInfo?.userAgent || 'unknown',
-      platform: deviceInfo?.platform || 'unknown',
-      model: deviceInfo?.model || 'unknown'
+      ip: deviceInfo.ip,
+      userAgent: deviceInfo.userAgent,
+      platform: deviceInfo.platform,
+      model: deviceInfo.model
     });
 
     // First try to find by exact IP match
     let existingDevice = await this.prisma.userDevice.findFirst({
       where: {
         userId,
-        firstIp: deviceInfo?.ip
+        firstIp: deviceInfo.ip
       },
     });
 
@@ -42,7 +42,7 @@ export class DeviceService {
     existingDevice = await this.prisma.userDevice.findFirst({
       where: {
         userId,
-        userAgent: deviceInfo?.userAgent
+        userAgent: deviceInfo.userAgent
       },
     });
 
@@ -55,8 +55,8 @@ export class DeviceService {
     existingDevice = await this.prisma.userDevice.findFirst({
       where: {
         userId,
-        platform: deviceInfo?.platform,
-        model: deviceInfo?.model
+        platform: deviceInfo.platform,
+        model: deviceInfo.model
       },
     });
 
@@ -69,7 +69,7 @@ export class DeviceService {
     existingDevice = await this.prisma.userDevice.findFirst({
       where: {
         userId,
-        platform: deviceInfo?.platform
+        platform: deviceInfo.platform
       },
     });
 
@@ -110,10 +110,10 @@ export class DeviceService {
     return this.prisma.deviceEnrollRequest.create({
       data: {
         userId,
-        installId: deviceInfo?.installId,
-        platform: deviceInfo?.platform,
-        model: deviceInfo?.model,
-        ip: deviceInfo?.ip,
+        installId: deviceInfo.installId,
+        platform: deviceInfo.platform,
+        model: deviceInfo.model,
+        ip: deviceInfo.ip,
         requestId,
         expiresAt: new Date(Date.now() + 15 * 60 * 1000), // 15 minutes
       },
@@ -200,11 +200,11 @@ export class DeviceService {
   async enrollDevice(userId: string, deviceInfo: any) {
     try {
       console.log(`🔍 enrollDevice called for user ${userId} with device info:`, {
-        platform: deviceInfo?.platform,
-        model: deviceInfo?.model,
-        ip: deviceInfo?.ip,
-        userAgent: deviceInfo?.userAgent,
-        installId: deviceInfo?.installId
+        platform: deviceInfo.platform,
+        model: deviceInfo.model,
+        ip: deviceInfo.ip,
+        userAgent: deviceInfo.userAgent,
+        installId: deviceInfo.installId
       });
 
       // Enhanced device detection with multiple criteria
@@ -213,18 +213,18 @@ export class DeviceService {
           userId,
           OR: [
             // Check by installId if provided
-            ...(deviceInfo?.installId ? [{ installId: deviceInfo?.installId }] : []),
+            ...(deviceInfo.installId ? [{ installId: deviceInfo.installId }] : []),
             // Check by IP address (same IP = same device)
-            ...(deviceInfo?.ip ? [{ firstIp: deviceInfo?.ip }] : []),
+            ...(deviceInfo.ip ? [{ firstIp: deviceInfo.ip }] : []),
             // Check by userAgent + platform combination
             {
-              userAgent: deviceInfo?.userAgent,
-              platform: deviceInfo?.platform,
+              userAgent: deviceInfo.userAgent,
+              platform: deviceInfo.platform,
             },
             // Check by model + platform combination
             {
-              model: deviceInfo?.model,
-              platform: deviceInfo?.platform,
+              model: deviceInfo.model,
+              platform: deviceInfo.platform,
             }
           ]
         },
@@ -239,14 +239,14 @@ export class DeviceService {
           data: {
             lastSeenAt: new Date(),
             updatedAt: new Date(),
-            lastIp: deviceInfo?.ip || existingDevice.lastIp,
-            osVersion: deviceInfo?.osVersion || existingDevice.osVersion,
-            appVersion: deviceInfo?.appVersion || existingDevice.appVersion,
-            model: deviceInfo?.model || existingDevice.model,
-            deviceName: deviceInfo?.deviceName || existingDevice.deviceName,
+            lastIp: deviceInfo.ip || existingDevice.lastIp,
+            osVersion: deviceInfo.osVersion || existingDevice.osVersion,
+            appVersion: deviceInfo.appVersion || existingDevice.appVersion,
+            model: deviceInfo.model || existingDevice.model,
+            deviceName: deviceInfo.deviceName || existingDevice.deviceName,
             // Update IP if it's different
-            ...(deviceInfo?.ip && deviceInfo?.ip !== existingDevice.firstIp && {
-              lastIp: deviceInfo?.ip
+            ...(deviceInfo.ip && deviceInfo.ip !== existingDevice.firstIp && {
+              lastIp: deviceInfo.ip
             })
           },
         });
@@ -265,7 +265,7 @@ export class DeviceService {
       const approvedAt = isTrusted ? new Date() : null;
 
       // Generate unique installId
-      const installId = deviceInfo?.installId || `device_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      const installId = deviceInfo.installId || `device_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
       // Create new device with better validation
       const newDevice = await this.prisma.userDevice.create({
@@ -273,22 +273,22 @@ export class DeviceService {
           userId,
           installId,
           publicKey: `pk_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-          platform: deviceInfo?.platform || 'unknown',
-          model: deviceInfo?.model || 'unknown',
-          userAgent: deviceInfo?.userAgent || 'unknown',
-          firstIp: deviceInfo?.ip || '127.0.0.1',
-          lastIp: deviceInfo?.ip || '127.0.0.1',
+          platform: deviceInfo.platform || 'unknown',
+          model: deviceInfo.model || 'unknown',
+          userAgent: deviceInfo.userAgent || 'unknown',
+          firstIp: deviceInfo.ip || '127.0.0.1',
+          lastIp: deviceInfo.ip || '127.0.0.1',
           lastSeenAt: new Date(),
           isTrusted,
           isActive: true,
           approvedAt,
-          deviceName: deviceInfo?.deviceName || `${deviceInfo?.platform || 'Unknown'} Device`,
-          osVersion: deviceInfo?.osVersion || 'unknown',
-          appVersion: deviceInfo?.appVersion || 'unknown',
+          deviceName: deviceInfo.deviceName || `${deviceInfo.platform || 'Unknown'} Device`,
+          osVersion: deviceInfo.osVersion || 'unknown',
+          appVersion: deviceInfo.appVersion || 'unknown',
         },
       });
 
-      console.log(`🔐 New device enrolled: ${newDevice.id}, Trusted: ${isTrusted}, Total devices: ${activeDevices + 1}, IP: ${deviceInfo?.ip}`);
+      console.log(`🔐 New device enrolled: ${newDevice.id}, Trusted: ${isTrusted}, Total devices: ${activeDevices + 1}, IP: ${deviceInfo.ip}`);
       return newDevice;
     } catch (error) {
       console.error('Device enrollment error:', error);

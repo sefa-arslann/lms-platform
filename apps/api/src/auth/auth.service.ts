@@ -43,13 +43,13 @@ export class AuthService {
     // Admin users don't need device approval - bypass all device checks
     if (user.role === 'ADMIN') {
       // For admin users, create or find device automatically without any limits
-      let existingDevice = await this.deviceService.findByInstallId(deviceInfo?.installId || 'unknown');
+      let existingDevice = await this.deviceService.findByInstallId(deviceInfo.installId);
       
       if (!existingDevice) {
         // Auto-approve device for admin users (bypass device limit)
-        const enrollRequest = await this.deviceService.createEnrollRequest(user.id, deviceInfo || {});
+        const enrollRequest = await this.deviceService.createEnrollRequest(user.id, deviceInfo);
         existingDevice = await this.deviceService.approveEnrollRequest(enrollRequest.requestId, {
-          deviceName: `Admin-${deviceInfo?.platform || 'unknown'}`,
+          deviceName: `Admin-${deviceInfo.platform}`,
           isTrusted: true
         });
       }
@@ -69,7 +69,7 @@ export class AuthService {
       );
 
       // Update device last seen
-      await this.deviceService.updateLastSeen(existingDevice.id, deviceInfo?.ip || 'unknown');
+      await this.deviceService.updateLastSeen(existingDevice.id, deviceInfo.ip);
 
       return {
         accessToken,
@@ -87,13 +87,13 @@ export class AuthService {
     // Regular users - check if they need device approval
     console.log(`🔍 Starting device lookup for ${user.email}...`);
     
-    let existingDevice = await this.deviceService.findByInstallId(deviceInfo?.installId || 'unknown');
+    let existingDevice = await this.deviceService.findByInstallId(deviceInfo.installId);
     console.log(`🔍 findByInstallId result:`, existingDevice ? `Found: ${existingDevice.id}` : 'Not found');
     
     if (!existingDevice) {
       // Try to find existing device by other criteria (IP, userAgent, etc.)
       console.log(`🔍 Trying findExistingDevice with other criteria...`);
-      existingDevice = await this.deviceService.findExistingDevice(user.id, deviceInfo || {});
+      existingDevice = await this.deviceService.findExistingDevice(user.id, deviceInfo);
       console.log(`🔍 Device lookup result for ${user.email}:`, existingDevice ? `Found: ${existingDevice.id}` : 'Not found');
     }
     
@@ -105,7 +105,7 @@ export class AuthService {
       if (activeDevices >= 3) {
         // User has 3+ devices, require approval
         console.log(`⚠️ User ${user.email} has reached device limit, requiring approval`);
-        const enrollRequest = await this.deviceService.createEnrollRequest(user.id, deviceInfo || {});
+        const enrollRequest = await this.deviceService.createEnrollRequest(user.id, deviceInfo);
         
         return {
           status: 'pending_approval',
@@ -122,9 +122,9 @@ export class AuthService {
       } else {
         // User has less than 3 devices, auto-approve
         console.log(`✅ Auto-approving device for ${user.email} (${activeDevices} devices)`);
-        const enrollRequest = await this.deviceService.createEnrollRequest(user.id, deviceInfo || {});
+        const enrollRequest = await this.deviceService.createEnrollRequest(user.id, deviceInfo);
         const newDevice = await this.deviceService.approveEnrollRequest(enrollRequest.requestId, {
-          deviceName: `${deviceInfo?.platform || 'unknown'} Device`,
+          deviceName: `${deviceInfo.platform} Device`,
           isTrusted: false
         });
         existingDevice = newDevice;
@@ -149,10 +149,10 @@ export class AuthService {
     );
 
     // Update device last seen and IP if changed
-    await this.deviceService.updateLastSeen(existingDevice.id, deviceInfo?.ip || 'unknown');
+    await this.deviceService.updateLastSeen(existingDevice.id, deviceInfo.ip);
     
     // Log device reuse
-    console.log(`🔐 User ${user.email} logged in with existing device: ${existingDevice.id}, IP: ${deviceInfo?.ip || 'unknown'}`);
+    console.log(`🔐 User ${user.email} logged in with existing device: ${existingDevice.id}, IP: ${deviceInfo.ip}`);
 
     return {
       accessToken,
