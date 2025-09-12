@@ -96,7 +96,7 @@ export default function AdminDashboard() {
   const [isClient, setIsClient] = useState(false);
   
   // WebSocket connection for real-time updates
-  const { isConnected, lastMessage, error: wsError, reconnect } = useWebSocket('ws://179.61.246.103:3001/admin-dashboard');
+  const { isConnected, lastMessage, error: wsError, reconnect } = useWebSocket('ws://localhost:3001/admin-dashboard');
 
   // Client-side rendering control
   useEffect(() => {
@@ -191,7 +191,7 @@ export default function AdminDashboard() {
     const fetchDashboardData = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://179.61.246.103:3001/admin/dashboard', {
+        const response = await fetch('http://localhost:3001/admin/dashboard', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

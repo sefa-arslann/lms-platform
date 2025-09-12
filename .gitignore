@@ -1,146 +1,41 @@
-# Environment files - CRITICAL: Don't commit environment files
+# Environment files
 .env
 .env.local
 .env.production
 .env.development
-.env.*
-apps/api/.env
-apps/web/.env
-packages/database/.env
 
-# Database files - CRITICAL: Don't commit database files
+# Database
 *.db
 *.sqlite
-*.sqlite3
-packages/database/*.db
-packages/database/*.sqlite
-
-# Prisma generated files
-packages/database/prisma/migrations/
-packages/database/node_modules/.prisma/
 
 # Logs
 logs/
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 
 # Node modules
 node_modules/
 */node_modules/
-**/node_modules/
 
 # Build outputs
 dist/
 build/
 .next/
-apps/api/dist/
-apps/web/.next/
-apps/web/out/
 
 # OS files
 .DS_Store
-Thumbs.db
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
 Thumbs.db
 
 # IDE
 .vscode/
 .idea/
-*.swp
-*.swo
-*~
 
 # PM2
 .pm2/
-ecosystem.config.js
 
-# Uploads - CRITICAL: Don't commit uploaded files
+# Uploads
 uploads/
 public/uploads/
-apps/api/uploads/
-apps/api/public/uploads/
 
 # Temporary files
 *.tmp
 *.temp
-.tmp/
-.temp/
-
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
-
-# Coverage directory used by tools like istanbul
-coverage/
-*.lcov
-
-# nyc test coverage
-.nyc_output
-
-# Dependency directories
-jspm_packages/
-
-# Optional npm cache directory
-.npm
-
-# Optional eslint cache
-.eslintcache
-
-# Microbundle cache
-.rpt2_cache/
-.rts2_cache_cjs/
-.rts2_cache_es/
-.rts2_cache_umd/
-
-# Optional REPL history
-.node_repl_history
-
-# Output of 'npm pack'
-*.tgz
-
-# Yarn Integrity file
-.yarn-integrity
-
-# parcel-bundler cache (https://parceljs.org/)
-.cache
-.parcel-cache
-
-# Next.js build output
-.next
-
-# Nuxt.js build / generate output
-.nuxt
-dist
-
-# Gatsby files
-.cache/
-public
-
-# Storybook build outputs
-.out
-.storybook-out
-
-# Temporary folders
-tmp/
-temp/
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-# Local development
-.local

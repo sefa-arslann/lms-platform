@@ -10,7 +10,7 @@ interface ApiOptions {
 class ApiClient {
   private baseUrl: string;
 
-  constructor(baseUrl: string = 'http://179.61.246.103:3001') {
+  constructor(baseUrl: string = 'http://localhost:3001') {
     this.baseUrl = baseUrl;
   }
 

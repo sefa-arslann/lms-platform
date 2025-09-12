@@ -1,13 +1,13 @@
 export const API_CONFIG = {
   // Development
   development: {
-    baseUrl: 'http://localhost:3003',
-    wsUrl: 'http://localhost:3003',
+    baseUrl: 'http://localhost:3001',
+    wsUrl: 'http://localhost:3001',
   },
   // Production
   production: {
-    baseUrl: process.env.NEXT_PUBLIC_API_URL || 'https://api.lmsplatform.com',
-    wsUrl: process.env.NEXT_PUBLIC_WS_URL || 'wss://api.lmsplatform.com',
+    baseUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001',
+    wsUrl: process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:3001',
   },
 };
 

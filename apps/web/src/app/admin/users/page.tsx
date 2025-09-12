@@ -67,7 +67,7 @@ export default function UsersPage() {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://179.61.246.103:3001/admin/users');
+      const response = await fetch('http://localhost:3001/admin/users');
       if (!response.ok) {
         throw new Error('Failed to fetch users');
       }
@@ -154,7 +154,7 @@ export default function UsersPage() {
 
   const changeUserRole = async (userId: string, newRole: string) => {
     try {
-      const response = await fetch(`http://179.61.246.103:3001/admin/users/${userId}/role`, {
+      const response = await fetch(`http://localhost:3001/admin/users/${userId}/role`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -178,7 +178,7 @@ export default function UsersPage() {
 
   const changeUserStatus = async (userId: string, newStatus: boolean) => {
     try {
-      const response = await fetch(`http://179.61.246.103:3001/admin/users/${userId}/status`, {
+      const response = await fetch(`http://localhost:3001/admin/users/${userId}/status`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -209,7 +209,7 @@ export default function UsersPage() {
   const fetchUserDevices = async (userId: string) => {
     try {
       setLoadingDevices(true);
-      const response = await fetch(`http://179.61.246.103:3001/admin/devices/user/${userId}`);
+      const response = await fetch(`http://localhost:3001/admin/devices/user/${userId}`);
       if (!response.ok) {
         throw new Error('Failed to fetch user devices');
       }
@@ -320,7 +320,7 @@ export default function UsersPage() {
         updateData.password = editFormData.password;
       }
 
-      const response = await fetch(`http://179.61.246.103:3001/admin/users/${selectedUser.id}`, {
+      const response = await fetch(`http://localhost:3001/admin/users/${selectedUser.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

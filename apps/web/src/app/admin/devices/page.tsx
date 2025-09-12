@@ -56,7 +56,7 @@ export default function DevicesPage() {
       console.log('Fetching live data from API...');
       
       // Fetch device enrollment requests
-      const requestsResponse = await fetch('http://179.61.246.103:3001/admin/devices/requests');
+      const requestsResponse = await fetch('http://localhost:3001/admin/devices/requests');
       if (requestsResponse.ok) {
         const requestsData = await requestsResponse.json();
         setEnrollRequests(requestsData.requests || []);
@@ -67,7 +67,7 @@ export default function DevicesPage() {
       }
 
       // Fetch user devices
-      const devicesResponse = await fetch('http://179.61.246.103:3001/admin/devices');
+      const devicesResponse = await fetch('http://localhost:3001/admin/devices');
       if (devicesResponse.ok) {
         const devicesData = await devicesResponse.json();
         setUserDevices(devicesData.devices || []);
@@ -117,7 +117,7 @@ export default function DevicesPage() {
 
   const handleApproveRequest = async (requestId: string) => {
     try {
-      const response = await fetch(`http://179.61.246.103:3001/admin/devices/requests/${requestId}/approve`, {
+      const response = await fetch(`http://localhost:3001/admin/devices/requests/${requestId}/approve`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -141,7 +141,7 @@ export default function DevicesPage() {
 
   const handleDenyRequest = async (requestId: string) => {
     try {
-      const response = await fetch(`http://179.61.246.103:3001/admin/devices/requests/${requestId}/deny`, {
+      const response = await fetch(`http://localhost:3001/admin/devices/requests/${requestId}/deny`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

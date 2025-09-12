@@ -45,7 +45,7 @@ export default function AdminOrdersPage() {
 
   const fetchOrders = async () => {
     try {
-      const response = await fetch('http://179.61.246.103:3001/admin/orders', {
+      const response = await fetch('http://localhost:3001/admin/orders', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
@@ -67,7 +67,7 @@ export default function AdminOrdersPage() {
 
   const updateOrderStatus = async (orderId: string, newStatus: string) => {
     try {
-      const response = await fetch(`http://179.61.246.103:3001/admin/orders/${orderId}/status`, {
+      const response = await fetch(`http://localhost:3001/admin/orders/${orderId}/status`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

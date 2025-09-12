@@ -279,7 +279,7 @@ export default function ProfilePage() {
             ip: ipAddress,
           }
 
-          await fetch("http://179.61.246.103:3001/devices/enroll", {
+          await fetch("http://localhost:3001/devices/enroll", {
             method: "POST",
             headers: {
               Authorization: `Bearer ${token}`,
@@ -293,7 +293,7 @@ export default function ProfilePage() {
 
         // Fetch user profile
         try {
-          const profileResponse = await fetch("http://179.61.246.103:3001/users/profile", {
+          const profileResponse = await fetch("http://localhost:3001/users/profile", {
             headers: {
               Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
@@ -334,7 +334,7 @@ export default function ProfilePage() {
 
         // Fetch user courses
         try {
-          const coursesResponse = await fetch("http://179.61.246.103:3001/access-grants/my-courses", {
+          const coursesResponse = await fetch("http://localhost:3001/access-grants/my-courses", {
             headers: {
               Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
@@ -377,7 +377,7 @@ export default function ProfilePage() {
 
         // Fetch user orders
         try {
-          const ordersResponse = await fetch("http://179.61.246.103:3001/orders/my-orders", {
+          const ordersResponse = await fetch("http://localhost:3001/orders/my-orders", {
             headers: {
               Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
@@ -394,7 +394,7 @@ export default function ProfilePage() {
 
                 // Fetch user devices
         try {
-          const devicesResponse = await fetch("http://179.61.246.103:3001/devices/my-devices", {
+          const devicesResponse = await fetch("http://localhost:3001/devices/my-devices", {
             headers: {
               Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
@@ -411,7 +411,7 @@ export default function ProfilePage() {
 
         // Fetch last watched course
         try {
-          const lastWatchedResponse = await fetch("http://179.61.246.103:3001/lesson-progress/user/last-watched", {
+          const lastWatchedResponse = await fetch("http://localhost:3001/lesson-progress/user/last-watched", {
             headers: {
               Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",

@@ -81,7 +81,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           
           // Fallback: Verify token with backend
           console.log('🔄 Verifying token with backend...');
-          const response = await fetch('http://179.61.246.103:3001/auth/verify', {
+          const response = await fetch('http://localhost:3001/auth/verify', {
             headers: {
               'Authorization': `Bearer ${storedToken}`,
               'Content-Type': 'application/json',
@@ -177,7 +177,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const deviceInfo = getDeviceInfo();
       console.log('🔍 Frontend device info:', deviceInfo);
       
-      const response = await fetch('http://179.61.246.103:3001/auth/login', {
+      const response = await fetch('http://localhost:3001/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

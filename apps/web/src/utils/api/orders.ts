@@ -44,7 +44,7 @@ export interface OrderStats {
 }
 
 class OrdersApi {
-  private baseUrl = 'http://179.61.246.103:3001/orders';
+  private baseUrl = 'http://localhost:3001/orders';
 
   async createOrder(data: CreateOrderRequest): Promise<Order> {
     // Get auth token from SecureStorage
