@@ -70,7 +70,6 @@ export default function CartPage() {
           setTaxRate(data.taxRate || 0.20);
         }
       } catch (error) {
-        console.log('Tax rate not available, using default');
       }
     };
     
@@ -144,11 +143,9 @@ export default function CartPage() {
       await new Promise(resolve => setTimeout(resolve, 2000));
 
       // Create orders for all cart items
-      console.log('Cart items before order creation:', cartItems); // Debug log
       const orders = await Promise.all(
         cartItems.map(async (item) => {
           try {
-            console.log('Processing cart item:', item); // Debug log
             const response = await fetch('http://localhost:3001/orders', {
               method: 'POST',
               headers: {
@@ -181,7 +178,6 @@ export default function CartPage() {
 
             if (!response.ok) {
               const errorData = await response.text();
-              console.error('Order creation failed:', {
                 status: response.status,
                 statusText: response.statusText,
                 error: errorData
@@ -191,13 +187,11 @@ export default function CartPage() {
 
             return await response.json();
           } catch (error) {
-            console.error('Order creation error for course:', item.title, error);
             throw error;
           }
         })
       );
 
-      console.log('Siparişler oluşturuldu:', orders);
       
       // Sepeti temizle
       clearCart();
@@ -206,7 +200,6 @@ export default function CartPage() {
       setActiveStep("confirmation");
       
     } catch (error) {
-      console.error('Ödeme hatası:', error);
       setError("Ödeme işlemi sırasında bir hata oluştu. Lütfen tekrar deneyin.");
     } finally {
       setIsProcessing(false);

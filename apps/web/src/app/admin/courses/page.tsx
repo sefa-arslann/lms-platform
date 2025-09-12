@@ -96,7 +96,6 @@ export default function CoursesPage() {
       
       await Promise.all(updatePromises);
     } catch (error) {
-      console.error('Failed to save new section order:', error);
     }
   };
 
@@ -137,7 +136,6 @@ export default function CoursesPage() {
       
       await Promise.all(updatePromises);
     } catch (error) {
-      console.error('Failed to save new order:', error);
     }
   };
 
@@ -159,7 +157,6 @@ export default function CoursesPage() {
         }));
       }
     } catch (error) {
-      console.error('Failed to fetch tax settings:', error);
     }
   };
 
@@ -192,7 +189,6 @@ export default function CoursesPage() {
       
       setCourses(safeCourses);
     } catch (error) {
-      console.error('Failed to fetch courses:', error);
       // Fallback to mock data
       const mockCourses = getMockCourses();
       // Ensure mock courses also have safe array properties and numeric values
@@ -225,10 +221,8 @@ export default function CoursesPage() {
         const course = await response.json();
         setSelectedCourse(course);
       } else {
-        console.error('Failed to fetch course details');
       }
     } catch (error) {
-      console.error('Error fetching course details:', error);
     }
   };
 
@@ -268,7 +262,6 @@ export default function CoursesPage() {
       // Show success message
       alert('Kurs başarıyla oluşturuldu!');
     } catch (error) {
-      console.error('Failed to create course:', error);
       setFormErrors({ general: 'Kurs oluşturulurken hata oluştu' });
     } finally {
       setSubmitting(false);
@@ -294,7 +287,6 @@ export default function CoursesPage() {
       // Show success message
       alert('Kurs başarıyla silindi!');
     } catch (error) {
-      console.error('Failed to delete course:', error);
       alert('Kurs silinirken hata oluştu');
     }
   };
@@ -343,7 +335,6 @@ export default function CoursesPage() {
         }, 1000);
       }
     } catch (error) {
-      console.error('Failed to delete lesson:', error);
       alert('Ders silinirken hata oluştu');
     }
   };
@@ -375,7 +366,6 @@ export default function CoursesPage() {
       
       return result;
     } catch (error) {
-      console.error('Failed to calculate course duration:', error);
       alert('Kurs süresi hesaplanırken hata oluştu');
     }
   };
@@ -926,7 +916,6 @@ export default function CoursesPage() {
           : course
       ) : []);
     } catch (error) {
-      console.error('Failed to update course status:', error);
       alert('Kurs durumu güncellenirken hata oluştu!');
     }
   };
@@ -1409,7 +1398,6 @@ export default function CoursesPage() {
                         closeModals();
                         alert(selectedSection ? 'Bölüm güncellendi!' : 'Bölüm eklendi!');
                       } catch (error) {
-                        console.error('Section operation failed:', error);
                         alert('İşlem başarısız! Lütfen tekrar deneyin.');
                       }
                     }}
@@ -1592,7 +1580,6 @@ export default function CoursesPage() {
                                   throw new Error('Failed to get video duration');
                                 }
                               } catch (error) {
-                                console.error('Error getting video duration:', error);
                                 alert('Video süresi alınamadı. Manuel olarak girebilirsiniz.');
                               }
                             }}
@@ -1712,9 +1699,7 @@ export default function CoursesPage() {
 
                         if (selectedLesson) {
                           // Update existing lesson
-                          console.log('🔍 Token check for lesson update:', token ? 'EXISTS' : 'NOT FOUND');
                           if (!token) {
-                            console.error('❌ No token found in useAuth for lesson update');
                             throw new Error('No authentication token found');
                           }
 
@@ -1734,8 +1719,6 @@ export default function CoursesPage() {
                               const formData = new FormData();
                               formData.append('pdf', lessonFormData.pdfFile);
                               
-                              console.log('📄 Uploading PDF for lesson update:', selectedLesson.id);
-                              console.log('📄 PDF file:', lessonFormData.pdfFile.name, 'Size:', lessonFormData.pdfFile.size);
                               
                               const pdfResponse = await fetch(`http://localhost:3001/videos/upload-pdf/${selectedLesson.id}`, {
                                 method: 'POST',
@@ -1745,19 +1728,15 @@ export default function CoursesPage() {
                                 body: formData,
                               });
                               
-                              console.log('📄 PDF upload response status:', pdfResponse.status);
                               
                               if (!pdfResponse.ok) {
                                 const errorData = await pdfResponse.json();
-                                console.error('PDF upload failed:', errorData);
                                 alert(`Ders güncellendi ancak PDF yüklenemedi: ${errorData.message || 'Bilinmeyen hata'}`);
                               } else {
                                 const pdfData = await pdfResponse.json();
-                                console.log('✅ PDF uploaded successfully:', pdfData);
                                 alert('PDF ders başarıyla güncellendi!');
                               }
                             } catch (error) {
-                              console.error('PDF upload error:', error);
                               alert(`Ders güncellendi ancak PDF yüklenemedi: ${error instanceof Error ? error.message : 'Bilinmeyen hata'}`);
                             }
                           }
@@ -1790,9 +1769,7 @@ export default function CoursesPage() {
                           delete lessonData.pdfFile;
                           
                           // Get JWT token for admin requests
-                          console.log('🔍 Token check for lesson creation:', token ? 'EXISTS' : 'NOT FOUND');
                           if (!token) {
-                            console.error('❌ No token found in useAuth for lesson creation');
                             throw new Error('No authentication token found');
                           }
 
@@ -1815,8 +1792,6 @@ export default function CoursesPage() {
                               const formData = new FormData();
                               formData.append('pdf', lessonFormData.pdfFile);
                               
-                              console.log('📄 Uploading PDF for lesson:', newLesson.id);
-                              console.log('📄 PDF file:', lessonFormData.pdfFile.name, 'Size:', lessonFormData.pdfFile.size);
                               
                               const pdfResponse = await fetch(`http://localhost:3001/videos/upload-pdf/${newLesson.id}`, {
                                 method: 'POST',
@@ -1826,19 +1801,15 @@ export default function CoursesPage() {
                                 body: formData,
                               });
                               
-                              console.log('📄 PDF upload response status:', pdfResponse.status);
                               
                               if (!pdfResponse.ok) {
                                 const errorData = await pdfResponse.json();
-                                console.error('PDF upload failed:', errorData);
                                 alert(`Ders oluşturuldu ancak PDF yüklenemedi: ${errorData.message || 'Bilinmeyen hata'}`);
                               } else {
                                 const pdfData = await pdfResponse.json();
-                                console.log('✅ PDF uploaded successfully:', pdfData);
                                 alert('PDF ders başarıyla oluşturuldu!');
                               }
                             } catch (error) {
-                              console.error('PDF upload error:', error);
                               alert(`Ders oluşturuldu ancak PDF yüklenemedi: ${error instanceof Error ? error.message : 'Bilinmeyen hata'}`);
                             }
                           }
@@ -1856,7 +1827,6 @@ export default function CoursesPage() {
                         closeModals();
                         alert(selectedLesson ? 'Ders güncellendi!' : 'Ders eklendi! Kurs süresi otomatik olarak güncelleniyor...');
                       } catch (error) {
-                        console.error('Lesson operation failed:', error);
                         alert('İşlem başarısız! Lütfen tekrar deneyin.');
                       }
                     }}
@@ -2011,7 +1981,6 @@ export default function CoursesPage() {
                         closeModals();
                         alert(selectedQnA ? 'Soru güncellendi!' : 'Soru eklendi!');
                       } catch (error) {
-                        console.error('Q&A operation failed:', error);
                         alert('İşlem başarısız! Lütfen tekrar deneyin.');
                       }
                     }}

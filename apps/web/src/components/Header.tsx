@@ -39,7 +39,6 @@ function ContinueLearningButton() {
         setLastWatchedCourse(null);
       }
     } catch (error) {
-      console.log("Error fetching last watched course:", error);
       setLastWatchedCourse(null);
     } finally {
       setIsLoading(false);
@@ -120,7 +119,6 @@ export default function Header() {
 
     // Fetch unread message count
   useEffect(() => {
-    console.log('🔍 Header - useEffect triggered:', { isAuthenticated, userId: user?.id, currentCount: unreadMessageCount });
     if (isAuthenticated && user) {
       const fetchUnreadCount = async () => {
         try {
@@ -133,7 +131,6 @@ export default function Header() {
           
           if (response.ok) {
             const messages = await response.json();
-            console.log('🔍 Header - Fetched messages for count:', messages);
             
             // Count only unread admin replies
             const unreadCount = messages.reduce((total: number, msg: any) => {
@@ -146,20 +143,15 @@ export default function Header() {
                 );
                 
                 count += unreadAdminReplies.length;
-                console.log(`🔍 Message ${msg.id}: ${unreadAdminReplies.length} unread admin replies`);
               }
               
               return total + count;
             }, 0);
             
-            console.log('🔍 Header - Total unread count:', unreadCount);
-            console.log('🔍 Header - All messages:', messages);
             setUnreadMessageCount(unreadCount);
           } else {
-            console.error('❌ Header - Failed to fetch messages:', response.status, response.statusText);
           }
         } catch (error) {
-          console.error('Error fetching unread message count:', error);
         }
       };
 
@@ -198,7 +190,6 @@ export default function Header() {
             setUnreadMessageCount(unreadCount);
           }
         } catch (error) {
-          console.error('Error updating badge after message read:', error);
         }
       };
       fetchUnreadCount();

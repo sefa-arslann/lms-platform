@@ -64,7 +64,6 @@ export default function CoursesPage() {
         const data = await response.json();
         setCourses(data);
       } catch (err) {
-        console.error('Failed to fetch courses:', err);
         setError('Kurslar yüklenirken bir hata oluştu. Lütfen daha sonra tekrar deneyin.');
       } finally {
         setLoading(false);

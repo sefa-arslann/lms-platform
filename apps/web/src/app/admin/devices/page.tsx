@@ -53,16 +53,13 @@ export default function DevicesPage() {
     try {
       setLoading(true);
       
-      console.log('Fetching live data from API...');
       
       // Fetch device enrollment requests
       const requestsResponse = await fetch('http://localhost:3001/admin/devices/requests');
       if (requestsResponse.ok) {
         const requestsData = await requestsResponse.json();
         setEnrollRequests(requestsData.requests || []);
-        console.log('Device requests loaded:', requestsData.requests?.length || 0);
       } else {
-        console.error('Failed to fetch device requests:', requestsResponse.status);
         setEnrollRequests([]);
       }
 
@@ -71,14 +68,11 @@ export default function DevicesPage() {
       if (devicesResponse.ok) {
         const devicesData = await devicesResponse.json();
         setUserDevices(devicesData.devices || []);
-        console.log('User devices loaded:', devicesData.devices?.length || 0);
       } else {
-        console.error('Failed to fetch user devices:', devicesResponse.status);
         setUserDevices([]);
       }
       
     } catch (error) {
-      console.error('Failed to fetch data:', error);
       setEnrollRequests([]);
       setUserDevices([]);
     } finally {
@@ -125,16 +119,13 @@ export default function DevicesPage() {
       });
 
       if (response.ok) {
-        console.log('Device request approved successfully');
         alert('Cihaz isteği onaylandı!');
         // Refresh data to get updated lists
         await fetchData();
       } else {
-        console.error('Failed to approve device request');
         alert('Cihaz isteği onaylanamadı!');
       }
     } catch (error) {
-      console.error('Error approving device request:', error);
       alert('Cihaz isteği onaylanırken hata oluştu!');
     }
   };
@@ -149,16 +140,13 @@ export default function DevicesPage() {
       });
 
       if (response.ok) {
-        console.log('Device request denied successfully');
         alert('Cihaz isteği reddedildi!');
         // Refresh data to get updated lists
         await fetchData();
       } else {
-        console.error('Failed to deny device request');
         alert('Cihaz isteği reddedilemedi!');
       }
     } catch (error) {
-      console.error('Error denying device request:', error);
       alert('Cihaz isteği reddedilirken hata oluştu!');
     }
   };

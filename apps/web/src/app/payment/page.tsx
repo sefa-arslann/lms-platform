@@ -34,7 +34,6 @@ export default function PaymentPage() {
           setTaxRate(data.taxRate || 0.20);
         }
       } catch (error) {
-        console.log('Tax rate not available, using default');
       }
     };
     
@@ -107,7 +106,6 @@ export default function PaymentPage() {
         )
       );
 
-      console.log('Siparişler oluşturuldu:', orders);
       clearCart();
       setSuccess(true);
       
@@ -116,7 +114,6 @@ export default function PaymentPage() {
       }, 3000);
       
     } catch (error) {
-      console.error('Ödeme hatası:', error);
       if (error instanceof Error) {
         setError(`Ödeme hatası: ${error.message}`);
       } else {

@@ -34,14 +34,12 @@ class SecureStorage {
   static setToken(token: string): void {
     try {
       if (!token || typeof token !== 'string') {
-        console.error('Invalid token provided:', token);
         return;
       }
       
       const encrypted = this.encrypt(token);
       sessionStorage.setItem(this.STORAGE_KEY, encrypted);
     } catch (error) {
-      console.error('Failed to store token securely:', error);
     }
   }
 
@@ -53,7 +51,6 @@ class SecureStorage {
       const decrypted = this.decrypt(encrypted);
       return decrypted || null;
     } catch (error) {
-      console.error('Failed to retrieve token:', error);
       return null;
     }
   }
@@ -62,7 +59,6 @@ class SecureStorage {
     try {
       sessionStorage.removeItem(this.STORAGE_KEY);
     } catch (error) {
-      console.error('Failed to remove token:', error);
     }
   }
 

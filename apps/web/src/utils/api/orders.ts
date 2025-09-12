@@ -50,7 +50,6 @@ class OrdersApi {
     // Get auth token from SecureStorage
     const token = SecureStorage.getToken();
     
-    console.log('🔐 Token check:', { 
       hasToken: !!token, 
       tokenLength: token?.length,
       tokenStart: token?.substring(0, 20) + '...'

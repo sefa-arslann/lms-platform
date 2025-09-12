@@ -67,9 +67,7 @@ export default function AdminMessagesPage() {
 
   const fetchMessages = async () => {
     try {
-      console.log('🔍 Fetching messages from API...');
       const token = SecureStorage.getToken();
-      console.log('🔑 Token being used:', token ? `${token.substring(0, 20)}...` : 'NO TOKEN');
       
       const response = await fetch('http://localhost:3001/messages/admin', {
         headers: {
@@ -77,17 +75,13 @@ export default function AdminMessagesPage() {
           'Content-Type': 'application/json'
         }
       });
-      console.log('📡 API Response status:', response.status);
       if (response.ok) {
         const data = await response.json();
-        console.log('📨 Messages data received:', data);
         setMessages(data);
       } else {
         const errorData = await response.json();
-        console.error('❌ API Error:', errorData);
       }
     } catch (error) {
-      console.error('❌ Error fetching messages:', error);
     } finally {
       setLoading(false);
     }
@@ -95,9 +89,7 @@ export default function AdminMessagesPage() {
 
   const fetchStats = async () => {
     try {
-      console.log('📊 Fetching stats from API...');
       const token = SecureStorage.getToken();
-      console.log('🔑 Stats Token being used:', token ? `${token.substring(0, 20)}...` : 'NO TOKEN');
       
       const response = await fetch('http://localhost:3001/messages/admin/stats', {
         headers: {
@@ -105,17 +97,13 @@ export default function AdminMessagesPage() {
           'Content-Type': 'application/json'
         }
       });
-      console.log('📡 Stats API Response status:', response.status);
       if (response.ok) {
         const data = await response.json();
-        console.log('📊 Stats data received:', data);
         setStats(data);
       } else {
         const errorData = await response.json();
-        console.error('❌ Stats API Error:', errorData);
       }
     } catch (error) {
-      console.error('❌ Error fetching stats:', error);
     }
   };
 
@@ -133,7 +121,6 @@ export default function AdminMessagesPage() {
         setReplies(data.replies || []);
       }
     } catch (error) {
-      console.error('Error fetching replies:', error);
     }
   };
 
@@ -162,7 +149,6 @@ export default function AdminMessagesPage() {
         body: JSON.stringify({ status: 'READ' })
       });
     } catch (error) {
-      console.error('Error marking as read:', error);
     }
   };
 
@@ -190,7 +176,6 @@ export default function AdminMessagesPage() {
         await fetchStats();
       }
     } catch (error) {
-      console.error('Error sending reply:', error);
     } finally {
       setSendingReply(false);
     }
@@ -218,7 +203,6 @@ export default function AdminMessagesPage() {
         await fetchStats();
       }
     } catch (error) {
-      console.error('Error updating status:', error);
     }
   };
 

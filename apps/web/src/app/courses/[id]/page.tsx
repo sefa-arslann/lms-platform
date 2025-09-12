@@ -63,7 +63,6 @@ export default function CourseDetail({ params }: { params: Promise<{ id: string 
     const fetchCourseData = async () => {
       try {
         setLoading(true);
-        console.log('Fetching course data for slug:', resolvedParams.id);
         
         // Use slug endpoint since params.id contains the slug
         const response = await fetch(`http://localhost:3001/courses/slug/${resolvedParams.id}`);
@@ -73,7 +72,6 @@ export default function CourseDetail({ params }: { params: Promise<{ id: string 
         }
         
         const data = await response.json();
-        console.log('Course data received:', data);
         
         // Transform API data to match our interface
         const transformedData: CourseData = {
@@ -125,7 +123,6 @@ export default function CourseDetail({ params }: { params: Promise<{ id: string 
         
         setCourseData(transformedData);
       } catch (err) {
-        console.error('Error fetching course data:', err);
         setError(err instanceof Error ? err.message : 'Kurs bilgileri yüklenemedi');
       } finally {
         setLoading(false);

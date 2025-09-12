@@ -522,11 +522,9 @@ function StatsSection() {
             const ordersData = await ordersResponse.json();
             ordersCount = ordersData.totalOrders || 0;
           } else if (ordersResponse.status === 401) {
-            console.log('Orders stats requires authentication, using default value');
             ordersCount = 0;
           }
         } catch (error) {
-          console.log('Orders stats not available:', error);
         }
 
         setStats({
@@ -536,7 +534,6 @@ function StatsSection() {
           totalOrders: ordersCount
         });
       } catch (error) {
-        console.error('Failed to fetch stats:', error);
         // Fallback to placeholder stats
         setStats({
           totalCourses: 0,
@@ -674,7 +671,6 @@ function Slider() {
           setCourses(data.slice(0, 4)); // Take first 4 courses for slider
         }
       } catch (error) {
-        console.error('Failed to fetch courses:', error);
       } finally {
         setLoading(false);
       }

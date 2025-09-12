@@ -57,7 +57,6 @@ export default function AdminReports() {
     try {
       const token = SecureStorage.getToken();
       if (!token) {
-        console.log('No token found');
         setLoading(false);
         return;
       }
@@ -74,7 +73,6 @@ export default function AdminReports() {
         const activitiesData = await activitiesResponse.json();
         setUserActivities(activitiesData);
       } else {
-        console.log('Failed to fetch activities');
         setUserActivities([]);
       }
 
@@ -90,7 +88,6 @@ export default function AdminReports() {
         const dailyData = await dailyResponse.json();
         setDailyStats(dailyData);
       } else {
-        console.log('Failed to fetch daily stats');
         setDailyStats([]);
       }
 
@@ -106,13 +103,11 @@ export default function AdminReports() {
         const weeklyData = await weeklyResponse.json();
         setWeeklyStats(weeklyData);
       } else {
-        console.log('Failed to fetch weekly stats');
         setWeeklyStats([]);
       }
 
       setLoading(false);
     } catch (error) {
-      console.error('Failed to fetch reports:', error);
       setUserActivities([]);
       setDailyStats([]);
       setWeeklyStats([]);
@@ -151,7 +146,6 @@ export default function AdminReports() {
         setDetailedNotes(notesData);
       }
     } catch (error) {
-      console.error('Failed to fetch detailed reports:', error);
     }
   };
 
@@ -175,7 +169,6 @@ export default function AdminReports() {
         fetchDetailedReports(); // Refresh notes
       }
     } catch (error) {
-      console.error('Failed to delete note:', error);
     }
   };
 
@@ -676,7 +669,6 @@ function AdminQAPanel() {
         setQuestions(data);
       }
     } catch (error) {
-      console.error('Failed to fetch questions:', error);
     } finally {
       setLoading(false);
     }
@@ -702,7 +694,6 @@ function AdminQAPanel() {
         fetchQuestions(); // Refresh questions
       }
     } catch (error) {
-      console.error('Failed to submit answer:', error);
     }
   };
 
@@ -726,7 +717,6 @@ function AdminQAPanel() {
         fetchQuestions(); // Refresh questions
       }
     } catch (error) {
-      console.error('Failed to delete question:', error);
     }
   };
 
@@ -750,7 +740,6 @@ function AdminQAPanel() {
         fetchQuestions(); // Refresh questions
       }
     } catch (error) {
-      console.error('Failed to delete answer:', error);
     }
   };
 

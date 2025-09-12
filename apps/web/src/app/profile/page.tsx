@@ -288,7 +288,6 @@ export default function ProfilePage() {
             body: JSON.stringify(deviceData),
           })
     } catch (error) {
-          console.log("Device registration error:", error)
         }
 
         // Fetch user profile
@@ -423,7 +422,6 @@ export default function ProfilePage() {
             setLastWatchedCourse(lastWatchedData)
       }
     } catch (error) {
-          console.log("Error fetching last watched course:", error)
           setLastWatchedCourse(null)
         }
 
@@ -1189,7 +1187,6 @@ export default function ProfilePage() {
                   <button
                     onClick={() => {
                       // Şifre değiştirme API çağrısı burada yapılacak
-                      console.log("Şifre değiştiriliyor:", passwordData)
                       setShowPasswordModal(false)
                       setPasswordData({ currentPassword: "", newPassword: "", confirmPassword: "" })
                     }}

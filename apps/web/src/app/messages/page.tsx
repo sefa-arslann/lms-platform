@@ -98,13 +98,10 @@ export default function MessagesPage() {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('📨 Fetched messages:', data);
         setMessages(data);
       } else {
-        console.error('❌ Failed to fetch messages:', response.status, response.statusText);
       }
     } catch (error) {
-      console.error("Error fetching messages:", error);
     } finally {
       setLoading(false);
     }
@@ -140,7 +137,6 @@ export default function MessagesPage() {
       });
 
       if (response.ok) {
-        console.log('✅ Message sent successfully');
         
         // Reset form
         setSubject("");
@@ -152,10 +148,8 @@ export default function MessagesPage() {
         // Refresh messages
         fetchMessages();
       } else {
-        console.error('❌ Failed to send message:', response.status, response.statusText);
       }
     } catch (error) {
-      console.error("Error sending message:", error);
     } finally {
       setSending(false);
     }
@@ -186,7 +180,6 @@ export default function MessagesPage() {
         }
       }
     } catch (error) {
-      console.error("Error sending reply:", error);
     }
   };
 
@@ -309,7 +302,6 @@ export default function MessagesPage() {
                             // Header badge'ini güncelle
                             window.dispatchEvent(new Event('messageRead'));
                           } catch (error) {
-                            console.error('Error marking message as read:', error);
                           }
                         }
 
@@ -341,7 +333,6 @@ export default function MessagesPage() {
                             // Badge'i güncelle
                             window.dispatchEvent(new Event('messageRead'));
                           } catch (error) {
-                            console.error('Error marking admin replies as read:', error);
                           }
                         }
                       }}

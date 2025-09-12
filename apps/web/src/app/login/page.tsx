@@ -33,33 +33,17 @@ export default function LoginPage() {
   useEffect(() => {
     setIsClient(true);
     
-    console.log('=== COMBINED USE EFFECT ===');
-    console.log('isAuthenticated:', isAuthenticated);
-    console.log('user:', user);
-    console.log('user?.role:', user?.role);
     
     if (user && user.role) {
-      console.log('=== REDIRECT LOGIC ===');
-      console.log('User state changed to:', user);
-      console.log('User role:', user.role);
       
       // Role-based redirection
       if (user.role === 'ADMIN') {
-        console.log('🚀 ADMIN DETECTED - Redirecting to /admin');
-        console.log('Current URL before redirect:', window.location.pathname);
         router.push('/admin');
-        console.log('Router.push(/admin) called');
       } else if (user.role === 'STUDENT' || user.role === 'INSTRUCTOR') {
-        console.log('🚀 USER DETECTED - Redirecting to /profile');
-        console.log('Current URL before redirect:', window.location.pathname);
         router.push('/profile');
-        console.log('Router.push(/profile) called');
       } else {
-        console.log('❓ UNKNOWN ROLE:', user.role);
       }
     } else if (isAuthenticated && user) {
-      console.log('=== AUTHENTICATED BUT NO ROLE ===');
-      console.log('User authenticated but no role found');
     }
   }, [isAuthenticated, user, router]);
 
@@ -121,12 +105,6 @@ export default function LoginPage() {
       const result = await login(formData.email, formData.password);
       
       if (result.success) {
-        console.log('=== LOGIN DEBUG START ===');
-        console.log('Login result:', result);
-        console.log('Current user state:', user);
-        console.log('User role from context:', user?.role);
-        console.log('✅ Login successful! User state will be updated by AuthContext');
-        console.log('🔄 useEffect will handle redirection when user state changes');
       } else {
         if (result.requiresApproval) {
           setShowApprovalMessage(true);

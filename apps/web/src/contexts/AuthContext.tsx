@@ -42,20 +42,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const checkAuth = async () => {
       const storedToken = SecureStorage.getToken();
-      console.log('🔍 Checking stored token:', storedToken ? 'EXISTS' : 'NOT FOUND');
       
       if (storedToken) {
         try {
           // First try to decode token locally to get user info
           const tokenPayload = decodeJwtToken(storedToken);
-          console.log('🔍 Token payload:', tokenPayload);
           
           if (tokenPayload && tokenPayload.email && tokenPayload.role) {
             // Check if token is expired
             const currentTime = Math.floor(Date.now() / 1000);
             if (tokenPayload.exp && tokenPayload.exp < currentTime) {
               // Token expired, remove it
-              console.log('❌ Token expired, removing...');
               SecureStorage.removeToken();
               setToken(null);
               setUser(null);
@@ -72,7 +69,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               role: tokenPayload.role,
             };
             
-            console.log('✅ Setting user from token:', userData);
             setUser(userData);
             setToken(storedToken);
             setIsLoading(false);
@@ -80,7 +76,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           }
           
           // Fallback: Verify token with backend
-          console.log('🔄 Verifying token with backend...');
           const response = await fetch('http://localhost:3001/auth/verify', {
             headers: {
               'Authorization': `Bearer ${storedToken}`,
@@ -90,24 +85,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           
           if (response.ok) {
             const userData = await response.json();
-            console.log('✅ Backend verification successful:', userData);
             setUser(userData);
             setToken(storedToken);
           } else {
             // Token invalid, remove it
-            console.log('❌ Backend verification failed, removing token');
             SecureStorage.removeToken();
             setToken(null);
             setUser(null);
           }
         } catch (error) {
-          console.error('❌ Token verification failed:', error);
           SecureStorage.removeToken();
           setToken(null);
           setUser(null);
         }
       } else {
-        console.log('❌ No stored token found');
         setToken(null);
         setUser(null);
       }
@@ -129,7 +120,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         
         // If token expires in less than 1 hour, refresh it
         if (timeUntilExpiry < 3600) {
-          console.log('Token expires soon, refreshing...');
           refreshToken();
         }
       }
@@ -149,9 +139,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       // For now, just log that we would refresh
       // In a real implementation, you would call the refresh endpoint
-      console.log('Would refresh token here...');
     } catch (error) {
-      console.error('Failed to refresh token:', error);
       logout();
     }
   };
@@ -166,7 +154,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }).join(''));
       return JSON.parse(jsonPayload);
     } catch (error) {
-      console.error('Failed to decode JWT token:', error);
       return null;
     }
   };
@@ -175,7 +162,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       // Get device info from frontend
       const deviceInfo = getDeviceInfo();
-      console.log('🔍 Frontend device info:', deviceInfo);
       
       const response = await fetch('http://localhost:3001/auth/login', {
         method: 'POST',
@@ -206,7 +192,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         
         // Validate token and user data
         if (!newToken || typeof newToken !== 'string') {
-          console.error('Invalid token received from server:', newToken);
           return { 
             success: false, 
             message: 'Sunucudan geçersiz token alındı. Lütfen tekrar deneyin.'
@@ -214,7 +199,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
         
         if (!userData || !userData.id) {
-          console.error('Invalid user data received from server:', userData);
           return { 
             success: false, 
             message: 'Sunucudan geçersiz kullanıcı bilgisi alındı. Lütfen tekrar deneyin.'
@@ -222,10 +206,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
         
         // Store token and user data securely
-        console.log('=== AUTH CONTEXT DEBUG ===');
-        console.log('Setting token:', newToken);
-        console.log('Setting user:', userData);
-        console.log('User role:', userData?.role);
         
         // Store in secure storage first
         SecureStorage.setToken(newToken);
@@ -234,8 +214,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setToken(newToken);
         setUser(userData);
         
-        console.log('✅ State updated successfully, token:', newToken ? 'EXISTS' : 'NULL');
-        console.log('✅ User state:', userData);
         
         // Return success with user role for proper redirection
         return { 
@@ -243,7 +221,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           userRole: userData.role 
         };
       } else {
-        console.error('Login failed:', data.message);
         
         // Check if it's a device approval required error
         if (data.status === 'pending_approval' || (data.message && data.message.includes('Device approval required'))) {
@@ -266,7 +243,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         };
       }
     } catch (error) {
-      console.error('Login error:', error);
       return { 
         success: false, 
         message: 'Giriş yapılırken bir hata oluştu. Lütfen tekrar deneyin.'
@@ -275,11 +251,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = () => {
-    console.log('🚪 Logging out, clearing all data...');
     SecureStorage.removeToken();
     setToken(null);
     setUser(null);
-    console.log('✅ Logout completed, states cleared');
   };
 
   const isAuthenticated = !!token && !!user;

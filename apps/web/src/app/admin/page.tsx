@@ -199,18 +199,14 @@ export default function AdminDashboard() {
         });
         if (!response.ok) {
           const errorText = await response.text();
-          console.error('API response not ok:', response.status, errorText);
           throw new Error(`Failed to fetch dashboard data: ${response.status} ${errorText}`);
         }
         const data = await response.json();
-        console.log('API data received:', data);
         setStats(data);
         setError(null);
       } catch (err) {
-        console.error('Error fetching dashboard data:', err);
         setError(`Dashboard verileri yüklenirken hata oluştu: ${err instanceof Error ? err.message : 'Bilinmeyen hata'}`);
         // Fallback to mock data if API fails
-        console.log('API failed, using mock data');
         setStats(mockDashboardData);
       } finally {
         setLoading(false);
@@ -223,7 +219,6 @@ export default function AdminDashboard() {
   // Handle real-time WebSocket updates
   useEffect(() => {
     if (lastMessage && stats) {
-      console.log('WebSocket message received:', lastMessage);
       switch (lastMessage.type) {
         case 'dashboard-update':
           setStats(prevStats => ({
@@ -233,18 +228,14 @@ export default function AdminDashboard() {
           break;
         case 'user-activity':
           // Update recent activity
-          console.log('User activity update:', lastMessage.data);
           break;
         case 'course-view':
           // Update course views
-          console.log('Course view update:', lastMessage.data);
           break;
         case 'video-analytics':
           // Update video analytics
-          console.log('Video analytics update:', lastMessage.data);
           break;
         default:
-          console.log('Unknown WebSocket message type:', lastMessage.type);
       }
     }
   }, [lastMessage, stats]);

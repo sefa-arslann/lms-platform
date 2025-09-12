@@ -248,25 +248,20 @@ export default function CMSPage() {
 
   const handleTogglePublish = (contentId: string) => {
     // Toggle publish status logic
-    console.log('Toggle publish for:', contentId);
   };
 
   const handleDeleteContent = (contentId: string) => {
     if (confirm('Bu içeriği silmek istediğinizden emin misiniz?')) {
-      console.log('Delete content:', contentId);
     }
   };
 
   const handleModerateNote = (noteId: string, action: 'approve' | 'reject' | 'flag') => {
-    console.log('Moderate note:', noteId, action);
   };
 
   const handleModerateQuestion = (questionId: string, action: 'approve' | 'reject' | 'flag') => {
-    console.log('Moderate question:', questionId, action);
   };
 
   const handleAnswerQuestion = (questionId: string) => {
-    console.log('Answer question:', questionId);
   };
 
   return (

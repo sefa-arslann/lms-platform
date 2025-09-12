@@ -59,7 +59,6 @@ export default function AdminOrdersPage() {
       setOrders(data);
     } catch (error) {
       setError('Siparişler yüklenirken hata oluştu');
-      console.error('Error fetching orders:', error);
     } finally {
       setLoading(false);
     }
@@ -86,7 +85,6 @@ export default function AdminOrdersPage() {
       ));
     } catch (error) {
       setError('Durum güncellenirken hata oluştu');
-      console.error('Error updating order status:', error);
     }
   };
 

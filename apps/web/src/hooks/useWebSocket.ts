@@ -29,18 +29,15 @@ export const useWebSocket = (url: string) => {
         socket.on('connect', () => {
           setIsConnected(true);
           setError(null);
-          console.log('Socket.io connected');
           
           // Join admin room
           socket.emit('join-admin', { adminId: 'admin-dashboard' });
         });
 
         socket.on('connected', (data) => {
-          console.log('Admin dashboard connected:', data);
         });
 
         socket.on('joined-admin', (data) => {
-          console.log('Joined admin room:', data);
         });
 
         socket.on('dashboard-update', (data) => {
@@ -77,22 +74,18 @@ export const useWebSocket = (url: string) => {
 
         socket.on('disconnect', () => {
           setIsConnected(false);
-          console.log('Socket.io disconnected');
         });
 
         socket.on('connect_error', (error) => {
           setError(`Connection error: ${error.message}`);
-          console.error('Socket.io connection error:', error);
         });
 
         socket.on('error', (error) => {
           setError(`Socket error: ${error}`);
-          console.error('Socket.io error:', error);
         });
 
       } catch (err) {
         setError('Failed to create Socket.io connection');
-        console.error('Socket.io connection error:', err);
       }
     };
 

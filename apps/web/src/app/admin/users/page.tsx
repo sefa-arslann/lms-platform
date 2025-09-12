@@ -74,7 +74,6 @@ export default function UsersPage() {
       const data = await response.json();
       setUsers(data.users);
     } catch (error) {
-      console.error('Failed to fetch users:', error);
       // Fallback to mock data if API fails
       const mockUsers: User[] = [
         {
@@ -171,7 +170,6 @@ export default function UsersPage() {
         user.id === userId ? { ...user, role: newRole as any } : user
       ));
     } catch (error) {
-      console.error('Failed to change user role:', error);
       alert('Kullanıcı rolü değiştirilemedi!');
     }
   };
@@ -195,7 +193,6 @@ export default function UsersPage() {
         user.id === userId ? { ...user, isActive: newStatus } : user
       ));
     } catch (error) {
-      console.error('Failed to change user status:', error);
       alert('Kullanıcı durumu değiştirilemedi!');
     }
   };
@@ -216,7 +213,6 @@ export default function UsersPage() {
       const data = await response.json();
       setUserDevices(data.devices || []);
     } catch (error) {
-      console.error('Failed to fetch user devices:', error);
       setUserDevices([]);
     } finally {
       setLoadingDevices(false);
@@ -347,7 +343,6 @@ export default function UsersPage() {
       alert('Kullanıcı başarıyla güncellendi!');
       closeEditModal();
     } catch (error) {
-      console.error('Failed to update user:', error);
       alert('Kullanıcı güncellenirken hata oluştu!');
     } finally {
       setEditLoading(false);

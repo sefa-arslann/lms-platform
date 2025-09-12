@@ -40,10 +40,8 @@ export default function SettingsPage() {
         const data = await response.json();
         setSettings(data);
       } else {
-        console.error('Failed to fetch settings');
       }
     } catch (error) {
-      console.error('Error fetching settings:', error);
     } finally {
       setLoading(false);
     }
@@ -61,13 +59,10 @@ export default function SettingsPage() {
       });
       
       if (response.ok) {
-        console.log(`${tabId} settings saved successfully`);
         await fetchSettings(); // Refresh settings
       } else {
-        console.error(`Failed to save ${tabId} settings`);
       }
     } catch (error) {
-      console.error(`Error saving ${tabId} settings:`, error);
     } finally {
       setSaving(false);
     }

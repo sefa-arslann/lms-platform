@@ -100,7 +100,6 @@ export default function RegisterPage() {
       await new Promise(resolve => setTimeout(resolve, 2000));
       
       // Success - redirect to login or show success message
-      console.log("Registration successful:", formData);
       alert("Kayıt başarılı! Giriş sayfasına yönlendiriliyorsunuz...");
       
     } catch (error) {

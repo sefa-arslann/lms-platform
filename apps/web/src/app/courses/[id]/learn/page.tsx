@@ -158,7 +158,6 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
     const fetchCourseData = async () => {
       try {
         setLoading(true);
-        console.log('Fetching course data for slug:', resolvedParams.id);
         
         // Use slug endpoint since params.id contains the slug
         const response = await fetch(`http://localhost:3001/courses/slug/${resolvedParams.id}`);
@@ -168,7 +167,6 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
         }
         
         const data = await response.json();
-        console.log('Course data received:', data);
         setCourseData(data);
         
         // Check URL parameters for specific lesson and position
@@ -191,7 +189,6 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
               // Set last position if provided
               if (position) {
                 setLastPosition(parseFloat(position));
-                console.log('Setting last position from URL:', position);
               }
             }
           }
@@ -209,7 +206,6 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
           }
         }
       } catch (err) {
-        console.error('Error fetching course data:', err);
         setError(err instanceof Error ? err.message : 'Kurs verisi yüklenemedi');
       } finally {
         setLoading(false);
@@ -234,12 +230,10 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
     
     // Skip video URL generation for PDF lessons
     if (currentLesson.contentType === 'PDF') {
-      console.log('📄 PDF lesson detected, skipping video URL generation');
       return;
     }
     
     try {
-      console.log('🎬 Getting secure video URL for lesson:', currentLesson.id);
       
       // Use the new API video streaming endpoint to avoid CORS issues
       const response = await fetch(`http://localhost:3001/secure-video/lesson/${currentLesson.id}/video`, {
@@ -259,7 +253,6 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
             secureVideoUrl: data.data.secureUrl
           } : null);
           
-          console.log('✅ Secure video URL obtained:', data.data.secureUrl);
           
           // Reset video loading state and reload video
           setIsVideoLoading(false);
@@ -270,17 +263,14 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
             videoRef.current.load();
           }
         } else {
-          console.error('❌ Invalid response format:', data);
           setVideoError('Video URL alınamadı');
           setIsVideoLoading(false);
         }
       } else {
-        console.error('❌ Error getting secure video URL:', response.status, response.statusText);
         setVideoError(`Video yüklenemedi: ${response.status}`);
         setIsVideoLoading(false);
       }
     } catch (error) {
-      console.error('❌ Error getting secure video URL:', error);
       setVideoError('Video yüklenirken hata oluştu');
       setIsVideoLoading(false);
     }
@@ -289,7 +279,6 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
   // Get secure video URL when lesson changes - with proper dependencies
   useEffect(() => {
     if (currentLesson && user && token) {
-      console.log('🎬 Lesson changed, loading new video:', currentLesson.title);
       
       // Only set video loading for non-PDF lessons
       if (currentLesson.contentType !== 'PDF') {
@@ -341,7 +330,6 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
     if (!user || !currentLesson || !token) return;
     
     try {
-      console.log('📊 Loading progress for lesson:', currentLesson.id);
       
       // Double-check that we're still on the same lesson
       const lessonId = currentLesson.id;
@@ -357,10 +345,6 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
         
         // Verify we're still on the same lesson
         if (currentLesson?.id !== lessonId) {
-          console.log('🎬 Lesson changed during API call, aborting progress loading:', {
-            originalLesson: lessonId,
-            currentLesson: currentLesson?.id
-          });
           return;
         }
         
@@ -368,14 +352,6 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
         const lastPos = data.lastPosition || 0;
         const lessonDuration = data.duration || 0;
         const completed = data.completed || false;
-        
-        console.log('📊 Progress data received for lesson:', {
-          lessonId,
-          progress,
-          lastPosition: lastPos,
-          duration: lessonDuration,
-          completed
-        });
         
         // Update lesson progress map
         setLessonProgressMap(prev => new Map(prev).set(lessonId, {
@@ -398,18 +374,8 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
         setLastPosition(lastPos);
         
         // DON'T set position here - let video events handle it
-        console.log('📊 Progress loaded, video events will handle position restore');
-        
-        console.log('📊 Lesson progress loaded successfully:', {
-          lessonId,
-          progress,
-          lastPosition: lastPos,
-          duration: lessonDuration,
-          completed
-        });
       }
     } catch (error) {
-      console.error('❌ Error loading lesson progress:', error);
       setLessonProgress(0);
       setCurrentLessonProgress({
         progress: 0,
@@ -434,10 +400,8 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
       if (response.ok) {
         const data = await response.json();
         setCourseProgress(data.overallProgress || 0);
-        console.log('📊 Course progress loaded:', data);
       }
     } catch (error) {
-      console.error('❌ Error loading course progress:', error);
       setCourseProgress(0);
     }
   };
@@ -455,13 +419,10 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
 
       if (response.ok) {
         const data = await response.json();
-        console.log('📝 Notes loaded:', data);
         setNotes(data);
       } else {
-        console.error('❌ Error loading notes:', response.status);
       }
     } catch (error) {
-      console.error('❌ Error loading notes:', error);
     }
   };
 
@@ -470,7 +431,6 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
     if (!user || !currentLesson || !token) return;
     
     try {
-      console.log('🔍 Loading questions for lesson:', currentLesson.id);
       const response = await fetch(`http://localhost:3001/questions/lesson/${currentLesson.id}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -479,20 +439,15 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
 
       if (response.ok) {
         const data = await response.json();
-        console.log('❓ Questions loaded successfully:', data);
-        console.log('❓ Questions count:', data.length);
         setQuestions(data);
         
         // Debug: Check if state was updated
         setTimeout(() => {
-          console.log('❓ Questions state after update:', questions);
         }, 100);
       } else {
-        console.error('❌ Error loading questions:', response.status, response.statusText);
         setQuestions([]);
       }
     } catch (error) {
-      console.error('❌ Error loading questions:', error);
       setQuestions([]);
     }
   };
@@ -510,30 +465,26 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
 
       if (response.ok) {
         const data = await response.json();
-        console.log('📊 All lessons progress loaded:', data);
         
-        // Update lessons with progress data
+        // Update lessonProgressMap with all lessons progress
         if (data.lessons) {
-          setCourseData(prev => {
-            if (!prev) return prev;
-            
-            const updatedSections = prev.sections.map(section => ({
-              ...section,
-              lessons: section.lessons.map(lesson => ({
-                ...lesson,
-                progress: data.lessons.find((l: any) => l.lessonId === lesson.id)?.progress || 0
-              }))
-            }));
-            
-            return {
-              ...prev,
-              sections: updatedSections
-            };
+          const newProgressMap = new Map();
+          
+          // Initialize with existing data
+          setLessonProgressMap(prev => {
+            data.lessons.forEach((lessonProgress: any) => {
+              newProgressMap.set(lessonProgress.lessonId, {
+                progress: lessonProgress.progress || 0,
+                lastPosition: lessonProgress.lastPosition || 0,
+                duration: lessonProgress.duration || 0,
+                completed: lessonProgress.completed || false
+              });
+            });
+            return newProgressMap;
           });
         }
       }
     } catch (error) {
-      console.error('❌ Error loading all lessons progress:', error);
     }
   };
 
@@ -548,14 +499,12 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
         (e.ctrlKey && e.key === 'u')
       ) {
         e.preventDefault();
-        console.log('⚠️ Download attempt blocked');
       }
     };
 
     const preventRightClick = (e: MouseEvent) => {
       if (e.button === 2) { // Right click
         e.preventDefault();
-        console.log('⚠️ Right click blocked');
       }
     };
 
@@ -566,7 +515,6 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
         // Block common download manager events
         e.preventDefault();
         e.stopPropagation();
-        console.log('⚠️ Download manager attempt blocked');
       }
     };
 
@@ -617,7 +565,6 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
         video.currentTime = lastPosition;
         setCurrentTime(lastPosition);
         setCurrentVideoTime(lastPosition);
-        console.log('🎬 Video position set from lastPosition:', lastPosition);
       }
     }
   }, [lastPosition, currentLesson]);
@@ -642,7 +589,6 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
       const progressPercent = (currentTime / duration) * 100;
       // Only mark as completed if user has watched at least 95% AND has been watching for a reasonable time
       if (progressPercent >= 95 && lessonProgress < 100 && currentTime >= (duration * 0.8)) {
-        console.log('🎯 Video completion threshold reached:', { progressPercent, currentTime, duration });
         markLessonCompleted();
       }
     }
@@ -670,7 +616,6 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
         
         // CRITICAL: Validate current lesson before saving progress
         if (!currentLesson) {
-          console.log('⚠️ No current lesson, skipping progress save');
           return;
         }
         
@@ -682,15 +627,6 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
         const shouldSavePosition = Math.abs(currentTime - (currentLessonProgress.lastPosition || 0)) >= 2;
         
         if (shouldSaveProgress || shouldSavePosition) {
-          console.log('📊 Progress/Position update for lesson:', {
-            lessonId: currentLesson.id,
-            lessonTitle: currentLesson.title,
-            oldProgress: lessonProgress,
-            newProgress: roundedProgress,
-            oldPosition: currentLessonProgress.lastPosition || 0,
-            newPosition: currentTime,
-            reason: shouldSaveProgress ? 'progress_increase' : 'position_change'
-          });
           
           // Progress ve position'ı birlikte kaydet
           saveProgress(roundedProgress);
@@ -707,24 +643,15 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
     setIsVideoLoading(false);
     setVideoError(null);
     
-    console.log('🎬 Video metadata loaded, duration:', duration);
-    console.log('🎬 currentLesson ID:', currentLesson?.id);
     
     // Get progress for current lesson from lessonProgressMap
     const currentLessonData = currentLesson ? lessonProgressMap.get(currentLesson.id) : null;
     const validLastPosition = currentLessonData?.lastPosition || 0;
     const validProgress = currentLessonData?.progress || 0;
     
-    console.log('🎬 Current lesson data from map:', {
-      lessonId: currentLesson?.id,
-      progress: validProgress,
-      lastPosition: validLastPosition,
-      duration: duration
-    });
     
     // Kaldığı yerden devam et - but only if we have a valid lastPosition for THIS lesson
     if (validLastPosition > 0 && validLastPosition < duration && video.currentTime !== validLastPosition && validProgress > 0) {
-      console.log('🎬 Restoring video position to:', validLastPosition);
       video.currentTime = validLastPosition;
       setCurrentTime(validLastPosition);
       setCurrentVideoTime(validLastPosition);
@@ -732,17 +659,7 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
       // Also restore progress if available
       const progressPercent = (validLastPosition / duration) * 100;
       setProgress(progressPercent);
-      console.log('🎬 Progress restored:', progressPercent);
-      
-      console.log('🎬 Video kaldığı yerden başlatıldı:', validLastPosition);
     } else {
-      console.log('🎬 Kaldığı yerden başlatılmadı:', {
-        validLastPosition,
-        currentTime: video.currentTime,
-        duration,
-        validProgress,
-        reason: validLastPosition <= 0 ? 'no lastPosition' : validLastPosition >= duration ? 'lastPosition >= duration' : validProgress <= 0 ? 'no progress' : 'already at position'
-      });
       
       // Start from beginning for new lesson
       video.currentTime = 0;
@@ -752,7 +669,6 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
     }
     
     // Don't auto-play - let user control
-    console.log('🎬 Video ready to play - user control');
   };
 
   const handleVideoError = (e: React.SyntheticEvent<HTMLVideoElement>) => {
@@ -781,13 +697,11 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
     }
     
     setVideoError(errorMessage);
-    console.error('❌ Video error:', video.error, errorMessage);
   };
 
   const handleVideoLoadStart = () => {
     setIsVideoLoading(true);
     setVideoError(null);
-    console.log('🔄 Video loading started');
   };
 
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -833,20 +747,10 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
     const shouldSave = progressPercent > currentProgress && progressDifference >= 2 || progressPercent >= 95 || positionChanged;
     
     if (!shouldSave) {
-      console.log(`📊 Progress not saved: current (${progressPercent}%) vs saved (${currentProgress}%), difference: ${progressDifference}%, position changed: ${positionChanged}`);
       return;
     }
     
     try {
-      console.log('📊 Saving progress for lesson:', {
-        lessonId: currentLesson.id,
-        progress: progressPercent,
-        duration: duration,
-        lastPosition: currentTime,
-        previousProgress: currentProgress,
-        progressDifference,
-        positionChanged
-      });
       
       const response = await fetch(`http://localhost:3001/lesson-progress/lesson/${currentLesson.id}/update`, {
         method: 'POST',
@@ -883,22 +787,14 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
         setLessonProgress(progressPercent);
         setLastPosition(currentTime);
         
-        console.log('✅ Progress saved successfully for lesson:', {
-          lessonId: currentLesson.id,
-          progress: progressPercent,
-          lastPosition: currentTime,
-          reason: progressPercent >= 95 ? 'completion' : positionChanged ? 'position_change' : 'progress_increase'
-        });
         
         // Kurs genel ilerlemesini güncelle
         if (courseData) {
           loadCourseProgress();
         }
       } else {
-        console.error('❌ Failed to save progress:', response.status);
       }
     } catch (error) {
-      console.error('❌ Error saving progress:', error);
     }
   }, [user?.id, currentLesson?.id, token, duration, currentTime, currentLessonProgress.progress, currentLessonProgress.lastPosition]);
 
@@ -908,11 +804,6 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
     
     // CRITICAL: Validate that we're marking completion for the correct lesson
     const lessonId = currentLesson.id;
-    console.log('🔒 Lesson completion validation:', {
-      currentLessonId: lessonId,
-      currentTime: currentTime,
-      duration: duration
-    });
     
     try {
       const response = await fetch(`http://localhost:3001/lesson-progress/lesson/${lessonId}/update`, {
@@ -931,10 +822,8 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
 
       if (response.ok) {
         setLessonProgress(100);
-        console.log('✅ Lesson marked as completed for lesson:', lessonId);
       }
     } catch (error) {
-      console.error('❌ Error marking lesson as completed:', error);
     }
   }, [user?.id, currentLesson?.id, token, duration, currentTime]);
 
@@ -976,11 +865,6 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
   const addNote = async () => {
     if (newNote.trim() && currentLesson && user && token) {
       try {
-        console.log('📝 Not ekleme başladı:', {
-          lessonId: currentLesson.id,
-          content: newNote,
-          timestamp: currentVideoTime
-        });
 
         const response = await fetch('http://localhost:3001/notes', {
           method: 'POST',
@@ -998,7 +882,6 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
 
         if (response.ok) {
           const savedNote = await response.json();
-          console.log('✅ Not başarıyla kaydedildi:', savedNote);
           
           // Notu listeye ekle
           setNotes([...notes, savedNote]);
@@ -1007,10 +890,8 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
           // Notları yeniden yükle
           loadNotes();
         } else {
-          console.error('❌ Not kaydedilemedi:', response.status);
         }
       } catch (error) {
-        console.error('❌ Not ekleme hatası:', error);
       }
     }
   };
@@ -1027,7 +908,6 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
       videoRef.current.play();
       }
       
-      console.log('�� Video timestamp\'e gidildi:', timestamp, '(', formatTime(timestamp), ')');
     }
   };
 
@@ -1043,13 +923,10 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
         });
 
         if (response.ok) {
-          console.log('✅ Not başarıyla silindi:', noteId);
       setNotes(notes.filter(note => note.id !== noteId));
         } else {
-          console.error('❌ Not silinemedi:', response.status);
         }
       } catch (error) {
-        console.error('❌ Not silme hatası:', error);
       }
     }
   };
@@ -1058,13 +935,6 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
   const addQuestion = async () => {
     if (newQuestion.trim() && currentLesson && user && token && courseData) {
       try {
-        console.log('❓ Soru ekleme başladı:', {
-          lessonId: currentLesson.id,
-          courseId: courseData.id,
-          title: newQuestion,
-          content: newQuestion,
-          hasFile: selectedFile ? true : false
-        });
 
         const formData = new FormData();
         formData.append('title', newQuestion);
@@ -1086,7 +956,6 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
 
         if (response.ok) {
           const savedQuestion = await response.json();
-          console.log('✅ Soru başarıyla kaydedildi:', savedQuestion);
           
           // Soruyu listeye ekle
           setQuestions([savedQuestion, ...questions]);
@@ -1096,10 +965,8 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
           // Soruları yeniden yükle
           loadQuestions();
         } else {
-          console.error('❌ Soru kaydedilemedi:', response.status);
         }
       } catch (error) {
-        console.error('❌ Soru ekleme hatası:', error);
       }
     }
   };
@@ -1352,7 +1219,6 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
                           if (currentLesson && user && token) {
                             saveProgress(100);
                             setLessonProgress(100);
-                            console.log('📄 PDF görüntülendi, ders otomatik tamamlandı');
                             
                             // Kurs genel ilerlemesini güncelle
                             if (courseData) {
@@ -1360,7 +1226,6 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
                             }
                           }
                         } catch (error) {
-                          console.error('PDF progress hatası:', error);
                         }
                       }}
                       className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors"
@@ -1381,7 +1246,6 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
                         if (currentLesson && user && token) {
                           saveProgress(100);
                           setLessonProgress(100);
-                          console.log('📄 PDF yüklendi, ders otomatik tamamlandı');
                           
                           // Kurs genel ilerlemesini güncelle
                           if (courseData) {
@@ -1417,29 +1281,20 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
                   onLoadStart={handleVideoLoadStart}
                   onCanPlay={() => {
                     setIsVideoLoading(false);
-                    console.log('🎬 Video can play');
                   }}
                   onSeeking={(e) => e.preventDefault()}
                   onRateChange={(e) => e.preventDefault()}
                   onError={handleVideoError}
                   onLoadedData={() => {
-                    console.log('🎬 Video data loaded');
                     setIsVideoLoading(false);
                   }}
                   onCanPlayThrough={() => {
-                    console.log('🎬 Video can play through');
                     setIsVideoLoading(false);
                     
                     // Get progress for current lesson from lessonProgressMap
                     const currentLessonData = currentLesson ? lessonProgressMap.get(currentLesson.id) : null;
                     const validLastPosition = currentLessonData?.lastPosition || 0;
                     const validProgress = currentLessonData?.progress || 0;
-                    
-                    console.log('🎬 onCanPlayThrough - Current lesson data:', {
-                      lessonId: currentLesson?.id,
-                      progress: validProgress,
-                      lastPosition: validLastPosition
-                    });
                     
                     // Video oynatılmaya hazır olduğunda kaldığı yerden başlat - but only for THIS lesson
                     if (validLastPosition > 0 && videoRef.current && videoRef.current.currentTime !== validLastPosition && validProgress > 0) {
@@ -1452,17 +1307,7 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
                         // Restore progress
                         const progressPercent = (validLastPosition / videoRef.current.duration) * 100;
                         setProgress(progressPercent);
-                        
-                        console.log('🎬 Video oynatılmaya hazır, kaldığı yerden başlatılıyor:', {
-                          lastPosition: validLastPosition,
-                          duration: videoRef.current.duration,
-                          progress: progressPercent
-                        });
                       } else {
-                        console.log('🎬 lastPosition invalid, starting from beginning:', {
-                          lastPosition: validLastPosition,
-                          duration: videoRef.current.duration
-                        });
                         
                         // Start from beginning
                         videoRef.current.currentTime = 0;
@@ -1471,11 +1316,6 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
                         setProgress(0);
                       }
                     } else {
-                      console.log('🎬 Starting from beginning - no valid position for this lesson:', {
-                        validLastPosition,
-                        validProgress,
-                        lessonId: currentLesson?.id
-                      });
                       
                       // Start from beginning for new lesson
                       if (videoRef.current) {
@@ -1491,7 +1331,6 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
                     if (currentLesson && user && token) {
                       saveProgress(100);
                       setLessonProgress(100);
-                      console.log('🎯 Video tamamlandı, ilerleme %100');
                       
                       // Kurs genel ilerlemesini güncelle
                       if (courseData) {
@@ -1799,17 +1638,10 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
                         <button
                           key={lesson.id}
                           onClick={() => {
-                            console.log('🎬 Lesson selected:', lesson.title);
                             
                             // Get existing progress for this lesson
                             const existingProgress = lessonProgressMap.get(lesson.id);
                             if (existingProgress) {
-                              console.log('📊 Existing progress found for lesson:', {
-                                lessonId: lesson.id,
-                                progress: existingProgress.progress,
-                                lastPosition: existingProgress.lastPosition,
-                                completed: existingProgress.completed
-                              });
                             }
                             
                             setCurrentLesson(lesson);

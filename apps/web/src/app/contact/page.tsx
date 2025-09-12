@@ -78,7 +78,6 @@ export default function ContactPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Form submission logic will be implemented here
-    console.log("Form submitted:", formData);
     alert("Mesajınız başarıyla gönderildi! En kısa sürede size dönüş yapacağız.");
     setFormData({ name: "", email: "", subject: "", message: "" });
   };

@@ -40,7 +40,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
       try {
         setCartItems(JSON.parse(savedCart));
       } catch (error) {
-        console.error('Failed to parse cart from localStorage:', error);
       }
     }
   }, []);
@@ -51,16 +50,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [cartItems]);
 
   const addToCart = (item: CartItem) => {
-    console.log('Adding item to cart:', item); // Debug log
     setCartItems(prev => {
       // Check if item already exists in cart
       const existingItem = prev.find(cartItem => cartItem.courseId === item.courseId);
       if (existingItem) {
-        console.log('Item already exists in cart:', existingItem); // Debug log
         // Item already exists, don't add duplicate
         return prev;
       }
-      console.log('Adding new item to cart'); // Debug log
       // Add new item
       return [...prev, item];
     });
