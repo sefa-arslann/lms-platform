@@ -178,10 +178,6 @@ export default function CartPage() {
 
             if (!response.ok) {
               const errorData = await response.text();
-                status: response.status,
-                statusText: response.statusText,
-                error: errorData
-              });
               throw new Error(`Sipariş oluşturulamadı: ${response.status} ${response.statusText}`);
             }
 

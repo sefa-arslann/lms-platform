@@ -50,11 +50,6 @@ class OrdersApi {
     // Get auth token from SecureStorage
     const token = SecureStorage.getToken();
     
-      hasToken: !!token, 
-      tokenLength: token?.length,
-      tokenStart: token?.substring(0, 20) + '...'
-    });
-    
     if (!token) {
       throw new Error('Authentication token not found. Please login again.');
     }
