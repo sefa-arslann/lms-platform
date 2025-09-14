@@ -1,13 +1,13 @@
 export const API_CONFIG = {
   // Development
   development: {
-    baseUrl: 'http://localhost:3001',
-    wsUrl: 'http://localhost:3001',
+    baseUrl: 'http://localhost:3002',
+    wsUrl: 'http://localhost:3002',
   },
   // Production
   production: {
-    baseUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001',
-    wsUrl: process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:3001',
+    baseUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002',
+    wsUrl: process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:3002',
   },
 };
 

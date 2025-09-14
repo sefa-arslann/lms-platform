@@ -43,6 +43,15 @@ const customStyles = `
   .animate-pulse {
     animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
+  
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 interface User {
@@ -461,33 +470,35 @@ export default function ProfilePage() {
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900">
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           
-          {/* Header Section */}
-          <div className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-xl border border-white/20 p-8 mb-8 overflow-hidden relative">
+          {/* Header Section - Mobile Optimized */}
+          <div className="bg-white/90 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-xl border border-white/20 p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8 overflow-hidden relative">
             {/* Animated Background Elements */}
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-indigo-500/5 to-purple-500/5"></div>
-            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-blue-400/10 to-transparent rounded-full blur-3xl animate-pulse"></div>
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-indigo-400/10 to-transparent rounded-full blur-2xl animate-pulse" style={{animationDelay: '1s'}}></div>
+            <div className="absolute top-0 right-0 w-32 sm:w-48 lg:w-64 h-32 sm:h-48 lg:h-64 bg-gradient-to-bl from-blue-400/10 to-transparent rounded-full blur-3xl animate-pulse"></div>
+            <div className="absolute bottom-0 left-0 w-24 sm:w-36 lg:w-48 h-24 sm:h-36 lg:h-48 bg-gradient-to-tr from-indigo-400/10 to-transparent rounded-full blur-2xl animate-pulse" style={{animationDelay: '1s'}}></div>
             
-            <div className="relative flex flex-col md:flex-row items-start md:items-center space-y-6 md:space-y-0 md:space-x-8">
-              <div className="relative group">
-                <div className="w-32 h-32 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 rounded-2xl flex items-center justify-center text-white text-4xl font-bold shadow-2xl transform group-hover:scale-105 transition-all duration-300">
+            <div className="relative flex flex-col sm:flex-row items-center sm:items-start lg:items-center space-y-4 sm:space-y-0 sm:space-x-6 lg:space-x-8">
+              {/* Avatar Section */}
+              <div className="relative group flex-shrink-0">
+                <div className="w-20 h-20 sm:w-24 sm:h-24 lg:w-32 lg:h-32 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 rounded-xl sm:rounded-2xl flex items-center justify-center text-white text-2xl sm:text-3xl lg:text-4xl font-bold shadow-2xl transform group-hover:scale-105 transition-all duration-300">
                   {user.firstName.charAt(0)}{user.lastName.charAt(0)}
                 </div>
-                <div className="absolute -bottom-3 -right-3 w-10 h-10 bg-emerald-500 rounded-xl border-4 border-white flex items-center justify-center shadow-lg animate-bounce">
-                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <div className="absolute -bottom-2 -right-2 sm:-bottom-3 sm:-right-3 w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 bg-emerald-500 rounded-lg sm:rounded-xl border-2 sm:border-4 border-white flex items-center justify-center shadow-lg animate-bounce">
+                  <svg className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
                 </div>
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-600/20 to-purple-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-gradient-to-br from-blue-600/20 to-purple-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
 
-              <div className="flex-1">
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-indigo-800 bg-clip-text text-transparent mb-3 animate-fade-in">
+              {/* User Info Section */}
+              <div className="flex-1 text-center sm:text-left">
+                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-indigo-800 bg-clip-text text-transparent mb-2 sm:mb-3 animate-fade-in">
                   {user.firstName} {user.lastName}
                 </h1>
-                <p className="text-gray-600 mb-2 text-lg">{user.email}</p>
-                <div className="flex items-center space-x-2 text-sm text-gray-500">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <p className="text-gray-600 mb-2 text-sm sm:text-base lg:text-lg break-all">{user.email}</p>
+                <div className="flex items-center justify-center sm:justify-start space-x-2 text-xs sm:text-sm text-gray-500">
+                  <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 0h6m-6 0l-1 12a2 2 0 002 2h6a2 2 0 002-2L16 7" />
                   </svg>
                   <span>Üye olma: {user.createdAt ? new Date(user.createdAt).toLocaleDateString("tr-TR", {
@@ -498,15 +509,16 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-3">
-                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 text-center border border-white/30 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
-                  <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              {/* Stats Grid - Mobile Optimized */}
+              <div className="grid grid-cols-3 gap-2 sm:gap-3 w-full sm:w-auto">
+                <div className="bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl p-2 sm:p-3 lg:p-4 text-center border border-white/30 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
+                  <div className="text-lg sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                     {stats.totalCourses}
                   </div>
                   <div className="text-xs text-gray-600 font-medium">Aktif Kurs</div>
                 </div>
-                <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 text-center border border-white/30 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
-                  <div className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
+                <div className="bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl p-2 sm:p-3 lg:p-4 text-center border border-white/30 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
+                  <div className="text-lg sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
                     {stats.averageProgress}%
                   </div>
                   <div className="text-xs text-gray-600 font-medium">Ortalama İlerleme</div>
@@ -514,20 +526,20 @@ export default function ProfilePage() {
                 {lastWatchedCourse ? (
                   <Link
                     href={`/courses/${lastWatchedCourse.slug}/learn?lesson=${lastWatchedCourse.lastLessonId}&section=${lastWatchedCourse.lastSectionId}&position=${lastWatchedCourse.lastPosition}`}
-                    className="bg-gradient-to-r from-emerald-500 to-green-500 rounded-2xl p-4 text-center border border-emerald-400/30 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 cursor-pointer group"
+                    className="bg-gradient-to-r from-emerald-500 to-green-500 rounded-xl sm:rounded-2xl p-2 sm:p-3 lg:p-4 text-center border border-emerald-400/30 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 cursor-pointer group"
                   >
-                    <div className="text-2xl mb-2 group-hover:scale-110 transition-transform duration-300">🚀</div>
-                    <div className="text-sm text-white font-medium">Çalışmaya Devam Et!</div>
-                    <div className="text-xs text-emerald-100 mt-1 opacity-80">{lastWatchedCourse.title}</div>
+                    <div className="text-lg sm:text-xl lg:text-2xl mb-1 sm:mb-2 group-hover:scale-110 transition-transform duration-300">🚀</div>
+                    <div className="text-xs sm:text-sm text-white font-medium">Devam Et!</div>
+                    <div className="text-xs text-emerald-100 mt-1 opacity-80 hidden sm:block truncate">{lastWatchedCourse.title}</div>
                   </Link>
                 ) : (
                   <Link
                     href="/courses"
-                    className="bg-gradient-to-r from-emerald-500 to-green-500 rounded-2xl p-4 text-center border border-emerald-400/30 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 cursor-pointer group"
+                    className="bg-gradient-to-r from-emerald-500 to-green-500 rounded-xl sm:rounded-2xl p-2 sm:p-3 lg:p-4 text-center border border-emerald-400/30 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 cursor-pointer group"
                   >
-                    <div className="text-2xl mb-2 group-hover:scale-110 transition-transform duration-300">🚀</div>
-                    <div className="text-sm text-white font-medium">Çalışmaya Devam Et!</div>
-                    <div className="text-xs text-emerald-100 mt-1 opacity-80">Kurs keşfet</div>
+                    <div className="text-lg sm:text-xl lg:text-2xl mb-1 sm:mb-2 group-hover:scale-110 transition-transform duration-300">🚀</div>
+                    <div className="text-xs sm:text-sm text-white font-medium">Devam Et!</div>
+                    <div className="text-xs text-emerald-100 mt-1 opacity-80 hidden sm:block">Kurs keşfet</div>
                   </Link>
                 )}
               </div>
@@ -536,66 +548,67 @@ export default function ProfilePage() {
 
 
 
-          {/* Tab Navigation */}
-          <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 overflow-hidden">
+          {/* Tab Navigation - Mobile Optimized */}
+          <div className="bg-white/90 backdrop-blur-sm rounded-2xl sm:rounded-3xl shadow-xl border border-white/20 overflow-hidden">
             <div className="bg-gradient-to-r from-gray-50 via-blue-50/50 to-indigo-50/50 border-b border-gray-200">
-              <nav className="flex space-x-1 px-8 overflow-x-auto">
+              <nav className="flex space-x-1 px-2 sm:px-4 lg:px-8 overflow-x-auto scrollbar-hide">
                 {[
-                  { id: "overview", label: "Genel Bakış", icon: "📊" },
-                  { id: "courses", label: "Kurslarım", icon: "📚" },
-                  { id: "orders", label: "Siparişlerim", icon: "📦" },
-                  { id: "devices", label: "Cihazlarım", icon: "📱" },
-                  { id: "profile", label: "Profil", icon: "👤" },
-                  { id: "settings", label: "Ayarlar", icon: "⚙️" },
+                  { id: "overview", label: "Genel Bakış", icon: "📊", shortLabel: "Genel" },
+                  { id: "courses", label: "Kurslarım", icon: "📚", shortLabel: "Kurslar" },
+                  { id: "orders", label: "Siparişlerim", icon: "📦", shortLabel: "Siparişler" },
+                  { id: "devices", label: "Cihazlarım", icon: "📱", shortLabel: "Cihazlar" },
+                  { id: "profile", label: "Profil", icon: "👤", shortLabel: "Profil" },
+                  { id: "settings", label: "Ayarlar", icon: "⚙️", shortLabel: "Ayarlar" },
                 ].map((tab) => (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`py-4 px-6 border-b-3 font-semibold text-sm transition-all duration-300 rounded-t-2xl whitespace-nowrap ${
+                    className={`py-3 sm:py-4 px-3 sm:px-4 lg:px-6 border-b-3 font-semibold text-xs sm:text-sm transition-all duration-300 rounded-t-xl sm:rounded-t-2xl whitespace-nowrap flex flex-col sm:flex-row items-center space-y-1 sm:space-y-0 sm:space-x-2 ${
                       activeTab === tab.id
                         ? "border-blue-500 text-blue-700 bg-white shadow-lg transform -translate-y-1"
                         : "border-transparent text-gray-700 hover:text-blue-700 hover:bg-white/70 hover:shadow-md"
                     }`}
                   >
-                    <span className="text-lg mr-2">{tab.icon}</span>
-                    {tab.label}
+                    <span className="text-base sm:text-lg">{tab.icon}</span>
+                    <span className="hidden sm:inline">{tab.label}</span>
+                    <span className="sm:hidden">{tab.shortLabel}</span>
                   </button>
                 ))}
               </nav>
             </div>
 
-            {/* Tab Content */}
-            <div className="p-8">
+            {/* Tab Content - Mobile Optimized */}
+            <div className="p-4 sm:p-6 lg:p-8">
               {activeTab === "overview" && (
                 <div className="space-y-8">
-                  {/* Animated Welcome Section */}
-                  <div className="text-center py-12 bg-gradient-to-br from-blue-50/50 via-indigo-50/30 to-purple-50/50 rounded-3xl border border-blue-200/50 overflow-hidden relative">
+                  {/* Animated Welcome Section - Mobile Optimized */}
+                  <div className="text-center py-6 sm:py-8 lg:py-12 bg-gradient-to-br from-blue-50/50 via-indigo-50/30 to-purple-50/50 rounded-2xl sm:rounded-3xl border border-blue-200/50 overflow-hidden relative">
                     <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-indigo-500/5 to-purple-500/5"></div>
-                    <div className="absolute top-0 left-1/4 w-32 h-32 bg-blue-400/20 rounded-full blur-2xl animate-pulse"></div>
-                    <div className="absolute bottom-0 right-1/4 w-24 h-24 bg-purple-400/20 rounded-full blur-2xl animate-pulse" style={{animationDelay: '1.5s'}}></div>
+                    <div className="absolute top-0 left-1/4 w-16 sm:w-24 lg:w-32 h-16 sm:h-24 lg:h-32 bg-blue-400/20 rounded-full blur-2xl animate-pulse"></div>
+                    <div className="absolute bottom-0 right-1/4 w-12 sm:w-18 lg:w-24 h-12 sm:h-18 lg:h-24 bg-purple-400/20 rounded-full blur-2xl animate-pulse" style={{animationDelay: '1.5s'}}></div>
                     
                     <div className="relative">
-                      <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent mb-4 animate-fade-in">
+                      <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent mb-3 sm:mb-4 animate-fade-in">
                         Hoş Geldin, {user.firstName}! 👋
                       </h2>
-                      <p className="text-xl text-gray-600 mb-6 max-w-2xl mx-auto">
+                      <p className="text-base sm:text-lg lg:text-xl text-gray-600 mb-4 sm:mb-6 max-w-2xl mx-auto px-4">
                         Öğrenme yolculuğunda {stats.totalCourses} aktif kursın var ve ortalama {stats.averageProgress}% ilerleme kaydettin.
                       </p>
                       
-                      <div className="inline-flex items-center space-x-6 bg-white/80 backdrop-blur-sm rounded-2xl px-6 py-4 border border-white/50 shadow-lg">
+                      <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4 lg:space-x-6 bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl px-4 sm:px-6 py-4 sm:py-4 border border-white/50 shadow-lg">
                         <div className="text-center">
-                          <div className="text-2xl font-bold text-blue-600">{stats.totalCourses}</div>
-                          <div className="text-sm text-gray-600">Aktif Kurs</div>
+                          <div className="text-xl sm:text-2xl font-bold text-blue-600">{stats.totalCourses}</div>
+                          <div className="text-xs sm:text-sm text-gray-600">Aktif Kurs</div>
                         </div>
-                        <div className="w-px h-12 bg-gray-300"></div>
+                        <div className="hidden sm:block w-px h-8 lg:h-12 bg-gray-300"></div>
                         <div className="text-center">
-                          <div className="text-2xl font-bold text-green-600">{stats.completedLessons}</div>
-                          <div className="text-sm text-gray-600">Tamamlanan Ders</div>
+                          <div className="text-xl sm:text-2xl font-bold text-green-600">{stats.completedLessons}</div>
+                          <div className="text-xs sm:text-sm text-gray-600">Tamamlanan Ders</div>
                         </div>
-                        <div className="w-px h-12 bg-gray-300"></div>
+                        <div className="hidden sm:block w-px h-8 lg:h-12 bg-gray-300"></div>
                         <div className="text-center">
-                          <div className="text-2xl font-bold text-purple-600">{stats.averageProgress}%</div>
-                          <div className="text-sm text-gray-600">Ortalama İlerleme</div>
+                          <div className="text-xl sm:text-2xl font-bold text-purple-600">{stats.averageProgress}%</div>
+                          <div className="text-xs sm:text-sm text-gray-600">Ortalama İlerleme</div>
                         </div>
                       </div>
                     </div>
@@ -603,10 +616,10 @@ export default function ProfilePage() {
 
 
 
-                  {/* Recent Courses */}
+                  {/* Recent Courses - Mobile Optimized */}
                   <div>
-                    <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                      <span className="mr-3">📊</span>
+                    <h3 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 flex items-center">
+                      <span className="mr-2 sm:mr-3 text-lg sm:text-xl">📊</span>
                       Son Kurslarım
                     </h3>
                     {recentCourses.length > 0 ? (
@@ -614,7 +627,7 @@ export default function ProfilePage() {
                         {recentCourses.slice(0, 3).map((course, index) => (
                           <div 
                             key={course.id} 
-                            className="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg hover:border-blue-200 transition-all duration-300 overflow-hidden relative group animate-fade-in"
+                            className="bg-white border border-gray-200 rounded-xl sm:rounded-2xl p-4 sm:p-6 hover:shadow-lg hover:border-blue-200 transition-all duration-300 overflow-hidden relative group animate-fade-in"
                             style={{ animationDelay: `${index * 0.2}s` }}
                           >
                             {/* Animated Background */}
@@ -631,29 +644,29 @@ export default function ProfilePage() {
                                       {course.title}
                                     </span>
                                   </h4>
-                                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                                    <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-3 flex items-center space-x-3 transition-all duration-300 shadow-sm">
-                                      <span className="text-blue-500 text-lg">📚</span>
+                                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 text-sm">
+                                    <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg sm:rounded-xl p-3 flex items-center space-x-3 transition-all duration-300 shadow-sm">
+                                      <span className="text-blue-500 text-base sm:text-lg">📚</span>
                                       <div>
-                                        <div className="font-bold text-blue-800 text-lg">
+                                        <div className="font-bold text-blue-800 text-base sm:text-lg">
                                           {course.totalLessons > 0 ? course.totalLessons : 'N/A'}
                                         </div>
                                         <div className="text-blue-600 text-xs">Toplam Ders</div>
                                       </div>
                                     </div>
-                                    <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-3 flex items-center space-x-3 transition-all duration-300 shadow-sm">
-                                      <span className="text-green-500 text-lg">✅</span>
+                                    <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg sm:rounded-xl p-3 flex items-center space-x-3 transition-all duration-300 shadow-sm">
+                                      <span className="text-green-500 text-base sm:text-lg">✅</span>
                                       <div>
-                                        <div className="font-bold text-green-800 text-lg">
+                                        <div className="font-bold text-green-800 text-base sm:text-lg">
                                           {course.completedLessons || 0}
                                         </div>
                                         <div className="text-green-600 text-xs">Tamamlanan</div>
                                       </div>
                                     </div>
-                                    <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-3 flex items-center space-x-3 transition-all duration-300 shadow-sm">
-                                      <span className="text-purple-500 text-lg">⏱️</span>
+                                    <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg sm:rounded-xl p-3 flex items-center space-x-3 transition-all duration-300 shadow-sm sm:col-span-2 lg:col-span-1">
+                                      <span className="text-purple-500 text-base sm:text-lg">⏱️</span>
                                       <div>
-                                        <div className="font-bold text-purple-800 text-lg">
+                                        <div className="font-bold text-purple-800 text-base sm:text-lg">
                                           {course.duration > 0 ? formatDurationShort(Math.floor(course.duration / 60)) : 'N/A'}
                                         </div>
                                         <div className="text-purple-600 text-xs">Dakika</div>
@@ -721,23 +734,24 @@ export default function ProfilePage() {
                                 )}
                               </div>
 
-                              <div className="flex space-x-3">
+                              <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
                                 <Link
                                   href={`/courses/${course.slug}`}
-                                  className="flex-1 px-5 py-3 bg-gradient-to-r from-blue-500 via-indigo-500 to-blue-600 text-white text-sm rounded-xl hover:from-blue-600 hover:via-indigo-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl font-bold text-center"
+                                  className="flex-1 px-4 sm:px-5 py-3 bg-gradient-to-r from-blue-500 via-indigo-500 to-blue-600 text-white text-sm rounded-lg sm:rounded-xl hover:from-blue-600 hover:via-indigo-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl font-bold text-center"
                                 >
                                   <span className="flex items-center justify-center">
-                                    <span className="mr-2 text-lg">📖</span>
-                                    Kurs Detayları
+                                    <span className="mr-2 text-base sm:text-lg">📖</span>
+                                    <span className="hidden sm:inline">Kurs Detayları</span>
+                                    <span className="sm:hidden">Detaylar</span>
                                   </span>
                                 </Link>
                                 <Link
                                   href={`/courses/${course.slug}/learn`}
-                                  className="flex-1 px-6 py-4 bg-gradient-to-r from-emerald-500 via-green-500 to-emerald-600 text-white text-base rounded-2xl hover:from-emerald-600 hover:via-green-600 hover:to-emerald-700 transition-all duration-300 shadow-lg hover:shadow-xl font-bold text-center"
+                                  className="flex-1 px-4 sm:px-6 py-3 sm:py-4 bg-gradient-to-r from-emerald-500 via-green-500 to-emerald-600 text-white text-sm sm:text-base rounded-lg sm:rounded-2xl hover:from-emerald-600 hover:via-green-600 hover:to-emerald-700 transition-all duration-300 shadow-lg hover:shadow-xl font-bold text-center"
                                 >
                                   <span className="flex items-center justify-center">
-                                    <span className="mr-3 text-2xl">🚀</span>
-                                    <span className="text-lg">Kursa Devam Et!</span>
+                                    <span className="mr-2 sm:mr-3 text-lg sm:text-2xl">🚀</span>
+                                    <span className="text-sm sm:text-lg">Kursa Devam Et!</span>
                                   </span>
                                 </Link>
                               </div>
@@ -777,22 +791,22 @@ export default function ProfilePage() {
 
               {activeTab === "courses" && (
                 <div>
-                  <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-2xl font-bold text-gray-800">Kurslarım</h3>
-                    <div className="flex items-center space-x-4">
-                      <div className="bg-blue-50 border border-blue-200 rounded-xl px-4 py-2">
-                        <span className="text-blue-800 font-medium">{stats.totalCourses} Aktif Kurs</span>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 space-y-3 sm:space-y-0">
+                    <h3 className="text-xl sm:text-2xl font-bold text-gray-800">Kurslarım</h3>
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                      <div className="bg-blue-50 border border-blue-200 rounded-lg sm:rounded-xl px-3 sm:px-4 py-2 text-center sm:text-left">
+                        <span className="text-blue-800 font-medium text-sm sm:text-base">{stats.totalCourses} Aktif Kurs</span>
                       </div>
-                      <div className="bg-green-50 border border-green-200 rounded-xl px-4 py-2">
-                        <span className="text-green-800 font-medium">{stats.averageProgress}% Ortalama İlerleme</span>
+                      <div className="bg-green-50 border border-green-200 rounded-lg sm:rounded-xl px-3 sm:px-4 py-2 text-center sm:text-left">
+                        <span className="text-green-800 font-medium text-sm sm:text-base">{stats.averageProgress}% Ortalama İlerleme</span>
                       </div>
                     </div>
                   </div>
 
                   {recentCourses.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                       {recentCourses.map((course) => (
-                        <div key={course.id} className="group bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-xl hover:border-blue-300 transition-all duration-300 overflow-hidden relative">
+                        <div key={course.id} className="group bg-white border border-gray-200 rounded-xl sm:rounded-2xl p-4 sm:p-6 hover:shadow-xl hover:border-blue-300 transition-all duration-300 overflow-hidden relative">
                           {/* Progress Badge */}
                           <div className="absolute top-4 right-4">
                             <div className={`px-3 py-1 rounded-full text-xs font-bold ${
@@ -862,19 +876,21 @@ export default function ProfilePage() {
                             Son erişim: {course.lastAccessed}
                           </div>
 
-                          {/* Action Buttons */}
-                          <div className="flex space-x-2">
+                          {/* Action Buttons - Mobile Optimized */}
+                          <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
                             <Link
                               href={`/courses/${course.slug}`}
-                              className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-center py-3 px-4 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 text-sm font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                              className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-center py-3 px-4 rounded-lg sm:rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 text-sm font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
                             >
-                              📖 Kursa Git
+                              <span className="hidden sm:inline">📖 Kursa Git</span>
+                              <span className="sm:hidden">📖 Detaylar</span>
                             </Link>
                             <Link
                               href={`/courses/${course.slug}/learn`}
-                              className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 text-white text-center py-3 px-4 rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all duration-200 text-sm font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                              className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 text-white text-center py-3 px-4 rounded-lg sm:rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all duration-200 text-sm font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
                             >
-                              ▶️ Öğrenmeye Başla
+                              <span className="hidden sm:inline">▶️ Öğrenmeye Başla</span>
+                              <span className="sm:hidden">▶️ Başla</span>
                             </Link>
                           </div>
 
@@ -1014,18 +1030,18 @@ export default function ProfilePage() {
               )}
 
               {activeTab === "profile" && (
-                <div className="space-y-6">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-2xl font-bold text-gray-800">Profil Bilgileri</h3>
+                <div className="space-y-4 sm:space-y-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between space-y-3 sm:space-y-0">
+                    <h3 className="text-xl sm:text-2xl font-bold text-gray-800">Profil Bilgileri</h3>
                     <button
                       onClick={() => setIsEditing(!isEditing)}
-                      className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200"
+                      className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 text-sm sm:text-base font-medium"
                     >
                       {isEditing ? "İptal" : "Profili Düzenle"}
                     </button>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                     {[
                       { label: "Ad", value: user.firstName, type: "text" },
                       { label: "Soyad", value: user.lastName, type: "text" },
@@ -1034,23 +1050,23 @@ export default function ProfilePage() {
                       { label: "Website", value: user.website || "", type: "url" },
                       { label: "Üyelik Tarihi", value: new Date(user.createdAt).toLocaleDateString("tr-TR"), type: "text", disabled: true },
                     ].map((field, index) => (
-                      <div key={index}>
+                      <div key={index} className={field.label === "E-posta" ? "sm:col-span-2" : ""}>
                         <label className="block text-sm font-semibold text-gray-700 mb-2">{field.label}</label>
                         <input
                           type={field.type}
                           value={field.value}
                           disabled={!isEditing || field.disabled}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 transition-all duration-200"
+                          className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 transition-all duration-200 text-sm sm:text-base"
                         />
                       </div>
                     ))}
-                    <div className="md:col-span-2">
+                    <div className="sm:col-span-2">
                       <label className="block text-sm font-semibold text-gray-700 mb-2">Hakkımda</label>
                       <textarea
                         value={user.bio || ""}
                         disabled={!isEditing}
                         rows={4}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 transition-all duration-200 resize-none"
+                        className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 transition-all duration-200 resize-none text-sm sm:text-base"
                         placeholder="Kendiniz hakkında kısa bir açıklama yazın..."
                       />
                     </div>
@@ -1059,64 +1075,64 @@ export default function ProfilePage() {
               )}
 
               {activeTab === "settings" && (
-                <div className="space-y-6">
-                  <h3 className="text-2xl font-bold text-gray-800">Hesap Ayarları</h3>
-                  <div className="space-y-4">
+                <div className="space-y-4 sm:space-y-6">
+                  <h3 className="text-xl sm:text-2xl font-bold text-gray-800">Hesap Ayarları</h3>
+                  <div className="space-y-3 sm:space-y-4">
                     <button
                       onClick={() => setShowPasswordModal(true)}
-                      className="w-full text-left px-6 py-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-all duration-200 group"
+                      className="w-full text-left px-4 sm:px-6 py-3 sm:py-4 border border-gray-200 rounded-lg sm:rounded-xl hover:bg-gray-50 transition-all duration-200 group"
                     >
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-4">
-                          <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center group-hover:bg-blue-200 transition-colors">
-                            <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="flex items-center space-x-3 sm:space-x-4">
+                          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                            <svg className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                             </svg>
                           </div>
                           <div>
-                            <span className="text-gray-800 font-medium text-lg">Şifre Değiştir</span>
-                            <p className="text-gray-600 text-sm">Hesap güvenliğiniz için şifrenizi güncelleyin</p>
+                            <span className="text-gray-800 font-medium text-base sm:text-lg">Şifre Değiştir</span>
+                            <p className="text-gray-600 text-xs sm:text-sm">Hesap güvenliğiniz için şifrenizi güncelleyin</p>
                           </div>
                         </div>
-                        <svg className="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 group-hover:text-blue-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                         </svg>
                       </div>
                     </button>
 
-                    <button className="w-full text-left px-6 py-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-all duration-200 group">
+                    <button className="w-full text-left px-4 sm:px-6 py-3 sm:py-4 border border-gray-200 rounded-lg sm:rounded-xl hover:bg-gray-50 transition-all duration-200 group">
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-4">
-                          <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center group-hover:bg-green-200 transition-colors">
-                            <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="flex items-center space-x-3 sm:space-x-4">
+                          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:bg-green-200 transition-colors">
+                            <svg className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                             </svg>
                           </div>
                           <div>
-                            <span className="text-gray-800 font-medium text-lg">E-posta Bildirimleri</span>
-                            <p className="text-gray-600 text-sm">Bildirim tercihlerinizi yönetin</p>
+                            <span className="text-gray-800 font-medium text-base sm:text-lg">E-posta Bildirimleri</span>
+                            <p className="text-gray-600 text-xs sm:text-sm">Bildirim tercihlerinizi yönetin</p>
                           </div>
                         </div>
-                        <svg className="w-5 h-5 text-gray-400 group-hover:text-green-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 group-hover:text-green-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                         </svg>
                       </div>
                     </button>
 
-                    <button className="w-full text-left px-6 py-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-all duration-200 group">
+                    <button className="w-full text-left px-4 sm:px-6 py-3 sm:py-4 border border-gray-200 rounded-lg sm:rounded-xl hover:bg-gray-50 transition-all duration-200 group">
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-4">
-                          <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center group-hover:bg-red-200 transition-colors">
-                            <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="flex items-center space-x-3 sm:space-x-4">
+                          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-red-100 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:bg-red-200 transition-colors">
+                            <svg className="w-5 h-5 sm:w-6 sm:h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                             </svg>
                           </div>
                           <div>
-                            <span className="text-gray-800 font-medium text-lg">Hesabı Sil</span>
-                            <p className="text-gray-600 text-sm">Hesabınızı kalıcı olarak silin</p>
+                            <span className="text-gray-800 font-medium text-base sm:text-lg">Hesabı Sil</span>
+                            <p className="text-gray-600 text-xs sm:text-sm">Hesabınızı kalıcı olarak silin</p>
                           </div>
                         </div>
-                        <svg className="w-5 h-5 text-gray-400 group-hover:text-red-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 group-hover:text-red-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                         </svg>
                       </div>
@@ -1127,28 +1143,28 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          {/* Şifre Değiştirme Modal */}
+          {/* Şifre Değiştirme Modal - Mobile Optimized */}
           {showPasswordModal && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="bg-white rounded-2xl p-8 w-full max-w-md mx-4 shadow-2xl">
-                <div className="text-center mb-6">
-                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+              <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 w-full max-w-md shadow-2xl max-h-[90vh] overflow-y-auto">
+                <div className="text-center mb-4 sm:mb-6">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                    <svg className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                     </svg>
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">Şifre Değiştir</h3>
-                  <p className="text-gray-600">Hesap güvenliğiniz için yeni şifrenizi belirleyin</p>
+                  <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Şifre Değiştir</h3>
+                  <p className="text-sm sm:text-base text-gray-600">Hesap güvenliğiniz için yeni şifrenizi belirleyin</p>
                 </div>
                 
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">Mevcut Şifre</label>
                     <input
                       type="password"
                       value={passwordData.currentPassword}
                       onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                      className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-sm sm:text-base"
                       placeholder="Mevcut şifrenizi girin"
                     />
                   </div>
@@ -1158,7 +1174,7 @@ export default function ProfilePage() {
                       type="password"
                       value={passwordData.newPassword}
                       onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                      className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-sm sm:text-base"
                       placeholder="Yeni şifrenizi girin"
                     />
                   </div>
@@ -1168,19 +1184,19 @@ export default function ProfilePage() {
                       type="password"
                       value={passwordData.confirmPassword}
                       onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                      className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 text-sm sm:text-base"
                       placeholder="Yeni şifrenizi tekrar girin"
                     />
                   </div>
                 </div>
 
-                <div className="flex space-x-3 mt-8">
+                <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3 mt-6 sm:mt-8">
                   <button
                     onClick={() => {
                       setShowPasswordModal(false)
                       setPasswordData({ currentPassword: "", newPassword: "", confirmPassword: "" })
                     }}
-                    className="flex-1 bg-gray-100 text-gray-700 px-6 py-3 rounded-xl hover:bg-gray-200 transition-all duration-200 font-medium"
+                    className="flex-1 bg-gray-100 text-gray-700 px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl hover:bg-gray-200 transition-all duration-200 font-medium text-sm sm:text-base"
                   >
                     İptal
                   </button>
@@ -1190,7 +1206,7 @@ export default function ProfilePage() {
                       setShowPasswordModal(false)
                       setPasswordData({ currentPassword: "", newPassword: "", confirmPassword: "" })
                     }}
-                    className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 font-medium"
+                    className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 font-medium text-sm sm:text-base"
                   >
                     Şifreyi Değiştir
                   </button>

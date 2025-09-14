@@ -59,7 +59,9 @@ interface Lesson {
   thumbnail?: string;
   videoType: 'VIDEO' | 'LIVE' | 'QUIZ' | 'ASSIGNMENT';
   isFree: boolean;
-
+  contentType?: 'VIDEO' | 'PDF' | 'QUIZ' | 'ASSIGNMENT';
+  pdfFileName?: string;
+  pdfUrl?: string;
   progress?: number;
 }
 
@@ -1076,43 +1078,43 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
-      {/* Top Navigation Bar */}
-      <div className="bg-gray-800 border-b border-gray-700 px-6 py-4">
+      {/* Top Navigation Bar - Mobile Optimized */}
+      <div className="bg-gray-800 border-b border-gray-700 px-3 sm:px-6 py-3 sm:py-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 sm:space-x-4 min-w-0 flex-1">
             <button
               onClick={() => router.back()}
-              className="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors"
+              className="flex items-center space-x-1 sm:space-x-2 text-gray-300 hover:text-white transition-colors flex-shrink-0"
             >
-              <ArrowLeftIcon className="w-5 h-5" />
-              <span>Geri Dön</span>
+              <ArrowLeftIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="hidden sm:inline">Geri Dön</span>
             </button>
-            <div className="w-px h-6 bg-gray-600"></div>
+            <div className="w-px h-4 sm:h-6 bg-gray-600 hidden sm:block"></div>
             
-            {/* Breadcrumb */}
-            <div className="flex items-center space-x-2 text-sm text-gray-400">
-              <span>Kurslar</span>
-              <span>/</span>
-              <span className="text-white">{courseData.title}</span>
+            {/* Breadcrumb - Mobile Optimized */}
+            <div className="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm text-gray-400 min-w-0 flex-1">
+              <span className="hidden sm:inline">Kurslar</span>
+              <span className="hidden sm:inline">/</span>
+              <span className="text-white truncate">{courseData.title}</span>
               {currentSection && (
                 <>
-                  <span>/</span>
-                  <span className="text-blue-400">{currentSection.title}</span>
+                  <span className="hidden sm:inline">/</span>
+                  <span className="text-blue-400 truncate hidden sm:inline">{currentSection.title}</span>
                 </>
               )}
               {currentLesson && (
                 <>
-                  <span>/</span>
-                  <span className="text-green-400">{currentLesson.title}</span>
+                  <span className="hidden sm:inline">/</span>
+                  <span className="text-green-400 truncate hidden sm:inline">{currentLesson.title}</span>
                 </>
               )}
             </div>
           </div>
           
-          {/* Progress Section */}
-          <div className="flex items-center space-x-6">
+          {/* Progress Section - Mobile Optimized */}
+          <div className="flex items-center space-x-2 sm:space-x-6">
             {/* Course Progress */}
-            <div className="text-center">
+            <div className="text-center hidden sm:block">
               <p className="text-sm text-gray-400">Kurs İlerlemesi</p>
               <div className="flex items-center space-x-2">
                 <div className="w-16 h-2 bg-gray-600 rounded-full overflow-hidden">
@@ -1122,8 +1124,18 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
               </div>
             </div>
             
+            {/* Mobile Progress - Compact */}
+            <div className="text-center sm:hidden">
+              <div className="flex items-center space-x-2">
+                <div className="w-12 h-1.5 bg-gray-600 rounded-full overflow-hidden">
+                  <div className="h-full bg-green-500 rounded-full" style={{ width: `${courseProgress}%` }}></div>
+                </div>
+                <span className="text-xs font-semibold text-green-400">{Math.round(courseProgress)}%</span>
+              </div>
+            </div>
+            
             {/* Current Lesson Progress */}
-            <div className="text-center">
+            <div className="text-center hidden sm:block">
               <p className="text-sm text-gray-400">Bu Ders</p>
               <div className="flex items-center space-x-2">
                 <div className="w-16 h-2 bg-gray-600 rounded-full overflow-hidden">
@@ -1147,10 +1159,10 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
         </div>
       </div>
 
-      {/* Main Content Area */}
-      <div className="flex h-[calc(100vh-80px)]">
-        {/* Video Player Section - Left Side */}
-        <div className="flex-1 bg-black p-6">
+      {/* Main Content Area - Mobile Responsive */}
+      <div className="flex flex-col lg:flex-row h-[calc(100vh-80px)]">
+        {/* Video Player Section - Mobile: Full Width, Desktop: Left Side */}
+        <div className="flex-1 bg-black p-2 sm:p-4 lg:p-6">
           <div className="h-full flex flex-col">
             {/* Video Player */}
             <div className="flex-1 bg-black rounded-lg overflow-hidden relative group">
@@ -1409,12 +1421,12 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
                       </button>
                     </div>
                     
-                {/* Bottom Bar - Progress & Controls */}
-                <div className="absolute bottom-4 left-4 right-4">
+                {/* Bottom Bar - Progress & Controls - Mobile Optimized */}
+                <div className="absolute bottom-2 sm:bottom-4 left-2 sm:left-4 right-2 sm:right-4">
                   {/* Progress Bar */}
-                  <div className="mb-4">
-                    <div className="flex items-center space-x-3">
-                      <span className="text-sm text-white font-mono">
+                  <div className="mb-3 sm:mb-4">
+                    <div className="flex items-center space-x-2 sm:space-x-3">
+                      <span className="text-xs sm:text-sm text-white font-mono">
                         {Math.floor(currentVideoTime / 60)}:{(currentVideoTime % 60).toFixed(0).padStart(2, '0')}
                       </span>
                       <div className="flex-1 relative">
@@ -1429,26 +1441,26 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
                               videoRef.current.currentTime = seekTime;
                             }
                           }}
-                          className="w-full h-2 video-slider"
+                          className="w-full h-3 sm:h-2 video-slider"
                           style={{
                             background: `linear-gradient(to right, #3B82F6 0%, #3B82F6 ${duration > 0 ? (currentVideoTime / duration) * 100 : 0}%, rgba(255,255,255,0.3) ${duration > 0 ? (currentVideoTime / duration) * 100 : 0}%)`
                           }}
                         />
                       </div>
-                      <span className="text-sm text-white font-mono">
+                      <span className="text-xs sm:text-sm text-white font-mono">
                         {duration > 0 ? formatTime(duration) : '--:--'}
                       </span>
                     </div>
                   </div>
 
-                  {/* Control Buttons */}
+                  {/* Control Buttons - Mobile Optimized */}
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
+                    <div className="flex items-center space-x-2 sm:space-x-3">
                       {/* Volume Control */}
-                      <div className="flex items-center space-x-2">
+                      <div className="flex items-center space-x-1 sm:space-x-2">
                     <button
                           onClick={toggleMute}
-                          className="p-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors"
+                          className="p-2 sm:p-2 bg-white/20 hover:bg-white/30 rounded-lg transition-colors"
                         >
                           {isMuted ? (
                             <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1468,15 +1480,15 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
                           step="0.1"
                           value={volume}
                           onChange={handleVolumeChange}
-                          className="w-20 h-2 video-slider"
+                          className="w-16 sm:w-20 h-3 sm:h-2 video-slider"
                         />
                       </div>
 
-                      {/* Playback Speed */}
+                      {/* Playback Speed - Mobile Optimized */}
                       <div className="relative">
                         <button
                           onClick={() => setShowSpeedMenu(!showSpeedMenu)}
-                          className="px-3 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-sm transition-colors text-white"
+                          className="px-2 sm:px-3 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-xs sm:text-sm transition-colors text-white"
                         >
                           {playbackSpeed}x
                         </button>
@@ -1519,8 +1531,8 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
 
             {/* Video Controls Summary - Lesson Specific - Only show for video lessons */}
             {currentLesson?.contentType !== 'PDF' && (
-              <div className="mt-4 bg-gray-800 rounded-lg p-4">
-              <div className="flex items-center justify-center space-x-6 text-sm text-gray-400">
+              <div className="mt-3 sm:mt-4 bg-gray-800 rounded-lg p-3 sm:p-4">
+              <div className="flex items-center justify-center space-x-3 sm:space-x-6 text-xs sm:text-sm text-gray-400 flex-wrap">
                 <div className="flex items-center space-x-2">
                   <span>🎯</span>
                   <span>Ders İlerlemesi: {Math.round(currentLessonProgress.progress)}%</span>
@@ -1544,15 +1556,15 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
                 </div>
               </div>
               
-              {/* Lesson Progress Bar */}
-              <div className="mt-3">
+              {/* Lesson Progress Bar - Mobile Optimized */}
+              <div className="mt-2 sm:mt-3">
                 <div className="flex items-center justify-between text-xs text-gray-400 mb-1">
                   <span>Ders İlerlemesi</span>
                   <span>{Math.round(currentLessonProgress.progress)}%</span>
             </div>
-                <div className="w-full bg-gray-700 rounded-full h-2">
+                <div className="w-full bg-gray-700 rounded-full h-1.5 sm:h-2">
                   <div 
-                    className="bg-blue-500 h-2 rounded-full transition-all duration-300" 
+                    className="bg-blue-500 h-1.5 sm:h-2 rounded-full transition-all duration-300" 
                     style={{ width: `${currentLessonProgress.progress}%` }}
                   ></div>
                 </div>
@@ -1563,19 +1575,19 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
                 )}
               </div>
               
-              {/* Additional Progress Info */}
-              <div className="mt-4 grid grid-cols-3 gap-4 text-center">
-                <div className="bg-gray-700 rounded-lg p-3">
+              {/* Additional Progress Info - Mobile Optimized */}
+              <div className="mt-3 sm:mt-4 grid grid-cols-3 gap-2 sm:gap-4 text-center">
+                <div className="bg-gray-700 rounded-lg p-2 sm:p-3">
                   <div className="text-xs text-gray-400 mb-1">Kurs İlerlemesi</div>
-                  <div className="text-lg font-bold text-blue-400">{Math.round(courseProgress)}%</div>
+                  <div className="text-sm sm:text-lg font-bold text-blue-400">{Math.round(courseProgress)}%</div>
                 </div>
-                <div className="bg-gray-700 rounded-lg p-3">
+                <div className="bg-gray-700 rounded-lg p-2 sm:p-3">
                   <div className="text-xs text-gray-400 mb-1">Bu Ders</div>
-                  <div className="text-lg font-bold text-green-400">{Math.round(currentLessonProgress.progress)}%</div>
+                  <div className="text-sm sm:text-lg font-bold text-green-400">{Math.round(currentLessonProgress.progress)}%</div>
                 </div>
-                <div className="bg-gray-700 rounded-lg p-3">
+                <div className="bg-gray-700 rounded-lg p-2 sm:p-3">
                   <div className="text-xs text-gray-400 mb-1">Kalan Süre</div>
-                  <div className="text-lg font-bold text-yellow-400">
+                  <div className="text-sm sm:text-lg font-bold text-yellow-400">
                     {duration > 0 && currentTime > 0 ? formatTime(duration - currentTime) : '--:--'}
                   </div>
                 </div>
@@ -1585,50 +1597,50 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
           </div>
         </div>
 
-        {/* Course Content Section - Right Side */}
-        <div className="w-[450px] bg-gray-800 border-l border-gray-700 overflow-y-auto">
-          <div className="p-6">
-            <div className="mb-6">
-              <h2 className="text-xl font-semibold mb-4 text-white">Ders İçeriği</h2>
+        {/* Course Content Section - Mobile: Bottom, Desktop: Right Side */}
+        <div className="w-full lg:w-[450px] bg-gray-800 border-t lg:border-t-0 lg:border-l border-gray-700 overflow-y-auto max-h-[50vh] lg:max-h-none">
+          <div className="p-3 sm:p-6">
+            <div className="mb-4 sm:mb-6">
+              <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-white">Ders İçeriği</h2>
               
-              {/* Search Bar */}
-              <div className="relative mb-4">
+              {/* Search Bar - Mobile Optimized */}
+              <div className="relative mb-3 sm:mb-4">
                 <input
                   type="text"
                   placeholder="Ders ara..."
-                  className="w-full bg-gray-700 text-white px-4 py-2 rounded-lg border border-gray-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  className="w-full bg-gray-700 text-white px-3 sm:px-4 py-2 rounded-lg border border-gray-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-sm sm:text-base"
                 />
                 <BookOpenIcon className="absolute right-3 top-2.5 w-5 h-5 text-gray-400" />
               </div>
               
-              {/* Filter Buttons */}
-              <div className="flex space-x-2 mb-4">
-                <button className="px-3 py-1 bg-blue-600 text-white text-xs rounded-full">Tümü</button>
-                <button className="px-3 py-1 bg-gray-600 text-gray-300 text-xs rounded-full hover:bg-gray-500">Video</button>
-                <button className="px-3 py-1 bg-gray-600 text-gray-300 text-xs rounded-full hover:bg-gray-500">Quiz</button>
-                <button className="px-3 py-1 bg-gray-600 text-gray-300 text-xs rounded-full hover:bg-gray-500">Ödev</button>
+              {/* Filter Buttons - Mobile Optimized */}
+              <div className="flex space-x-1 sm:space-x-2 mb-3 sm:mb-4 overflow-x-auto">
+                <button className="px-2 sm:px-3 py-1 bg-blue-600 text-white text-xs rounded-full whitespace-nowrap">Tümü</button>
+                <button className="px-2 sm:px-3 py-1 bg-gray-600 text-gray-300 text-xs rounded-full hover:bg-gray-500 whitespace-nowrap">Video</button>
+                <button className="px-2 sm:px-3 py-1 bg-gray-600 text-gray-300 text-xs rounded-full hover:bg-gray-500 whitespace-nowrap">Quiz</button>
+                <button className="px-2 sm:px-3 py-1 bg-gray-600 text-gray-300 text-xs rounded-full hover:bg-gray-500 whitespace-nowrap">Ödev</button>
               </div>
             </div>
             
-            {/* Sections */}
-            <div className="space-y-4">
+            {/* Sections - Mobile Optimized */}
+            <div className="space-y-2 sm:space-y-4">
               {courseData.sections?.map((section: Section) => (
                 <div key={section.id} className="bg-gray-700 rounded-lg overflow-hidden">
                   <button
                     onClick={() => toggleSection(section.id)}
-                    className="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-gray-600 transition-colors"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-left flex items-center justify-between hover:bg-gray-600 transition-colors"
                   >
-                    <div className="flex items-center space-x-3">
-                      <BookOpenIcon className="w-5 h-5 text-blue-400" />
-                      <div>
-                        <h3 className="font-medium text-white">{section.title}</h3>
-                        <p className="text-sm text-gray-400">{section.lessons?.length || 0} ders</p>
+                    <div className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1">
+                      <BookOpenIcon className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400 flex-shrink-0" />
+                      <div className="min-w-0 flex-1">
+                        <h3 className="font-medium text-white text-sm sm:text-base truncate">{section.title}</h3>
+                        <p className="text-xs sm:text-sm text-gray-400">{section.lessons?.length || 0} ders</p>
                       </div>
                     </div>
                     {expandedSections.has(section.id) ? (
-                      <ChevronDownIcon className="w-5 h-5 text-gray-400" />
+                      <ChevronDownIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0" />
                     ) : (
-                      <ChevronRightIcon className="w-5 h-5 text-gray-400" />
+                      <ChevronRightIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0" />
                     )}
                   </button>
                   
@@ -1675,12 +1687,12 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
                             // Load progress for the new lesson immediately
                             loadLessonProgress();
                           }}
-                          className={`w-full px-6 py-3 text-left flex items-center space-x-3 hover:bg-gray-600 transition-colors ${
+                          className={`w-full px-4 sm:px-6 py-2 sm:py-3 text-left flex items-center space-x-2 sm:space-x-3 hover:bg-gray-600 transition-colors ${
                             currentLesson?.id === lesson.id ? 'bg-blue-600 text-white' : 'text-gray-300'
                           }`}
                         >
-                          <div className="relative">
-                            <PlayCircleIcon className="w-4 h-4" />
+                          <div className="relative flex-shrink-0">
+                            <PlayCircleIcon className="w-3 h-3 sm:w-4 sm:h-4" />
                             {/* Completion Status - Dynamic based on progress */}
                             {(() => {
                               const progressData = lessonProgressMap.get(lesson.id);
@@ -1700,15 +1712,15 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
                               return null;
                             })()}
                           </div>
-                          <div className="flex-1 text-left">
-                            <div className="flex items-center space-x-2">
-                              <p className="font-medium">{lesson.title}</p>
+                          <div className="flex-1 text-left min-w-0">
+                            <div className="flex items-center space-x-1 sm:space-x-2">
+                              <p className="font-medium text-sm sm:text-base truncate">{lesson.title}</p>
                               {lesson.contentType === 'PDF' && (
-                                <span className="text-red-500 text-sm" title="PDF Dersi">📄</span>
+                                <span className="text-red-500 text-xs sm:text-sm flex-shrink-0" title="PDF Dersi">📄</span>
                               )}
                             </div>
-                            <div className="flex items-center space-x-2 mt-1">
-                                <span className="text-sm opacity-75">
+                            <div className="flex items-center space-x-1 sm:space-x-2 mt-1">
+                                <span className="text-xs sm:text-sm opacity-75">
                                   {lesson.contentType === 'PDF' ? 'PDF' : formatDurationMMSS(lesson.duration || 0)}
                                 </span>
                                 
@@ -1716,27 +1728,27 @@ export default function CourseLearnPage({ params }: { params: Promise<{ id: stri
                                 {(() => {
                                   const progressData = lessonProgressMap.get(lesson.id);
                                   if (progressData) {
-                                    if (progressData.completed || progressData.progress >= 95) {
-                                      return <span className="text-xs text-green-400">✓ Tamamlandı</span>;
-                                    } else if (progressData.progress > 0) {
-                                      return (
-                                        <div className="flex items-center space-x-1">
-                                          <span className="text-xs text-blue-400">{progressData.progress}%</span>
-                                          {progressData.lastPosition > 0 && (
-                                            <span className="text-xs text-gray-400">
-                                              ({formatTime(progressData.lastPosition)})
-                                            </span>
-                                          )}
-                                        </div>
-                                      );
-                                    }
+                                  if (progressData.completed || progressData.progress >= 95) {
+                                    return <span className="text-xs text-green-400">✓ Tamamlandı</span>;
+                                  } else if (progressData.progress > 0) {
+                                    return (
+                                      <div className="flex items-center space-x-1">
+                                        <span className="text-xs text-blue-400">{progressData.progress}%</span>
+                                        {progressData.lastPosition > 0 && (
+                                          <span className="text-xs text-gray-400 hidden sm:inline">
+                                            ({formatTime(progressData.lastPosition)})
+                                          </span>
+                                        )}
+                                      </div>
+                                    );
                                   }
-                                  return <span className="text-xs text-gray-400">Henüz başlanmadı</span>;
+                                }
+                                return <span className="text-xs text-gray-400">Henüz başlanmadı</span>;
                                 })()}
                             </div>
                           </div>
                           {lesson.isFree && (
-                            <span className="text-xs bg-green-600 text-white px-2 py-1 rounded">Ücretsiz</span>
+                            <span className="text-xs bg-green-600 text-white px-1 sm:px-2 py-1 rounded flex-shrink-0">Ücretsiz</span>
                           )}
                         </button>
                       ))}

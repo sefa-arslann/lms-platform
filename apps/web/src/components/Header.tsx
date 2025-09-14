@@ -7,6 +7,16 @@ import { useCart } from '@/contexts/CartContext';
 import { usePathname } from 'next/navigation';
 import SecureStorage from '@/utils/secureStorage';
 
+// CSS for line-clamp utility
+const customStyles = `
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+`;
+
 // ContinueLearningButton Component
 function ContinueLearningButton() {
   const { user } = useAuth();
@@ -221,8 +231,10 @@ export default function Header() {
   }
 
   return (
-    <header className="bg-white/80 backdrop-blur-md shadow-lg border-b border-gray-200/50 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <>
+      <style jsx global>{customStyles}</style>
+      <header className="bg-white/80 backdrop-blur-md shadow-lg border-b border-gray-200/50 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <div className="flex items-center space-x-3">
@@ -309,88 +321,189 @@ export default function Header() {
                 )}
               </button>
 
-              {/* Cart Popup */}
+              {/* Cart Modal - Mobile Slide-in from Left */}
               {isCartOpen && (
-                <div className="cart-popup absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 py-4 z-50">
-                  <div className="px-4 pb-3 border-b border-gray-100">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-semibold text-gray-900">Sepet ({cartItems.length})</h3>
-                      <button
-                        onClick={() => setIsCartOpen(false)}
-                        className="text-gray-400 hover:text-gray-600"
-                      >
-                        <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                      </button>
+                <>
+                  {/* Backdrop */}
+                  <div 
+                    className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+                    onClick={() => setIsCartOpen(false)}
+                  ></div>
+                  
+                  {/* Mobile Cart Sidebar */}
+                  <div className="fixed inset-y-0 left-0 w-full max-w-sm bg-white shadow-2xl z-50 lg:hidden transform transition-transform duration-300 ease-in-out">
+                    <div className="flex flex-col h-full">
+                      {/* Header */}
+                      <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gray-50">
+                        <h3 className="text-lg font-semibold text-gray-900">Sepet ({cartItems.length})</h3>
+                        <button
+                          onClick={() => setIsCartOpen(false)}
+                          className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-200 rounded-lg transition-colors"
+                        >
+                          <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
+                      </div>
+
+                      {/* Content */}
+                      <div className="flex-1 overflow-y-auto">
+                        {cartItems.length > 0 ? (
+                          <div className="p-4 space-y-3">
+                            {cartItems.map((item) => (
+                              <div key={item.id} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                                <img src={item.image} alt={item.title} className="w-16 h-16 rounded-lg object-cover flex-shrink-0" />
+                                <div className="flex-1 min-w-0">
+                                  <h4 className="text-sm font-medium text-gray-900 line-clamp-2 mb-1">{item.title}</h4>
+                                  <p className="text-xs text-gray-500 mb-2">{item.instructor}</p>
+                                  <p className="text-sm font-semibold text-blue-600">
+                                    {new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(item.price)}
+                                  </p>
+                                </div>
+                                <button
+                                  onClick={() => removeFromCart(item.id)}
+                                  className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors flex-shrink-0"
+                                >
+                                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5.007 7H5m4 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                  </svg>
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="flex flex-col items-center justify-center h-full p-8 text-center">
+                            <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                              <svg className="h-10 w-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                              </svg>
+                            </div>
+                            <h3 className="text-lg font-medium text-gray-900 mb-2">Sepetiniz boş</h3>
+                            <p className="text-gray-500 mb-6">Hemen kursları keşfedin ve öğrenmeye başlayın!</p>
+                            <Link
+                              href="/courses"
+                              onClick={() => setIsCartOpen(false)}
+                              className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-lg font-medium hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                            >
+                              Kursları Keşfet
+                            </Link>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Footer - Only show when cart has items */}
+                      {cartItems.length > 0 && (
+                        <div className="border-t border-gray-200 p-4 bg-white">
+                          <div className="flex items-center justify-between mb-4">
+                            <span className="text-lg font-semibold text-gray-900">Toplam:</span>
+                            <span className="text-xl font-bold text-blue-600">
+                              {new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(
+                                cartItems.reduce((sum, item) => sum + item.price, 0)
+                              )}
+                            </span>
+                          </div>
+                          <div className="space-y-3">
+                            <Link
+                              href="/cart"
+                              onClick={() => setIsCartOpen(false)}
+                              className="block w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 px-4 rounded-lg font-medium text-center hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                            >
+                              Sepeti Görüntüle
+                            </Link>
+                            <button
+                              onClick={() => setIsCartOpen(false)}
+                              className="block w-full border-2 border-gray-300 text-gray-700 py-3 px-4 rounded-lg font-medium hover:bg-gray-50 hover:border-gray-400 transition-all duration-200"
+                            >
+                              Alışverişe Devam Et
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
 
-                  {cartItems.length > 0 ? (
-                    <>
-                      <div className="max-h-64 overflow-y-auto px-4">
-                        {cartItems.map((item) => (
-                          <div key={item.id} className="flex items-center space-x-3 py-3 border-b border-gray-100 last:border-b-0">
-                            <img src={item.image} alt={item.title} className="w-12 h-12 rounded-lg object-cover" />
-                            <div className="flex-1 min-w-0">
-                              <h4 className="text-sm font-medium text-gray-900 truncate">{item.title}</h4>
-                              <p className="text-xs text-gray-500">{item.instructor}</p>
-                              <p className="text-sm font-semibold text-blue-600">
-                                {new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(item.price)}
-                              </p>
+                  {/* Desktop Cart Popup - Keep original for desktop */}
+                  <div className="cart-popup absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 py-4 z-50 hidden lg:block">
+                    <div className="px-4 pb-3 border-b border-gray-100">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-lg font-semibold text-gray-900">Sepet ({cartItems.length})</h3>
+                        <button
+                          onClick={() => setIsCartOpen(false)}
+                          className="text-gray-400 hover:text-gray-600"
+                        >
+                          <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+
+                    {cartItems.length > 0 ? (
+                      <>
+                        <div className="max-h-64 overflow-y-auto px-4">
+                          {cartItems.map((item) => (
+                            <div key={item.id} className="flex items-center space-x-3 py-3 border-b border-gray-100 last:border-b-0">
+                              <img src={item.image} alt={item.title} className="w-12 h-12 rounded-lg object-cover" />
+                              <div className="flex-1 min-w-0">
+                                <h4 className="text-sm font-medium text-gray-900 truncate">{item.title}</h4>
+                                <p className="text-xs text-gray-500">{item.instructor}</p>
+                                <p className="text-sm font-semibold text-blue-600">
+                                  {new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(item.price)}
+                                </p>
+                              </div>
+                              <button
+                                onClick={() => removeFromCart(item.id)}
+                                className="text-red-500 hover:text-red-700 p-1"
+                              >
+                                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5.007 7H5m4 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                              </button>
                             </div>
-                            <button
-                              onClick={() => removeFromCart(item.id)}
-                              className="text-red-500 hover:text-red-700 p-1"
+                          ))}
+                        </div>
+                        
+                        <div className="px-4 pt-3 border-t border-gray-100">
+                          <div className="flex items-center justify-between mb-3">
+                            <span className="text-sm font-medium text-gray-900">Toplam:</span>
+                            <span className="text-lg font-bold text-blue-600">
+                              {new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(
+                                cartItems.reduce((sum, item) => sum + item.price, 0)
+                              )}
+                            </span>
+                          </div>
+                          <div className="space-y-2">
+                            <Link
+                              href="/cart"
+                              className="block w-full bg-blue-600 text-white py-2 px-4 rounded-lg text-sm font-medium text-center hover:bg-blue-700 transition-colors"
                             >
-                              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5.007 7H5m4 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                              </svg>
+                              Sepeti Görüntüle
+                            </Link>
+                            <button
+                              onClick={() => setIsCartOpen(false)}
+                              className="block w-full border border-gray-300 text-gray-700 py-2 px-4 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors"
+                            >
+                              Alışverişe Devam Et
                             </button>
                           </div>
-                        ))}
-                      </div>
-                      
-                      <div className="px-4 pt-3 border-t border-gray-100">
-                        <div className="flex items-center justify-between mb-3">
-                          <span className="text-sm font-medium text-gray-900">Toplam:</span>
-                          <span className="text-lg font-bold text-blue-600">
-                            {new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(
-                              cartItems.reduce((sum, item) => sum + item.price, 0)
-                            )}
-                          </span>
                         </div>
-                        <div className="space-y-2">
-                          <Link
-                            href="/cart"
-                            className="block w-full bg-blue-600 text-white py-2 px-4 rounded-lg text-sm font-medium text-center hover:bg-blue-700 transition-colors"
-                          >
-                            Sepeti Görüntüle
-                          </Link>
-                          <button
-                            onClick={() => setIsCartOpen(false)}
-                            className="block w-full border border-gray-300 text-gray-700 py-2 px-4 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors"
-                          >
-                            Alışverişe Devam Et
-                          </button>
-                        </div>
+                      </>
+                    ) : (
+                      <div className="px-4 py-8 text-center">
+                        <svg className="h-12 w-12 text-gray-400 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
+                        <p className="text-gray-500 mb-3">Sepetiniz boş</p>
+                        <Link
+                          href="/courses"
+                          className="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+                        >
+                          Kursları Keşfet
+                        </Link>
                       </div>
-                    </>
-                  ) : (
-                    <div className="px-4 py-8 text-center">
-                      <svg className="h-12 w-12 text-gray-400 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                      </svg>
-                      <p className="text-gray-500 mb-3">Sepetiniz boş</p>
-                      <Link
-                        href="/courses"
-                        className="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
-                      >
-                        Kursları Keşfet
-                      </Link>
-                    </div>
-                  )}
-                </div>
+                    )}
+                  </div>
+                </>
               )}
             </div>
             )}
@@ -458,7 +571,7 @@ export default function Header() {
                       Profilim
                     </Link>
                     
-                    {user?.role === 'admin' && (
+                    {user?.role === 'ADMIN' && (
                       <Link
                         href="/admin"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600"
@@ -519,5 +632,6 @@ export default function Header() {
         </div>
       </div>
     </header>
+    </>
   );
 }
